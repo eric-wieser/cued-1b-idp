@@ -1,0 +1,9 @@
+#pragma once
+
+/** Base class for all devices */
+
+class Device {
+protected:
+	RLink* _r;
+	Device(RLink* r) : _r(r);
+}

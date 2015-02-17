@@ -9,10 +9,7 @@ Intended usage:
     d.move({.forward=0.9, .steer=0.1});
 
 */
-class Drive {
-private:
-    RLink* _r;
-
+class Drive : Device {
 public:
     struct move_args {
         float forward;
