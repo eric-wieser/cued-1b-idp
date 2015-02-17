@@ -26,9 +26,10 @@ public:
     Should ensure that abs(args.forward) + abs(args.steer) <= 1
     */
     void move(move_args args);
+    void setWheelSpeeds(float left, float right);
 
     /// shorthand for no motion
-    void stop() { move({.forward = 0, .steer = 0}); }
+    void stop() { setWheelSpeed(0, 0); }
 };
 
 
