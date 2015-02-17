@@ -10,7 +10,7 @@ Intended usage:
     d.move({.forward=0.9, .steer=0.1});
 
 */
-class Drive : Device {
+class Drive : public Device {
 public:
     struct move_args {
         float forward;
@@ -29,7 +29,9 @@ public:
     void setWheelSpeeds(float left, float right);
 
     /// shorthand for no motion
-    void stop() { setWheelSpeed(0, 0); }
+    void stop() { setWheelSpeeds(0, 0); }
+
+    ~Drive();
 };
 
 
