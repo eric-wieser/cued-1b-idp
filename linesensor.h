@@ -1,5 +1,7 @@
 #pragma once
 
+#include "device.h"
+
 /**
 Intended usage:
 
