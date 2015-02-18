@@ -3,14 +3,23 @@
 #include "robot_delay.h"
 #include <iostream>
 
+#include "drive.h"
+
 int main() {
 	RLink r;
+	std::cout << "constructed" << std::endl;
 	r.initialise();
-
 	std::cout << "initialised" << std::endl;
 
-	r.command(MOTOR_1_GO, 127);
-	std::cout << "going" << std::endl;
-	delay(1000000);
+	Drive drive(&r);
+
+	float f = 1;
+	while(true) {
+		std::cout << "ready..." << std::endl;
+		std::cin >> f;
+		std::cout << "going" << std::endl;
+		drive.move({forward: f, steer: 0});
+	}
+
 	std::cout << "done" << std::endl;
 }
