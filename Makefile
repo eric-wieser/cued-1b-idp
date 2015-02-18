@@ -2,7 +2,7 @@ CC = arm-linux-gnueabi-g++
 RM = rm -f
 
 TARGET = a.out
-COMPILE_OPTIONS = -g -std=c++0x -Wall -I/export/teach/1BRobot
+COMPILE_OPTIONS = -g -std=gnu++0x -Wall -I/export/teach/1BRobot
 LINK_OPTIONS = -lrobot
 
 SRCS := $(wildcard *.cc)
