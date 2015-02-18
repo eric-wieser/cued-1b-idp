@@ -31,6 +31,7 @@ public:
     /// shorthand for no motion
     void stop() { setWheelSpeeds(0, 0); }
 
+    Drive(RLink* r) : Device(r) {}
     ~Drive();
 };
 
