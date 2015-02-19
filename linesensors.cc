@@ -1,5 +1,6 @@
 
 #include <cstdint>
+#include <limits>
 
 #include "ports.h"
 #include "rlink.h"
@@ -29,13 +30,13 @@ LineSensors::Reading LineSensors::read() {
 	switch (sensors & 0b111) {
 		case 0: // 000
 			if (_reading.position < 0.0f) {
-				pos = -(1.0f / 0.0f); // -inf
+				pos = -std::numeric_limits<float>::infinity();
 			}
 			else if (_reading.position > 0.0f) {
-				pos = 1.0f / 0.0f; // inf
+				pos = std::numeric_limits<float>::infinity();
 			}
 			else {
-				pos = 0.0f / 0.0f; // silent NaN
+				pos = std::numeric_limits<float>::quiet_NaN();
 			}
 			ret.state = Reading::NONE;
 
