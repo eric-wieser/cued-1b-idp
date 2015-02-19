@@ -2,3 +2,5 @@
 *.out
 *.a
 *.arm
+*.sublime-project
+*.sublime-workspace
