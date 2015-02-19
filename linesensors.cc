@@ -8,7 +8,7 @@
 #include "linesensors.h"
 
 
-LineSensors(RLink& r, port::Name p, bool passive = false)
+LineSensors::LineSensors(RLink& r, port::Name p, bool passive = false)
 		: Device(r), _passive(passive), _port(r, p) 
 {
 }
@@ -25,7 +25,6 @@ LineSensors::Reading LineSensors::read() {
 
 	// Determine position
 	float pos = 0.0f;
-	bool junc = false;
 	ret.state = Reading::LINE;
 	switch (sensors & 0b111) {
 		case 0: // 000

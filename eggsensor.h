@@ -2,13 +2,16 @@
 
 #include "eggtype.h"
 #include "device.h"
+
+class RLink;
+
 #include "ports.h"
 #include <array>
 
 /**
 Intended usage:
 
-	LineSensor ls(robot);
+	LineSensors ls(robot);
 
 	auto r = ls.read();
 
