@@ -17,10 +17,9 @@ Intended usage:
 	}
 
 */
-class LineSensor {
+class LineSensor : public Device {
 private:
 	bool _passive; // false => use LEDs
-	RLink* _r;
 
 public:
 	struct Reading {
@@ -29,5 +28,5 @@ public:
 	};
 
 	Reading read();
-	LineSensor(RLink& r, bool passive = false) : _r(r), _passive(passive);
+	LineSensor(RLink& r, bool passive = false) : DEvice(r), _passive(passive);
 }

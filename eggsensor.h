@@ -18,7 +18,7 @@ Intended usage:
 	}
 
 */
-class EggSensor : Device {
+class EggSensor : public Device {
 private:
 	port::Name _port;
 
