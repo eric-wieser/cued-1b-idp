@@ -3,6 +3,7 @@
 #include "ports.h"
 
 class Arm : public Device {
+private:
 	Port _port;
 public:
 	enum {
