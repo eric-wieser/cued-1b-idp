@@ -5,7 +5,7 @@
 /**
 Intended usage:
 
-	LineSensor ls(robot);
+	LineSensors ls(robot);
 
 	auto r = ls.read();
 
@@ -17,16 +17,19 @@ Intended usage:
 	}
 
 */
-class LineSensor : public Device {
+class LineSensors : public Device {
 private:
+	Port _port;
 	bool _passive; // false => use LEDs
+	Reading _reading;
 
 public:
 	struct Reading {
 		enum { NONE, LINE, JUNCTION, INVALID } state;
-		float position; // between -1 and 1, or NaN if no line
+		float position; // between -1 and 1, or +-Inf if no line, or NaN if invalid
+		bool lsl, lsc, lsr, lsa;
 	};
 
 	Reading read();
-	LineSensor(RLink& r, bool passive = false) : Device(r), _passive(passive) {}
+	LineSensors(RLink& r, port::Name p, bool passive = false);
 };
