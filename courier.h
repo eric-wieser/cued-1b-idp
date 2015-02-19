@@ -2,8 +2,9 @@
 #include "device.h"
 #include "eggtype.h"
 
-class Rail : Device {
+class Courier : public Device {
 	EggType _contents[3];
+	Port _ledPort;
 public:
 	/**
 		Indicate that a new egg has been added to the rail. This updates the
@@ -15,4 +16,7 @@ public:
 	void unloadEgg();
 	/// The number of eggs on the rail
 	int volume();
+
+	Courier(RLink* r, port::Name ledPort)
+		: Device(r), _ledPort(r, port) {};
 };
