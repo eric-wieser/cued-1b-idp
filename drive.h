@@ -33,6 +33,9 @@ public:
 
     Drive(RLink& r) : Device(r) {}
     ~Drive();
+
+    /// convert floating point speed to sign/magnitude
+    static uint8_t convertSpeed(float s);
 };
 
 
