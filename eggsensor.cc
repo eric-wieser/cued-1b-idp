@@ -1,8 +1,6 @@
 #include <cstdint>
 #include <algorithm>
-#include <iterator>
 #include "eggsensor.h"
-#include "ports.h"
 #include "robot_delay.h"
 
 EggSensor::Reading EggSensor::read() {
