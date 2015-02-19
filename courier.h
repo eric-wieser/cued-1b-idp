@@ -1,10 +1,16 @@
 #pragma once
+#include <array>
 #include "device.h"
+#include "ports.h"
 #include "eggtype.h"
 
 class Courier : public Device {
-	EggType _contents[3];
+private:
+	std::array<EggType, 3> _contents;
 	Port _ledPort;
+	int _volume;
+
+	void _updateLeds();
 public:
 	/**
 		Indicate that a new egg has been added to the rail. This updates the
@@ -18,5 +24,5 @@ public:
 	int volume();
 
 	Courier(RLink* r, port::Name ledPort)
-		: Device(r), _ledPort(r, port) {};
+		: Device(r), _ledPort(r, ledPort), _volume(0) {};
 };
