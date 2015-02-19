@@ -1,6 +1,7 @@
 
 #include "robot.h"
 #include "timing.h"
+#include "rlink.h"
 
 int main() {
 	RLink rlink;
