@@ -1,9 +1,10 @@
 #pragma once
 
+#include <array>
+
 #include "eggtype.h"
 #include "device.h"
-
-class RLink;
+#include "rlink.h"
 
 #include "ports.h"
 #include <array>
@@ -44,6 +45,6 @@ public:
 	};
 
 	Reading read();
-	EggSensor(RLink* r, port::Name port)
+	EggSensor(RLink& r, port::Name port)
 		: Device(r), _port(r, port, 0x7) {};
 };

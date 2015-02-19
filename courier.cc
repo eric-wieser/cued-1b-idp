@@ -41,13 +41,13 @@ void Courier::unloadEgg() {
 	assert(_volume != 0);
 
 	// move the motor. TODO: use light gate
-	_r->command(MOTOR_3_GO, Drive::convertSpeed(0.5));
+	_r.command(MOTOR_3_GO, Drive::convertSpeed(0.5));
 	delay(1000);
-	_r->command(MOTOR_3_GO, 0);
+	_r.command(MOTOR_3_GO, 0);
 	delay(1000);
-	_r->command(MOTOR_3_GO, Drive::convertSpeed(-0.5));
+	_r.command(MOTOR_3_GO, Drive::convertSpeed(-0.5));
 	delay(1000);
-	_r->command(MOTOR_3_GO, 0);
+	_r.command(MOTOR_3_GO, 0);
 
 	// update internal state, if we succeed
 	_contents[0] = _contents[1];

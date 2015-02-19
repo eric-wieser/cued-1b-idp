@@ -1,14 +1,14 @@
 
 #include <cstdint>
 
-#include "port.h"
+#include "ports.h"
 #include "rlink.h"
 #include "device.h"
 
 #include "linesensors.h"
 
 
-LineSensors::LineSensors(RLink& r, port::Name p, bool passive = false)
+LineSensors::LineSensors(RLink& r, port::Name p, bool passive)
 		: Device(r), _passive(passive), _port(r, p) 
 {
 }

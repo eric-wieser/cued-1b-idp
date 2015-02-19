@@ -1,7 +1,13 @@
 
+#include <iostream>
+
 #include "robot.h"
 #include "timing.h"
 #include "rlink.h"
+
+void robotLogic(Robot& robot) {
+
+}
 
 int main() {
 	RLink rlink;
