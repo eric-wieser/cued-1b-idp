@@ -28,5 +28,5 @@ public:
 	};
 
 	Reading read();
-	LineSensor(RLink& r, bool passive = false) : DEvice(r), _passive(passive);
+	LineSensor(RLink& r, bool passive = false) : Device(r), _passive(passive);
 }
