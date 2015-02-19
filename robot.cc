@@ -25,7 +25,7 @@ Robot::~Robot() {
 }
 
 
-const LineSensors::Reading& ls() {
+const LineSensors::Reading& Robot::ls() {
 	if (_lsUpdated < ticks()) {
 		_lsReading = _lineSensors.read();
 	}
@@ -34,7 +34,7 @@ const LineSensors::Reading& ls() {
 }
 
 
-const EggSensor::Reading& eld() {
+const EggSensor::Reading& Robot::eld() {
 	if (_esUpdated < ticks()) {
 		_esReading = _eggSensor.read();
 	}
