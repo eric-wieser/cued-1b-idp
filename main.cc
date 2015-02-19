@@ -1,25 +1,21 @@
-#include "rlink.h"
-#include "robot_instr.h"
-#include "robot_delay.h"
-#include <iostream>
 
-#include "drive.h"
+#include "robot.h"
+#include "timing.h"
 
 int main() {
-	RLink r;
+	RLink rlink;
+
 	std::cout << "constructed" << std::endl;
-	r.initialise();
+	rlink.initialise();
 	std::cout << "initialised" << std::endl;
 
-	Drive drive(&r);
+	Robot robot(rlink);
 
-	float f = 1;
-	while(true) {
-		std::cout << "ready..." << std::endl;
-		std::cin >> f;
-		std::cout << "going" << std::endl;
-		drive.move({forward: f, steer: 0});
+	for (;;) {
+		timing::tick();
+
+		robotLogic(robot);
 	}
 
-	std::cout << "done" << std::endl;
+	return(0);
 }

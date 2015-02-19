@@ -5,6 +5,6 @@
 
 class Device {
 protected:
-	RLink* _r;
-	Device(RLink* r) : _r(r) {};
+	RLink& _r;
+	Device(RLink& r) : _r(r) {};
 };

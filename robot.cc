@@ -5,21 +5,13 @@
 #include "eggsensor.h"
 #include "timing.h"
 
+class RLink;
+
 #include "robot.h"
 
 
-Robot robot;
-
-
-Robot::Robot() {
-	std::cout << "constructed" << std::endl;
-	_rlink.initialise();
-	std::cout << "initialised" << std::endl;
-
-	// Initialise Sensors/motors
-	_drive = Drive();
-	_lineSensors = LineSensors();
-
+Robot::Robot(Rlink& rlink)
+		: _drive(rlink), _lineSensors(rlink, port::P1), _eggSensor(rlink, port::P2) {
 }
 
 
@@ -43,8 +35,4 @@ const EggSensor::Reading& eld() {
 	}
 
 	return( _esReading );
-}
-
-operator RLink() {
-	return _rlink;
 }

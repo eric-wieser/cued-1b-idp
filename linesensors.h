@@ -1,6 +1,7 @@
 #pragma once
 
 #include "device.h"
+class RLink;
 
 /**
 Intended usage:
