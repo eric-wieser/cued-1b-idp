@@ -75,8 +75,7 @@ LineSensors::Reading LineSensors::read() {
 			break;
 	}
 
-	ret.position = position;
-
+	ret.position = pos;
 	_reading = ret;
 	return( ret );
 }
