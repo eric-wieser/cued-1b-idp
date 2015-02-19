@@ -2,12 +2,11 @@
 
 #include "eggtype.h"
 #include "device.h"
-<<<<<<< HEAD
+
 class RLink;
-=======
+
 #include "ports.h"
 #include <array>
->>>>>>> origin/master
 
 /**
 Intended usage:
