@@ -35,7 +35,7 @@ public:
 	inline bool lsa() { ls().lsa };
 	inline float position() { ls().position };
 
-	EggSensor::Reading eld();
+	const EggSensor::Reading& eld();
 
 	operator RLink();
 };
