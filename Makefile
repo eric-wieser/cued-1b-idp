@@ -2,20 +2,23 @@ CC = arm-linux-gnueabi-g++
 RM = rm -f
 
 TARGET = a.out
-COMPILE_OPTIONS = -g -std=gnu++0x -Wall -I/export/teach/1BRobot
+CFLAGS = -g -std=gnu++0x -Wall -I/export/teach/1BRobot
 LINK_OPTIONS = -lrobot
 
 SRCS := $(wildcard *.cc)
-HEADERS := $(wildcard *.h)
-OBJS = $(SRCS:.cc=.o)
+OBJS := $(wildcard *.o)
+
+.depend: $(SRCS)
+	rm -f ./.depend
+	$(CC) $(CFLAGS) -MM $^>>./.depend;
+ 
+include .depend
 
 $(TARGET): $(OBJS)
-	$(CC) $(COMPILE_OPTIONS) $(OBJS) -o$(TARGET) $(LINK_OPTIONS)
-
-$(OBJS): %.o : $(HEADERS)
+	$(CC) $(CFLAGS) $(OBJS) -o$(TARGET) $(LINK_OPTIONS)
 
 %.o: %.cc
-	$(CC) $(COMPILE_OPTIONS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OBJS) ./$(TARGET)
