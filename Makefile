@@ -3,7 +3,6 @@ CC = g++
 
 RM = rm -f
 
-TARGET = a.out
 CFLAGS = -g -std=gnu++0x -Wall -I/export/teach/1BRobot
 LINK_OPTIONS = -lrobot
 
@@ -12,6 +11,8 @@ OBJSRCS := $(filter-out main.cc,$(SRCS))
 
 OBJS := $(OBJSRCS:.cc=.o)
 OBJS_ARM := $(OBJSRCS:.cc=.arm.o)
+
+all: main.out
 
 .depend: $(SRCS)
 	rm -f ./.depend
@@ -34,7 +35,7 @@ include .depend
 	chmod +x $@
 
 clean:
-	$(RM) $(OBJS) ./$(TARGET)
+	$(RM) $(OBJS) ./*.out
 
-
-all: $(TARGET)
+%.robot: %.out
+	scp $< team@wlan-robot5.private:$@
