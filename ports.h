@@ -29,18 +29,18 @@ private:
 	port::Name _port;
 	uint8_t _mask;
 public:
-	Port(RLink* r, port::Name p, uint8_t mask=0xFF) : Device(r), _port(p), _mask(mask) {}
+	Port(RLink& r, port::Name p, uint8_t mask=0xFF) : Device(r), _port(p), _mask(mask) {}
 
 	inline operator uint8_t() {
-		uint8_t word = _r->request(port::read_instr(_port));
+		uint8_t word = _r.request(port::read_instr(_port));
 		return word & _mask;
 	}
 	inline void operator=(uint8_t val) {
 		if(_mask != 0xFF) {
 			// only bother reading if some bits are not masked
-			val |= ~_mask & _r->request(port::read_instr(_port));
+			val |= ~_mask & _r.request(port::read_instr(_port));
 		}
-		_r->command(port::write_instr(_port), val);
+		_r.command(port::write_instr(_port), val);
 	}
 
 

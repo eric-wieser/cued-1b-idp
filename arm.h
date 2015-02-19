@@ -14,6 +14,6 @@ public:
 	void open();
 	void close();
 
-    Arm(RLink* r, port::Name name)
+    Arm(RLink& r, port::Name name)
     	: Device(r), _port(r, name) {}
 };

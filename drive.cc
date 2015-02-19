@@ -23,15 +23,15 @@ void Drive::setWheelSpeeds(float left, float right) {
 	uint8_t right_i = convert_speed(right);
 
 	if (left_i == right_i) {
-		_r->command(BOTH_MOTORS_GO_SAME, left_i);
+		_r.command(BOTH_MOTORS_GO_SAME, left_i);
 	}
 	else if (left_i == -right_i) {
 		// TODO: should this be right_i?
-		_r->command(BOTH_MOTORS_GO_OPPOSITE, left_i);
+		_r.command(BOTH_MOTORS_GO_OPPOSITE, left_i);
 	}
 	else {
-		_r->command(MOTOR_1_GO, left_i);
-		_r->command(MOTOR_2_GO, right_i);
+		_r.command(MOTOR_1_GO, left_i);
+		_r.command(MOTOR_2_GO, right_i);
 	}
 }
 

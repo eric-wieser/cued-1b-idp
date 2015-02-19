@@ -8,7 +8,6 @@
 class Robot
 {
 private:
-	RLink _rlink;
 	Drive _drive;
 
 	LineSensors _lineSensors;
@@ -36,8 +35,4 @@ public:
 	inline float position() { ls().position };
 
 	const EggSensor::Reading& eld();
-
-	operator RLink();
 };
-
-extern Robot robot;
