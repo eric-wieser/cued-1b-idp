@@ -30,6 +30,6 @@ public:
 		bool lsl, lsc, lsr, lsa;
 	};
 
-	LineSensors(RLink& r, port::Name p, bool passive = false);
+	LineSensors(RLink* r, port::Name p, bool passive = false);
 	Reading read();
 };
