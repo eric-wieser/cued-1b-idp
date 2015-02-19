@@ -6,7 +6,7 @@ CFLAGS = -g -std=gnu++0x -Wall -I/export/teach/1BRobot
 LINK_OPTIONS = -lrobot
 
 SRCS := $(wildcard *.cc)
-OBJS := $(wildcard *.o)
+OBJS := $(filter-out main.o,$(SRCS:.cc=.o))
 
 .depend: $(SRCS)
 	rm -f ./.depend
@@ -14,8 +14,8 @@ OBJS := $(wildcard *.o)
  
 include .depend
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o$(TARGET) $(LINK_OPTIONS)
+%.out: $(OBJS) %.o
+	$(CC) $(CFLAGS) $^ -o $@ $(LINK_OPTIONS)
 
 %.o: %.cc
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -23,7 +23,7 @@ $(TARGET): $(OBJS)
 clean:
 	$(RM) $(OBJS) ./$(TARGET)
 
-deploy: all
-	scp a.out team@wlan-robot5.private:fedeggs.arm
+%.robot: %.out
+	scp $< team@wlan-robot5.private:$@
 
 all: $(TARGET)
