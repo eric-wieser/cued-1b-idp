@@ -1,7 +1,8 @@
 #pragma once
 
+#include "ports.h"
 #include "device.h"
-class RLink;
+#include "rlink.h"
 
 /**
 Intended usage:
@@ -19,11 +20,6 @@ Intended usage:
 
 */
 class LineSensors : public Device {
-private:
-	Port _port;
-	bool _passive; // false => use LEDs
-	Reading _reading;
-
 public:
 	struct Reading {
 		enum { NONE, LINE, JUNCTION, INVALID } state;
@@ -31,6 +27,12 @@ public:
 		bool lsl, lsc, lsr, lsa;
 	};
 
+private:
+	Port _port;
+	bool _passive; // false => use LEDs
+	Reading _reading;
+
+public:
 	LineSensors(RLink& r, port::Name p, bool passive = false);
 	Reading read();
 };

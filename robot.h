@@ -22,7 +22,7 @@ private:
 	Arm _arm;
 
 public:
-	Robot();
+	Robot(RLink& rlink);
 	~Robot();
 
 	// Drive
@@ -30,11 +30,11 @@ public:
 
 	// Line Sensors:
 	const LineSensors::Reading& ls();
-	inline bool lsl() { ls().lsl };
-	inline bool lsc() { ls().lsc };
-	inline bool lsr() { ls().lsr };
-	inline bool lsa() { ls().lsa };
-	inline float position() { ls().position };
+	inline bool lsl() { return ls().lsl; };
+	inline bool lsc() { return ls().lsc; };
+	inline bool lsr() { return ls().lsr; };
+	inline bool lsa() { return ls().lsa; };
+	inline float position() { return ls().position; };
 
 	const EggSensor::Reading& eld();
 

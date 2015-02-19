@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <robot_instr.h>
 #include "rlink.h"
+#include "device.h"
 
 namespace port {
 	enum Name{

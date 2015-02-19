@@ -1,18 +1,17 @@
 
 
 #include "timing.h"
-#include "port.h"
+#include "ports.h"
 #include "drive.h"
 #include "linesensors.h"
 #include "eggsensor.h"
 #include "arm.h"
-
-class RLink;
+#include "rlink.h"
 
 #include "robot.h"
 
 
-Robot::Robot(Rlink& rlink)
+Robot::Robot(RLink& rlink)
 		: _drive(rlink), 
 			_lineSensors(rlink, port::P1), 
 			_eggSensor(rlink, port::P2),
@@ -30,7 +29,7 @@ const LineSensors::Reading& Robot::ls() {
 		_lsReading = _lineSensors.read();
 	}
 
-	return( _lsReading )
+	return( _lsReading );
 }
 
 

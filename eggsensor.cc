@@ -12,19 +12,19 @@ EggSensor::Reading EggSensor::read() {
 	{
 		_port = 1 << PIN_LEDR;
 		delay(READ_DELAY);
-		res.r = _r->request(ADC0);
+		res.r = _r.request(ADC0);
 
 		_port = 1 << PIN_LEDG;
 		delay(READ_DELAY);
-		res.g = _r->request(ADC0);
+		res.g = _r.request(ADC0);
 
 		_port = 1 << PIN_LEDB;
 		delay(READ_DELAY);
-		res.b = _r->request(ADC0);
+		res.b = _r.request(ADC0);
 
 		_port = 0;
 		delay(READ_DELAY);
-		res.a = _r->request(ADC0);
+		res.a = _r.request(ADC0);
 	}
 
 	// do some processing
