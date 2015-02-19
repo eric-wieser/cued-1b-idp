@@ -1,9 +1,10 @@
 #pragma once
 
+#include "timing.h"
 #include "drive.h"
 #include "linesensors.h"
-#include "arm.h"
 #include "eggsensor.h"
+#include "arm.h"
 
 class Robot
 {
@@ -18,6 +19,7 @@ private:
 	EggSensor::Reading _esReading;
 	ticks_t _esUpdated;
 
+	Arm _arm;
 
 public:
 	Robot();
@@ -35,4 +37,6 @@ public:
 	inline float position() { ls().position };
 
 	const EggSensor::Reading& eld();
+
+	inline Arm& arm() { return _arm; }
 };

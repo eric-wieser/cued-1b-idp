@@ -1,9 +1,11 @@
 
 
+#include "timing.h"
+#include "port.h"
 #include "drive.h"
 #include "linesensors.h"
 #include "eggsensor.h"
-#include "timing.h"
+#include "arm.h"
 
 class RLink;
 
@@ -11,7 +13,10 @@ class RLink;
 
 
 Robot::Robot(Rlink& rlink)
-		: _drive(rlink), _lineSensors(rlink, port::P1), _eggSensor(rlink, port::P2) {
+		: _drive(rlink), 
+			_lineSensors(rlink, port::P1), 
+			_eggSensor(rlink, port::P2),
+			_arm(rlink, port::P3) {
 }
 
 
