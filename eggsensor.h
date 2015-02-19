@@ -2,6 +2,8 @@
 
 #include "eggtype.h"
 #include "device.h"
+#include "ports.h"
+#include <array>
 
 /**
 Intended usage:
@@ -20,11 +22,16 @@ Intended usage:
 */
 class EggSensor : public Device {
 private:
-	port::Name _port;
+	Port _port;
 
 public:
+	enum {
+		PIN_LEDR = 0,
+		PIN_LEDG = 1,
+		PIN_LEDB = 2
+	};
 	struct Reading {
-		float[3] probabilities;
+		std::array<float, 3> probabilities;
 		EggType bestGuess;
 
 		float r;
@@ -34,6 +41,6 @@ public:
 	};
 
 	Reading read();
-	EggSensor(RLink& r, port::Name port)
-		: Device(r), _port(port);
-}
+	EggSensor(RLink* r, port::Name port)
+		: Device(r), _port(r, port, 0x7) {};
+};
