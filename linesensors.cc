@@ -28,7 +28,9 @@ LineSensors::Reading LineSensors::read() {
 	float pos = 0.0f;
 	ret.state = Reading::LINE;
 	switch (sensors & 0b111) {
-		case 0: // 000
+
+		// line lost - deduce loss direction from previous state
+		case 0b000:
 			if (_reading.position < 0.0f) {
 				pos = -std::numeric_limits<float>::infinity();
 			}
@@ -42,32 +44,21 @@ LineSensors::Reading LineSensors::read() {
 
 			break;
 
-		case 3: // 011
-			pos = 0.5f;
-			break;
-		case 1: // 001
-			pos = 1.0f;
-			break;
+		// simple overlap of line, from leftmost to rightmost
+		case 0b001: pos =  1.0f; break;
+		case 0b011: pos =  0.5f; break;
+		case 0b010: pos =  0.0f; break;
+		case 0b110: pos = -0.5f; break;
+		case 0b100: pos = -1.0f; break;
 
-		case 2: // 010
-			pos = 0.0f;
-			break;
-
-		case 6: // 110
-			pos = -0.5f;
-			break;
-		case 4: // 100
-			pos = -1.0f;
-			break;
-
-		case 5: // 101
-			// Theoretically possible at junctions.
+		// junction, but hit at an odd angle
+		case 0b101:
 			pos = _reading.position;
 			ret.state = Reading::INVALID;
 			break;
 
-		case 7: // 111
-			// Junction. 
+		//junction - assume position is unchanged
+		case 0b111:
 			pos = _reading.position;
 			ret.state = Reading::JUNCTION;
 
