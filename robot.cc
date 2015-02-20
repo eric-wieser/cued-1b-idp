@@ -12,15 +12,15 @@
 
 
 Robot::Robot(RLink& rlink)
-		: _drive(rlink), 
-			_lineSensors(rlink, port::P1), 
+		: _drive(rlink),
+			_lineSensors(rlink, port::P1),
 			_eggSensor(rlink, port::P2),
 			_arm(rlink, port::P3) {
 }
 
 
 Robot::~Robot() {
-	// Stop drive?
+	// nothing to do here - all the subcomponents do clean up anyway
 }
 
 
