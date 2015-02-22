@@ -1,4 +1,6 @@
 #include <algorithm>
+#include <cmath>
+#include <vector>
 #include "util/utils.h"
 #include "util/timeout.h"
 #include "robot.h"
@@ -18,7 +20,7 @@ struct HardwareDamaged {};
 */
 void goToJunction(Robot& r, int distance) {
 	Timeout timeout = distance * 1000ms;
-	vector<LineSensors::Reading::State> history;
+	std::vector<LineSensors::Reading::State> history;
 
 	while(1) {
 		// read the line sensors
@@ -26,7 +28,7 @@ void goToJunction(Robot& r, int distance) {
 		history.push_front(line.state);
 
 		// if we know where the line is, adjust our course
-		if(isfinite(line.position)) {
+		if(std::isfinite(line.position)) {
 			r.drive.move({
 				forward: 0.8,
 				steer: 0.2 * line.position
