@@ -5,7 +5,7 @@ TARGET = a.out
 CFLAGS = -g -std=gnu++0x -Wall -I/export/teach/1BRobot
 LINK_OPTIONS = -lrobot
 
-SRCS := $(wildcard *.cc)
+SRCS := $(wildcard *.cc) $(wildcard utils/*.cc)
 OBJS := $(filter-out main.o,$(SRCS:.cc=.o))
 
 .depend: $(SRCS)
