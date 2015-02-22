@@ -30,6 +30,7 @@ include .depend
 	$(RCC) $(CFLAGS) $^ -o $@ $(LINK_OPTIONS)
 %.robot: %.arm.robot
 	scp $< team@wlan-robot5.private:$@
+	echo "ssh team@wlan-robot5.private ./$@" > $@
 
 clean:
 	$(RM) $(OBJS) ./$(TARGET)
