@@ -1,7 +1,7 @@
 
 
 #include <iostream>
-#include "timing.h"
+#include "../timing.h"
 
 int main(int argc, char const *argv[])
 {

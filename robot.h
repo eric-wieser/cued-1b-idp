@@ -1,10 +1,10 @@
 #pragma once
 
-#include "timing.h"
-#include "drive.h"
-#include "linesensors.h"
-#include "eggsensor.h"
-#include "arm.h"
+#include "dev/rlink.h"
+#include "dev/drive.h"
+#include "dev/linesensors.h"
+#include "dev/eggsensor.h"
+#include "dev/arm.h"
 
 class Robot
 {

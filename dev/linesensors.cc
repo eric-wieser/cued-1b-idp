@@ -10,7 +10,7 @@
 
 
 LineSensors::LineSensors(RLink& r, port::Name p, bool passive)
-		: Device(r), _passive(passive), _port(r, p) 
+		: Device(r), _passive(passive), _port(r, p)
 {
 }
 

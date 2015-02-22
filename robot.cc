@@ -1,14 +1,6 @@
-
-
-#include "timing.h"
-#include "ports.h"
-#include "drive.h"
-#include "linesensors.h"
-#include "eggsensor.h"
-#include "arm.h"
-#include "rlink.h"
-
 #include "robot.h"
+#include "ports.h"
+#include "timing.h"
 
 
 Robot::Robot(RLink& rlink)
