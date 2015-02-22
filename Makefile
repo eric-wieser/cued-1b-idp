@@ -31,6 +31,7 @@ include .depend
 %.robot: %.arm.robot
 	scp $< team@wlan-robot5.private:$@
 	echo "ssh team@wlan-robot5.private ./$@" > $@
+	chmod +x $@
 
 clean:
 	$(RM) $(OBJS) ./$(TARGET)
