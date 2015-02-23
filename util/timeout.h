@@ -22,7 +22,7 @@ eg:
 
 class Timeout {
 private:
-	typedef std::chrono::steady_clock clock;
+	typedef std::chrono::system_clock clock;
 	clock::time_point _end;
 public:
 	class Expired {};
@@ -32,6 +32,6 @@ public:
 
 	inline void check() {
 		if(clock::now() >= _end)
-			raise Expired();
+			throw Expired();
 	}
 };

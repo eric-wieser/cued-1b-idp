@@ -18,6 +18,7 @@ struct HardwareDamaged {};
 	@throws HardwareDamaged   Line state invalid for too long
 	                          Middle sensor broken? Wheels jammed?
 */
+#if 0
 void goToJunction(Robot& r, int distance) {
 	Timeout timeout = distance * 1000ms;
 	std::vector<LineSensors::Reading::State> history;
@@ -65,3 +66,4 @@ void goToJunction(Robot& r, int distance) {
 		delay(10ms);
 	}
 }
+#endif

@@ -7,7 +7,7 @@ enum LogLevel {
 
 #if !defined(LOGGING)
 	#define LOGGING LEVEL_WARN
-#end
+#endif
 
 #define DEBUG(x) (LOGGING <= LEVEL_DEBUG && (x));
 #define INFO(x)  (LOGGING <= LEVEL_INFO && (x));

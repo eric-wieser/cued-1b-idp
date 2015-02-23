@@ -2,7 +2,7 @@
 #include <array>
 #include "device.h"
 #include "ports.h"
-#include "eggtype.h"
+#include "../eggtype.h"
 
 class Courier : public Device {
 private:

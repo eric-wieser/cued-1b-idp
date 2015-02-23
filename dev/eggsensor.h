@@ -2,12 +2,9 @@
 
 #include <array>
 
-#include "eggtype.h"
 #include "device.h"
-#include "rlink.h"
-
+#include "../eggtype.h"
 #include "ports.h"
-#include <array>
 
 /**
 Intended usage:

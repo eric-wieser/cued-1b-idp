@@ -1,7 +1,7 @@
 #include <cstdint>
 #include <algorithm>
+#include <robot_delay.h>
 #include "eggsensor.h"
-#include "robot_delay.h"
 
 EggSensor::Reading EggSensor::read() {
 	const int READ_DELAY = 5; // ms

@@ -1,37 +1,40 @@
-#include "../dev/ports.h"
-#include "../dev/rlink.h"
+
 #include <cstdint>
 #include <iostream>
 #include <chrono>
-#include "utils/timeout.h"
+#include "../util/timeout.h"
+#include "../dev/ports.h"
+#include "../dev/rlink.h"
 
-typedef std::chrono::steady_clock clock;
+using namespace std::chrono;
+
+typedef system_clock clk;
 
 int main() {
 	RLink r;
 	std::cout << "constructed" << std::endl;
 	{
-		clock::time_point start_t = clock::now();
+		clk::time_point start_t = clk::now();
 		r.initialise();
-		std::chrono::nanoseconds dt = clock::now() - start_t;
-		cout << "Initialize time: " << dt.count() << "ns" << std::endl;
+		microseconds dt = duration_cast<microseconds>(clk::now() - start_t);
+		std::cout << "Initialize time: " << dt.count() << "us" << std::endl;
 	}
 
 	int N = 10000;
 	{
-		clock::time_point start_t = clock::now();
+		clk::time_point start_t = clk::now();
 		for(int i = 0; i < N; i++) {
 			r.command(WRITE_PORT_0, i%256);
 		}
-		std::chrono::nanoseconds dt = clock::now() - start_t;
-		cout << "Average command time: " << (dt / N).count() << "ns" << std::endl;
+		microseconds dt = duration_cast<microseconds>(clk::now() - start_t);
+		std::cout << "Average command time: " << (dt / N).count() << "us" << std::endl;
 	}
 	{
-		clock::time_point start_t = clock::now();
+		clk::time_point start_t = clk::now();
 		for(int i = 0; i < N; i++) {
-			r.command(READ_PORT_0);
+			r.request(READ_PORT_0);
 		}
-		std::chrono::nanoseconds dt = clock::now() - start_t;
-		cout << "Average request time: " << (dt / N).count() << "ns" << std::endl;
+		microseconds dt = duration_cast<microseconds>(clk::now() - start_t);
+		std::cout << "Average request time: " << (dt / N).count() << "us" << std::endl;
 	}
 }
