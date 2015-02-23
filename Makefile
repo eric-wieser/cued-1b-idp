@@ -35,7 +35,7 @@ include .depend
 	chmod +x $@
 
 clean:
-	$(RM) $(OBJS) ./*.out
+	$(RM) $(OBJS) $(OBJS_ARM) ./*.out
 
 %.robot: %.out
 	scp $< team@wlan-robot5.private:$@
