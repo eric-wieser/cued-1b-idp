@@ -9,8 +9,8 @@
 #include "linesensors.h"
 
 
-LineSensors::LineSensors(RLink& r, port::Name p, bool passive)
-		: Device(r), _passive(passive), _port(r, p)
+LineSensors::LineSensors(RLink& r, port::Name p)
+		: Device(r), _port(r, p)
 {
 }
 

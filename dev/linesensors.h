@@ -29,10 +29,9 @@ public:
 
 private:
 	Port _port;
-	bool _passive; // false => use LEDs
 	Reading _reading;
 
 public:
-	LineSensors(RLink& r, port::Name p, bool passive = false);
+	LineSensors(RLink& r, port::Name p);
 	Reading read();
 };
