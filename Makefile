@@ -12,7 +12,7 @@ OBJSRCS := $(filter-out main.cc,$(SRCS))
 OBJS := $(OBJSRCS:.cc=.o)
 OBJS_ARM := $(OBJSRCS:.cc=.arm.o)
 
-all: main.out
+all: main.wifi main.robot
 
 .depend: $(SRCS)
 	rm -f ./.depend
@@ -27,7 +27,7 @@ include .depend
 
 %.arm.o: %.cc
 	$(RCC) $(CFLAGS) -c $< -o $@
-%.arm.robot: $(OBJS_ARM) %.o
+%.arm.robot: $(OBJS_ARM) %.arm.o
 	$(RCC) $(CFLAGS) $^ -o $@ $(LINK_OPTIONS)
 %.robot: %.arm.robot
 	scp $< team@wlan-robot5.private:$@
@@ -36,6 +36,3 @@ include .depend
 
 clean:
 	$(RM) $(OBJS) $(OBJS_ARM) ./*.out
-
-%.robot: %.out
-	scp $< team@wlan-robot5.private:$@
