@@ -9,15 +9,20 @@
 using namespace std::chrono;
 
 /// Exception thrown if the line is lost
-struct LineLost : std::exception {
+struct LineLost : public std::exception {
 	LineSensors::Reading lastReading;
 	LineLost(LineSensors::Reading r) : lastReading(r) {};
-	const char* what() const noexcept { return "LineLost: can't find the line"; }
+	virtual const char* what() const throw() {
+		if(lastReading.position > 0)
+			return "lost to the left";
+		if(lastReading.position < 0)
+			return "lost to the right";
+		else
+			return "lost to the rear";
+	};
 };
 
-struct HardwareDamaged : std::exception {
-	const char* what() const noexcept { return "HardwareDamaged: one of the sensors is broken"; }
-};
+struct HardwareDamaged : public std::exception {};
 
 /**
 	@param distance  estimated travel distance, in cm

@@ -1,3 +1,3 @@
 #include "robot.h"
 
-void goToJunction(Robot& r, int distance);
+void goToJunction(Robot& r, float distance);
