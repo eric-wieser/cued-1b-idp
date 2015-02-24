@@ -22,7 +22,8 @@ Intended usage:
 class LineSensors : public Device {
 public:
 	struct Reading {
-		enum { NONE, LINE, JUNCTION, INVALID } state;
+		enum State { NONE, LINE, JUNCTION, INVALID };
+		State state;
 		float position; // between -1 and 1, or +-Inf if no line, or NaN if invalid
 		bool lsl, lsc, lsr, lsa;
 	};

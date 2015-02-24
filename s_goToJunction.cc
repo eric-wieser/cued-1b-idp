@@ -1,9 +1,12 @@
 #include <algorithm>
 #include <cmath>
-#include <vector>
+#include <deque>
+#include <chrono>
 #include "util/utils.h"
 #include "util/timeout.h"
 #include "robot.h"
+
+using namespace std::chrono;
 
 /// Exception thrown if the line is lost
 struct LineLost{ LineSensors::Reading lastReading; };
@@ -18,10 +21,10 @@ struct HardwareDamaged {};
 	@throws HardwareDamaged   Line state invalid for too long
 	                          Middle sensor broken? Wheels jammed?
 */
-#if 0
+
 void goToJunction(Robot& r, int distance) {
-	Timeout timeout = distance * 1000ms;
-	std::vector<LineSensors::Reading::State> history;
+	Timeout timeout = distance * milliseconds(1000);
+	std::deque<LineSensors::Reading::State> history;
 
 	while(1) {
 		// read the line sensors
@@ -31,8 +34,8 @@ void goToJunction(Robot& r, int distance) {
 		// if we know where the line is, adjust our course
 		if(std::isfinite(line.position)) {
 			r.drive.move({
-				forward: 0.8,
-				steer: 0.2 * line.position
+				forward: 0.8f,
+				steer: 0.5f * line.position
 			});
 		}
 		else {
@@ -59,11 +62,10 @@ void goToJunction(Robot& r, int distance) {
 			throw HardwareDamaged();
 
 		// only keep the last 5 readings
-		if(history.size() > 5):
+		if(history.size() > 5)
 			history.pop_back();
 
 		timeout.check();
-		delay(10ms);
+		delay(milliseconds(10));
 	}
 }
-#endif
