@@ -7,24 +7,25 @@
 #include "dev/eggsensor.h"
 #include "dev/arm.h"
 
-class Robot
+struct Robot {
+	Drive drive;
+	Arm arm;
+	LineSensors ls;
+	EggSensor detector;
+
+	Robot(RLink& rlink);
+};
+
+class CachingRobot : private Robot
 {
 private:
-	Drive _drive;
-
-	LineSensors _lineSensors;
 	LineSensors::Reading _lsReading;
 	ticks_t _lsUpdated;
-
-	EggSensor _eggSensor;
 	EggSensor::Reading _esReading;
 	ticks_t _esUpdated;
 
-	Arm _arm;
-
 public:
-	Robot(RLink& rlink);
-	~Robot();
+	CachingRobot(RLink& rlink) : Robot(rlink) { };
 
 	// Drive
 	Drive& drive();
@@ -39,5 +40,8 @@ public:
 
 	const EggSensor::Reading& eld();
 
-	inline Arm& arm() { return _arm; }
+	inline Arm& arm() { return Robot::arm; }
 };
+
+namespace simple_robot {
+}

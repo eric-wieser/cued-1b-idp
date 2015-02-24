@@ -40,31 +40,24 @@ Port 2 - courier indicator leds
 	6  C3B  Courier top - brown egg indicator LED
 	7  C3B  Courier top - tasty egg indicator LED
 */
-Robot::Robot(RLink& rlink)
-		: _drive(rlink),
-			_lineSensors(rlink, port::P1),
-			_eggSensor(rlink, port::P2),
-			_arm(rlink, port::P3) {
-}
+Robot::Robot(RLink& rlink) :
+			drive(rlink, {1, 2, 3}),
+			arm(rlink, port::P3),
+			ls(rlink, port::P1),
+			detector(rlink, port::P2) { }
 
-
-Robot::~Robot() {
-	// nothing to do here - all the subcomponents do clean up anyway
-}
-
-
-const LineSensors::Reading& Robot::ls() {
+const LineSensors::Reading& CachingRobot::ls() {
 	if (_lsUpdated < ticks()) {
-		_lsReading = _lineSensors.read();
+		_lsReading = Robot::ls.read();
 	}
 
 	return( _lsReading );
 }
 
 
-const EggSensor::Reading& Robot::eld() {
+const EggSensor::Reading& CachingRobot::eld() {
 	if (_esUpdated < ticks()) {
-		_esReading = _eggSensor.read();
+		_esReading = detector.read();
 	}
 
 	return( _esReading );
