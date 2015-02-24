@@ -27,8 +27,14 @@ private:
 public:
 	class Expired {};
 
-	Timeout(std::chrono::milliseconds duration) :
-		_end(clock::now() + duration) {}
+	// chrono really is a mess to use
+	template<class Rep, class Period>
+	Timeout(std::chrono::duration<Rep,Period> duration) :
+		_end(
+			std::chrono::time_point_cast<clock::time_point::duration>(
+				clock::now() + duration
+			)
+		) {}
 
 	inline void check() {
 		if(clock::now() >= _end)

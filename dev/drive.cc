@@ -3,6 +3,14 @@
 #include <cstdint>
 #include <cmath>
 
+Drive::Drive(RLink& r, Configuration c) : Device(r), maxSpeeds(c) {
+	_r.command(RAMP_TIME, 0);
+}
+
+Drive::~Drive() {
+	stop();
+}
+
 uint8_t Drive::convertSpeed(float s) {
 	uint8_t res = std::min(fabs(s), 1.0) * 127;
 
@@ -35,6 +43,7 @@ void Drive::setWheelSpeeds(float left, float right) {
 	}
 }
 
-Drive::~Drive() {
-	stop();
-}
+Drive::Speeds::Speeds(Drive::Configuration c) :
+    linear((2 * M_PI * c.radius) * (c.rpm/60)),
+    rotary(linear / (c.spacing / 2) * (180/M_PI)) {}
+

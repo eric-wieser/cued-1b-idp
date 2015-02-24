@@ -25,7 +25,7 @@ struct LineLost : public std::exception {
 struct HardwareDamaged : public std::exception {};
 
 /**
-	@param distance  estimated travel distance, in cm
+	@param distance  estimated travel distance, in m
 
 	@throws Timeout::Expired  Took too long to get to junction
 	@throws LineLost          Line lost for too long
@@ -33,9 +33,12 @@ struct HardwareDamaged : public std::exception {};
 	                          Middle sensor broken? Wheels jammed?
 */
 
-void goToJunction(Robot& r, int distance) {
-	Timeout timeout = distance * milliseconds(1000);
+void goToJunction(Robot& r, float distance) {
 	std::deque<LineSensors::Reading::State> history;
+
+	// Predict the time taken to get there, then set a timeout at a 10% margin
+	duration<float> tPredicted(distance / r.drive.maxSpeeds.linear);
+	Timeout timeout = tPredicted * 1.1;
 
 	while(1) {
 		// read the line sensors

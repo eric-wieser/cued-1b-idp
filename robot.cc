@@ -41,10 +41,14 @@ Port 2 - courier indicator leds
 	7  C3B  Courier top - tasty egg indicator LED
 */
 Robot::Robot(RLink& rlink) :
-			drive(rlink, {1, 2, 3}),
-			arm(rlink, port::P3),
-			ls(rlink, port::P1),
-			detector(rlink, port::P2) { }
+	drive(rlink, {
+		radius: 0.005,
+		spacing: 0.28,
+		rpm: 20
+	}),
+	arm(rlink, port::P3),
+	ls(rlink, port::P1),
+	detector(rlink, port::P2) { }
 
 const LineSensors::Reading& CachingRobot::ls() {
 	if (_lsUpdated < ticks()) {
