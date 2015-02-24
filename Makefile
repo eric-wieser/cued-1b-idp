@@ -3,8 +3,8 @@ CC = g++
 
 RM = rm -f
 
-CFLAGS = -g -std=gnu++0x -Wall -I/export/teach/1BRobot
-LINK_OPTIONS = -lrobot
+override CFLAGS += -g -std=gnu++0x -Wall -I/export/teach/1BRobot
+override LDFLAGS += -lrobot
 
 SRCS := $(wildcard *.cc) $(wildcard utils/*.cc) $(wildcard dev/*.cc)
 OBJSRCS := $(filter-out main.cc,$(SRCS))
@@ -26,7 +26,7 @@ include .depend
 %.arm.o: %.cc
 	$(RCC) $(CFLAGS) -c $< -o $@
 %.arm.robot: $(OBJS_ARM) %.arm.o
-	$(RCC) $(CFLAGS) $^ -o $@ $(LINK_OPTIONS)
+	$(RCC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 %.robot: %.arm.robot
 	echo $(OBJS_ARM)
 	scp $< team@wlan-robot5.private:$@
@@ -36,10 +36,10 @@ include .depend
 %.o: %.cc
 	$(CC) $(CFLAGS) -c $< -o $@
 %.wifi: $(OBJS) %.o
-	$(CC) $(CFLAGS) $^ -o $@ $(LINK_OPTIONS)
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 
-tests/drivetest.wifi: LINK_OPTIONS += -lncurses
+tests/drivetest.wifi: LDFLAGS += -lncurses
 
 clean:
 	$(RM) $(OBJS) $(OBJS_ARM)
