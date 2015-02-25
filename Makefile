@@ -42,4 +42,7 @@ include .depend
 tests/drivetest.wifi: LDFLAGS += -lncurses
 
 clean:
-	$(RM) $(OBJS) $(OBJS_ARM)
+	$(RM) $(OBJS) $(OBJS_ARM) ./html
+
+docs:
+	doxygen
