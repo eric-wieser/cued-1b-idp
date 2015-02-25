@@ -16,21 +16,22 @@ int main() {
 	std::cout << "constructed" << std::endl;
 	try {
 		rlink.initialise();
+	}
 	catch (LinkError& e) {
-		ERR(std::cout << "link error: initialization failed" << endl);
-		ERR(e.log());
+		ERROR(std::cout << "link error: initialization failed" << std::endl);
+		ERROR(e.log());
 		return -1;
 	}
 
 	try {
 		if (rlink.request (TEST_INSTRUCTION) != TEST_INSTRUCTION_RESULT) {
-			ERR(std::cout << "test instruction failed" << endl);
+			ERROR(std::cout << "test instruction failed" << std::endl);
 			return -1;
 		}
 	}
 	catch (LinkError& e) {
-		ERR(std::cout << "link error: test instruction" << endl);
-		ERR(e.log());
+		ERROR(std::cout << "link error: test instruction" << std::endl);
+		ERROR(e.log());
 		return -1;
 	}
 
@@ -47,7 +48,7 @@ int main() {
 			WARN(e.log());
 			if(e.is_fatal) {
 				WARN(std::cout << "Requires reinitialization" << std::endl);
-				rlink.reinitialize();
+				// rlink.reinitialize();
 				INFO(std::cout << "Reinitialized" << std::endl);
 			}
 		}
