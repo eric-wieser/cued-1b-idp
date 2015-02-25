@@ -3,23 +3,23 @@
 #include <cstdint>
 #include <chrono>
 
-typedef unsigned long ticks_t;
-typedef uint64_t timer_t;
+typedef unsigned long t_ticks;
+typedef uint64_t t_timer;
 
 namespace timing {
 
-typedef std::chrono::steady_clock _timerClock;
-extern ticks_t _ticks;
+typedef std::chrono::system_clock _timerClock;
+extern t_ticks _ticks;
 
 /** Increments the tick count.
 */
 void tick();
 
-timer_t now();
-double diff(timer_t timer);
+t_timer now();
+double diff(t_timer timer);
 
 }
 
 /** Returns an integer number of ticks.
 */
-ticks_t ticks();
+t_ticks ticks();

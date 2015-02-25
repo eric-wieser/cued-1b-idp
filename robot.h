@@ -20,9 +20,9 @@ class CachingRobot : private Robot
 {
 private:
 	LineSensors::Reading _lsReading;
-	ticks_t _lsUpdated;
+	t_ticks _lsUpdated;
 	EggSensor::Reading _esReading;
-	ticks_t _esUpdated;
+	t_ticks _esUpdated;
 
 public:
 	CachingRobot(RLink& rlink) : Robot(rlink) { };
