@@ -39,7 +39,8 @@ include .depend
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 
-tests/drivetest.wifi: LDFLAGS += -lncurses
+tests/t_drive.wifi: LDFLAGS += -lncurses
+tests/t_robotdrive.wifi: LDFLAGS += -lncurses
 
 clean:
 	$(RM) $(OBJS) $(OBJS_ARM) ./html
