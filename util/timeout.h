@@ -28,8 +28,7 @@ public:
 	class Expired {};
 
 	// chrono really is a mess to use
-	template<class Rep, class Period>
-	Timeout(std::chrono::duration<Rep,Period> duration) :
+	Timeout(std::chrono::duration<float> duration) :
 		_end(
 			std::chrono::time_point_cast<clock::time_point::duration>(
 				clock::now() + duration
@@ -39,5 +38,9 @@ public:
 	inline void check() {
 		if(clock::now() >= _end)
 			throw Expired();
+	}
+
+	inline std::chrono::duration<float> remaining() {
+		return _end - clock::now();
 	}
 };
