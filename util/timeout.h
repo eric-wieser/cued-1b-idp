@@ -19,6 +19,7 @@ eg:
 #pragma once
 
 #include <chrono>
+#include "robot_delay.h"
 
 class Timeout {
 private:
@@ -30,9 +31,7 @@ public:
 	// chrono really is a mess to use
 	Timeout(std::chrono::duration<float> duration) :
 		_end(
-			std::chrono::time_point_cast<clock::time_point::duration>(
-				clock::now() + duration
-			)
+			clock::now() + std::chrono::duration_cast<clock::time_point::duration>(duration)
 		) {}
 
 	inline void check() {
@@ -42,5 +41,11 @@ public:
 
 	inline std::chrono::duration<float> remaining() {
 		return _end - clock::now();
+	}
+
+	inline void wait() {
+		delay(std::chrono::duration_cast<std::chrono::milliseconds>(
+			_end - clock::now()
+		).count());
 	}
 };
