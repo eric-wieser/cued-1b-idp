@@ -10,8 +10,12 @@ using namespace std::chrono;
 
 /// Exception thrown if the line is lost
 struct LineLost : public std::exception {
-	LineSensors::Reading lastReading;
-	LineLost(LineSensors::Reading r) : lastReading(r) {};
+	const LineSensors::Reading lastReading;  ///< Reading that indicated a lost line
+	const float distanceLeft;                ///< distance left along the line when lost
+
+	LineLost(LineSensors::Reading r, float d) : lastReading(r), distanceLeft(d) {};
+
+	/// override of std::exception::what
 	virtual const char* what() const throw() {
 		if(lastReading.position > 0)
 			return "lost to the left";
@@ -38,7 +42,7 @@ void goToJunction(Robot& r, float distance) {
 
 	// Predict the time taken to get there, then set a timeout at a 10% margin
 	duration<float> tPredicted(distance / r.drive.maxSpeeds.linear);
-	Timeout timeout = tPredicted * 1.1;
+	Timeout timeout = tPredicted * 1.1f;
 
 	while(1) {
 		// read the line sensors
@@ -69,7 +73,7 @@ void goToJunction(Robot& r, float distance) {
 
 		// if the last 5 readings have been no line, we've failed
 		if(nNone == 5)
-			throw LineLost { line };
+			throw LineLost(line, timeout.remaining().count() * r.drive.maxSpeeds.linear);
 
 		// if the last 5 readings have been invalid...
 		if(nInvalid == 5)
@@ -83,7 +87,6 @@ void goToJunction(Robot& r, float distance) {
 		delay(milliseconds(10));
 	}
 }
-
 
 // void goToJunction(Robot& r, float distance) {
 // 	try{
