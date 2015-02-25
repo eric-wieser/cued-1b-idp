@@ -27,8 +27,11 @@ public:
         Speeds(Configuration g);
     };
 
+private:
+    static const Configuration _defConfig;
 
-    Drive(RLink& r, Configuration c = {});
+public:
+    Drive(RLink& r, Configuration c = Drive::_defConfig);
     ~Drive();
 
     /**

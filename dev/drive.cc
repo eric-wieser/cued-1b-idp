@@ -3,6 +3,10 @@
 #include <cstdint>
 #include <cmath>
 
+
+const Drive::Configuration Drive::_defConfig {0.0f, 0.0f, 0.0f};
+
+
 Drive::Drive(RLink& r, Configuration c) : Device(r), maxSpeeds(c) {
 	_r.command(RAMP_TIME, 0);
 }

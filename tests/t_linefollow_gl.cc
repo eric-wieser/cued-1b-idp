@@ -45,12 +45,12 @@ bool delay_falling(int& hist, bool value, int ticks = 5) {
 
 struct robotLogic
 {
-	int state = 0;
-	int nJunc = 0;
-	int nNone = 0;
-	int nInvalid = 0;
-	int nLine = 0;
-	timer_t timer;
+	int state;
+	int nJunc;
+	int nNone;
+	int nInvalid;
+	int nLine;
+	t_timer timer;
 
 	void operator()(CachingRobot& robot) {
 		auto line = robot.ls();

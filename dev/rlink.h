@@ -21,14 +21,14 @@ public:
 	const link_err err;
 	const bool is_fatal;
 
-	LinkError(RLink& r) : _r(r), err(r.lookup_err(0)), is_fatal(r.fatal_err()) {};
-	~LinkError() { _r.clear_errs(); };
+	LinkError(RLink& r) : _r(r), err(r.lookup_err(0)), is_fatal(r.fatal_err()) {}
+	virtual ~LinkError() throw() { _r.clear_errs(); }
 	inline void log() {
 		_r.print_errs("\t");
 	}
 
 	/// override of std::exception
-	inline virtual const char* what() const throw() {
+	virtual const char* what() const throw() {
 		return _r.err_string(err);
 	}
 };
