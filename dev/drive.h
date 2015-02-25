@@ -1,6 +1,7 @@
 #pragma once
 #include "device.h"
 #include <cmath>
+#include "../util/timeout.h"
 
 /**
 Class abtracting the drive motors
@@ -62,7 +63,14 @@ public:
     Should ensure that abs(args.forward) + abs(args.steer) <= 1
     */
     void move(move_args args);
-    
+
+
+    /// Move in a straight line, and return a timeout indicating expected completion
+    Timeout straight(float dist, float speed = 1);
+
+    /// Turn an angle on the spot, and return a timeout indicating expected completion
+    Timeout turn(float angle, float speed = 1);
+
     /// low-level motor access
     void setWheelSpeeds(float left, float right);
 
