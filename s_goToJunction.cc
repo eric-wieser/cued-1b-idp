@@ -83,3 +83,33 @@ void goToJunction(Robot& r, float distance) {
 		delay(milliseconds(10));
 	}
 }
+
+
+// void goToJunction(Robot& r, float distance) {
+// 	try{
+// 		goToJunction_inner(r, distance);
+// 	}
+// 	catch(LineLost& lost) {
+// 		if(lost.lastReading.position > 0) {
+// 			r.drive.move({forward: 0, steer: 1});
+// 			try {
+// 				waitForLine(5000);
+// 				r.drive.stop();
+// 			}
+// 			catch (NoLineFound) {
+// 				try {
+// 					r.drive.move({forward: 0, steer: -1});
+// 					waitForLine(5000);
+// 				}
+// 				catch (NoLineFound) {
+// 					throw lost;
+// 				}
+// 			}
+
+// 		}
+// 		else(lost.lastReading.position > 0) {
+// 			r.drive.move({forward: 0, steer: -1});
+// 		}
+// 		goToJunction(r, distance - lost.travelled);
+// 	}
+// }
