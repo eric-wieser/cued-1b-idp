@@ -42,7 +42,7 @@ Port 2 - courier indicator leds
 */
 Robot::Robot(RLink& rlink) :
 	drive(rlink, {
-		radius: 0.005,
+		radius: 0.05,
 		spacing: 0.28,
 		rpm: 20
 	}),
