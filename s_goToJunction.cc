@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cmath>
 #include <deque>
+#include <iostream>
 #include <chrono>
 #include "util/utils.h"
 #include "util/timeout.h"
@@ -37,8 +38,9 @@ struct HardwareDamaged : public std::exception {};
 	                          Middle sensor broken? Wheels jammed?
 */
 
-void goToJunction(Robot& r, float distance) {
+void goToJunction_inner(Robot& r, float distance) {
 	std::deque<LineSensors::Reading::State> history;
+	Drive d = r.drive;
 
 	// Predict the time taken to get there, then set a timeout at a 10% margin
 	duration<float> tPredicted(distance / r.drive.maxSpeeds.linear);
@@ -51,7 +53,7 @@ void goToJunction(Robot& r, float distance) {
 
 		// if we know where the line is, adjust our course
 		if(std::isfinite(line.position)) {
-			r.drive.move({
+			d.move({
 				forward: 0.8f,
 				steer: 0.5f * line.position
 			});
@@ -59,7 +61,7 @@ void goToJunction(Robot& r, float distance) {
 		else {
 			// otherwise, we've lost the line
 			// inch forward slowly, in case it was a bad reading
-			r.drive.move({forward: 0.4});
+			d.move({forward: 0.4});
 		}
 
 		// look back over the history, to deal with bad readings
@@ -73,7 +75,7 @@ void goToJunction(Robot& r, float distance) {
 
 		// if the last 5 readings have been no line, we've failed
 		if(nNone == 5)
-			throw LineLost(line, timeout.remaining().count() * r.drive.maxSpeeds.linear);
+			throw LineLost(line, timeout.remaining().count() * d.maxSpeeds.linear);
 
 		// if the last 5 readings have been invalid...
 		if(nInvalid == 5)
@@ -88,31 +90,81 @@ void goToJunction(Robot& r, float distance) {
 	}
 }
 
-// void goToJunction(Robot& r, float distance) {
-// 	try{
-// 		goToJunction_inner(r, distance);
-// 	}
-// 	catch(LineLost& lost) {
-// 		if(lost.lastReading.position > 0) {
-// 			r.drive.move({forward: 0, steer: 1});
-// 			try {
-// 				waitForLine(5000);
-// 				r.drive.stop();
-// 			}
-// 			catch (NoLineFound) {
-// 				try {
-// 					r.drive.move({forward: 0, steer: -1});
-// 					waitForLine(5000);
-// 				}
-// 				catch (NoLineFound) {
-// 					throw lost;
-// 				}
-// 			}
+class NoLineFound : public std::exception {};
 
-// 		}
-// 		else(lost.lastReading.position > 0) {
-// 			r.drive.move({forward: 0, steer: -1});
-// 		}
-// 		goToJunction(r, distance - lost.travelled);
-// 	}
-// }
+void reFindLine(Robot& r, float lastPos) {
+	const float reverseDist = 0.05; //m
+	const float reverseSpeed = 0.5;
+
+	const float steerAngle = 45;
+	const float steerSpeed = 0.5;
+
+
+	float sign = copysignf(1, lastPos);
+
+	// lost the line behind us
+	if(sign == 0) {
+		// reverse until we find a line
+		try {
+			Drive d = r.drive;
+			Timeout timeout = d.straight(-reverseDist, reverseSpeed);
+			while(r.ls.read().state != LineSensors::Reading::LINE) {
+				timeout.check();
+			}
+
+			return;
+		}
+		catch(Timeout::Expired) {}
+
+		// pick a side for further searching
+		sign = 1;
+	}
+
+	// turn in the direction we think we lost the line
+	try {
+		Drive d = r.drive;
+		Timeout timeout = d.turn(sign*steerAngle, steerSpeed);
+		while(r.ls.read().state != LineSensors::Reading::LINE) {
+			timeout.check();
+		}
+
+		return;
+	}
+	catch(Timeout::Expired) {}
+
+	// turn in the other direction
+	try {
+		Drive d = r.drive;
+		Timeout timeout = d.turn(-2*sign*steerAngle, steerSpeed);
+		while(r.ls.read().state != LineSensors::Reading::LINE) {
+			timeout.check();
+		}
+
+		return;
+	}
+	catch(Timeout::Expired) {}
+
+
+	throw NoLineFound();
+}
+
+void goToJunction(Robot& r, float distance) {
+	while(1) {
+		// try to follow the line to the appropriate distance
+		try{
+			goToJunction_inner(r, distance);
+			return;
+		}
+		catch(LineLost& lost) {
+			std::cout << "Lost: " << lost.what() << ", " << lost.distanceLeft << "m remain" << std::endl;
+			distance = lost.distanceLeft;
+			try {
+				reFindLine(r, lost.lastReading.position);
+			}
+			catch (NoLineFound) {
+				std::cout << "Could not refind" << std::endl;
+				throw lost;
+			}
+		}
+	}
+}

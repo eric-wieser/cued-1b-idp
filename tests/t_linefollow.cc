@@ -13,11 +13,7 @@ int main() {
 
 	Robot r(link);
 
-	try {
-		goToJunction(r, 20);
-	}
-	catch(std::exception& e) {
-		std::cout << "Damn: " << e.what() << std::endl;
-	}
-	return 0;
+	goToJunction(r, 1);
+	turnAtJunction(r);
+	goToJunction(r, 1);
 }
