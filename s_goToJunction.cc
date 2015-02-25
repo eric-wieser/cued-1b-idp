@@ -42,9 +42,10 @@ void goToJunction_inner(Robot& r, float distance) {
 	std::deque<LineSensors::Reading::State> history;
 	Drive d = r.drive;
 
-	// Predict the time taken to get there, then set a timeout at a 10% margin
-	duration<float> tPredicted(distance / r.drive.maxSpeeds.linear);
-	Timeout timeout = tPredicted * 1.1f;
+
+	// Predict the time taken to get there, with a 10% margin
+	duration<float> tPredicted(distance / r.drive.maxSpeeds.linear * 1.1f);
+	Timeout timeout = tPredicted;
 
 	while(1) {
 		// read the line sensors
@@ -54,14 +55,14 @@ void goToJunction_inner(Robot& r, float distance) {
 		// if we know where the line is, adjust our course
 		if(std::isfinite(line.position)) {
 			d.move({
-				forward: 0.8f,
+				forward: 1.0f,
 				steer: 0.5f * line.position
 			});
 		}
 		else {
 			// otherwise, we've lost the line
 			// inch forward slowly, in case it was a bad reading
-			d.move({forward: 0.4});
+			d.move({forward: 0.5f});
 		}
 
 		// look back over the history, to deal with bad readings
@@ -75,7 +76,7 @@ void goToJunction_inner(Robot& r, float distance) {
 
 		// if the last 5 readings have been no line, we've failed
 		if(nNone == 5)
-			throw LineLost(line, timeout.remaining().count() * d.maxSpeeds.linear);
+			throw LineLost(line, timeout.remaining() / tPredicted * distance);
 
 		// if the last 5 readings have been invalid...
 		if(nInvalid == 5)
