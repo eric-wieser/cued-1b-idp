@@ -7,4 +7,4 @@ inline void delay(const std::chrono::milliseconds& d) {
 	delay(d.count());
 }
 
-#define ALL(v) std::begin(v), std::end(v)
+#define ALL(v) v.begin(), v.end()
