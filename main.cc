@@ -17,20 +17,20 @@ int main() {
 	try {
 		rlink.initialise();
 	catch (LinkError& e) {
-		ERR(std::cout << "link error: initialization failed" << endl);
-		ERR(e.log());
+		ERROR(std::cout << "link error: initialization failed" << endl);
+		ERROR(e.log());
 		return -1;
 	}
 
 	try {
 		if (rlink.request (TEST_INSTRUCTION) != TEST_INSTRUCTION_RESULT) {
-			ERR(std::cout << "test instruction failed" << endl);
+			ERROR(std::cout << "test instruction failed" << endl);
 			return -1;
 		}
 	}
 	catch (LinkError& e) {
-		ERR(std::cout << "link error: test instruction" << endl);
-		ERR(e.log());
+		ERROR(std::cout << "link error: test instruction" << endl);
+		ERROR(e.log());
 		return -1;
 	}
 
