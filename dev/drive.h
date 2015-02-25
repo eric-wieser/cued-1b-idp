@@ -3,27 +3,35 @@
 #include <cmath>
 
 /**
-Intended usage:
+Class abtracting the drive motors
 
+Intended usage
+
+    \code{.cpp}
     Drive d(robot);
 
     // forward, steer with center of curvature on left
-    d.move({.forward=0.9, .steer=0.1});
+    d.move({forward: 0.9, .steer: 0.1});
+    \endcode
 
 */
 class Drive : public Device {
 public:
-    /// struct parameterizing drive configuration
+    /**
+    Describes the physical configuration of the robot
+    */
     struct Configuration {
-        float radius;  // m
-        float spacing; // m
-        float rpm;     // rpm
+        float radius;  ///< wheel radius, in m
+        float spacing; ///< distance between centers of wheels, in m
+        float rpm;     ///< motor speed, in rpm
     };
 
-    /// struct indicating maximum speeds, built from a geometry
+    /**
+    struct indicating maximum speeds, built from a Configuration
+    */
     struct Speeds {
-        const float linear; // m/s
-        const float rotary; // deg/s
+        const float linear; //< maximum forward/reversing speed in m/s
+        const float rotary; //< maximum rotational speed in degrees/s
         Speeds(Configuration g);
     };
 
@@ -31,9 +39,19 @@ private:
     static const Configuration _defConfig;
 
 public:
+    /**
+    Initialize a drive over a connection.
+
+    @param r  the link to the robot
+    @param c  the drive geometry and speeds, used to populate Drive::maxSpeeds
+    */
     Drive(RLink& r, Configuration c = Drive::_defConfig);
     ~Drive();
 
+    struct move_args {
+        float forward;
+        float steer;
+    };
     /**
     @param args.forward  non-dimensional linear speed: 1 is full speed
                          forwards, -1 is full speed backwards
@@ -43,12 +61,8 @@ public:
 
     Should ensure that abs(args.forward) + abs(args.steer) <= 1
     */
-    struct move_args {
-        float forward;
-        float steer;
-    };
     void move(move_args args);
-
+    
     /// low-level motor access
     void setWheelSpeeds(float left, float right);
 
@@ -58,6 +72,7 @@ public:
     /// convert floating point speed to sign/magnitude
     static uint8_t convertSpeed(float s);
 
+    /// The maximum speeds the robot is able to acheive
     const Speeds maxSpeeds;
 };
 
