@@ -2,13 +2,15 @@
 #include "robot_instr.h"
 #include <cstdint>
 #include <cmath>
+#include <iostream>
+#include <chrono>
 
 
 const Drive::Configuration Drive::_defConfig {0.0f, 0.0f, 0.0f};
 
 
 Drive::Drive(RLink& r, Configuration c) : Device(r), maxSpeeds(c) {
-	_r.command(RAMP_TIME, 0);
+	_r.command(RAMP_TIME, 10);
 }
 
 Drive::~Drive() {
@@ -27,6 +29,21 @@ void Drive::move(move_args args) {
 	float left = args.forward - args.steer;
 	float right = args.forward + args.steer;
 	setWheelSpeeds(left, right);
+}
+
+Timeout Drive::turn(float angle, float speed) {
+	speed = copysignf(speed, angle);
+	move({forward: 0, steer: speed});
+	return std::chrono::duration<float>(
+		angle / (maxSpeeds.rotary * speed)
+	);
+}
+Timeout Drive::straight(float dist, float speed) {
+	speed = copysignf(speed, dist);
+	move({forward: speed, steer: 0});
+	return std::chrono::duration<float>(
+		dist / (maxSpeeds.linear * speed)
+	);
 }
 
 void Drive::setWheelSpeeds(float left, float right) {

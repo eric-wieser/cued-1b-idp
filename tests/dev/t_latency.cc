@@ -2,9 +2,9 @@
 #include <cstdint>
 #include <iostream>
 #include <chrono>
-#include "../util/timeout.h"
-#include "../dev/ports.h"
-#include "../dev/rlink.h"
+#include "util/timeout.h"
+#include "dev/ports.h"
+#include "dev/rlink.h"
 
 using namespace std::chrono;
 

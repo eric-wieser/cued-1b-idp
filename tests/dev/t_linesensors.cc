@@ -1,5 +1,5 @@
-#include "../dev/rlink.h"
-#include "../dev/linesensors.h"
+#include "dev/rlink.h"
+#include "dev/linesensors.h"
 #include <cstdint>
 #include <iostream>
 #include <string>

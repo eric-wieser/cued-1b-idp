@@ -19,6 +19,7 @@ eg:
 #pragma once
 
 #include <chrono>
+#include "robot_delay.h"
 
 class Timeout {
 private:
@@ -28,16 +29,23 @@ public:
 	class Expired {};
 
 	// chrono really is a mess to use
-	template<class Rep, class Period>
-	Timeout(std::chrono::duration<Rep,Period> duration) :
+	Timeout(std::chrono::duration<float> duration) :
 		_end(
-			std::chrono::time_point_cast<clock::time_point::duration>(
-				clock::now() + duration
-			)
+			clock::now() + std::chrono::duration_cast<clock::time_point::duration>(duration)
 		) {}
 
 	inline void check() {
 		if(clock::now() >= _end)
 			throw Expired();
+	}
+
+	inline std::chrono::duration<float> remaining() {
+		return _end - clock::now();
+	}
+
+	inline void wait() {
+		delay(std::chrono::duration_cast<std::chrono::milliseconds>(
+			_end - clock::now()
+		).count());
 	}
 };

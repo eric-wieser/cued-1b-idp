@@ -1,5 +1,5 @@
-#include "../dev/rlink.h"
-#include "../dev/drive.h"
+#include "dev/rlink.h"
+#include "dev/drive.h"
 #include <cstdint>
 #include <iostream>
 
@@ -14,7 +14,7 @@ namespace nc {
 
 Drive::move_args charToDir(int c) {
 	float f = 1;
-	float t = 0.8;
+	float t = 1;
 	switch(c) {
 		case '8': return { f,  0};
 		case '9': return { f, -t};
