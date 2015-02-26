@@ -5,6 +5,7 @@
 #include "device.h"
 #include "../eggtype.h"
 #include "ports.h"
+#include <iostream>
 
 /**
 Intended usage:
@@ -39,6 +40,8 @@ public:
 		float g;
 		float b;
 		float a; /// ambient
+
+		friend std::ostream& operator<< (std::ostream& stream, const Reading& matrix);
 	};
 
 	Reading read();

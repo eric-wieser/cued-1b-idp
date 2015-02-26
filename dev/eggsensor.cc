@@ -10,15 +10,15 @@ EggSensor::Reading EggSensor::read() {
 
 	// read rgb + ambient
 	{
-		_port = 1 << PIN_LEDR;
+		_port = ~(1 << PIN_LEDR);
 		delay(READ_DELAY);
 		res.r = _r.request(ADC0);
 
-		_port = 1 << PIN_LEDG;
+		_port = ~(1 << PIN_LEDG);
 		delay(READ_DELAY);
 		res.g = _r.request(ADC0);
 
-		_port = 1 << PIN_LEDB;
+		_port = ~(1 << PIN_LEDB);
 		delay(READ_DELAY);
 		res.b = _r.request(ADC0);
 
@@ -28,9 +28,9 @@ EggSensor::Reading EggSensor::read() {
 	}
 
 	// do some processing
-	res.probabilities[0] = 0;
-	res.probabilities[1] = 0;
-	res.probabilities[2] = 0;
+	res.probabilities[EGG_WHITE] = 0;
+	res.probabilities[EGG_BROWN] = 0;
+	res.probabilities[EGG_TASTY] = 0;
 
 
 	// find the egg with the best chance
@@ -46,4 +46,8 @@ EggSensor::Reading EggSensor::read() {
 	}
 
 	return res;
+}
+
+std::ostream& operator <<(std::ostream& stream, const EggSensor::Reading& r) {
+	return stream << "{egg: " << r.bestGuess << ",r: " << r.r << ", g: " << r.g << ", b: " << r.b << ", a: " << r.a << "}";
 }
