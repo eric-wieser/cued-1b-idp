@@ -37,3 +37,28 @@ bool delay_falling(int& hist, bool value, int ticks) {
 	hist++;
 	return( hist < ticks);
 }
+
+
+bool edge_rising(bool& hist, bool value) {
+	if (value && !hist) {
+		hist = true;
+		return( true );
+	}
+	return( false );
+}
+
+bool edge_falling(bool& hist, bool value) {
+	if (!value && hist) {
+		hist = false;
+		return( true );
+	}
+	return( false );
+}
+
+bool edge_either(bool& hist, bool value) {
+	if (value ^ hist) {
+		hist = value;
+		return( true );
+	}
+	return( false );
+}
