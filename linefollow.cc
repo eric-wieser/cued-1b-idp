@@ -5,6 +5,7 @@
 #include "robot.h"
 
 #include "linefollow.h"
+#include "util/signals.h"
 
 LineFollow::LineFollow(Robot& robot)
 		: _robot(robot), _state(0), _nJunc(0), _nNone(0), _nInvalid(0), _nLine(0), _timer(0), _lineFinder(robot)
