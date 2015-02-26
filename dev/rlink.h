@@ -29,6 +29,6 @@ public:
 
 	/// override of std::exception
 	virtual const char* what() const throw() {
-		return _r.err_string(err);
+		return err == LINKERR_NONE ? "Undescribed error" : _r.err_string(err);
 	}
 };
