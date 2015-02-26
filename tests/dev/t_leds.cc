@@ -25,7 +25,7 @@ int main() {
 		while(button);
 		i++;
 
-		leds = 1 << (i % 4);
+		leds = ~(1 << (i % 4));
 		button = 0x08;
 	}
 }
