@@ -21,6 +21,7 @@ int main() {
 	while(true) {
 		int last = -1;
 		while(!button);
+		std::cout << "button pushed" << std::endl;
 		delay(250);
 		while(button);
 		i++;
