@@ -15,6 +15,14 @@ private:
 	t_timer _timer;
 
 public:
+	enum State{
+		BEGIN = 0,
+		SWEEP_LEFT = 1,
+		SWEEP_RIGHT = 2,
+
+		STILL_LOST = 20,
+		LINE_FOUND = 30
+	};
 	LineFinder(Robot& robot);
 	void reset();
 	bool found() const;
@@ -39,6 +47,16 @@ private:
 	LineFinder _lineFinder;
 
 public:
+	enum State{
+		BEGIN = 0,
+		ON_LINE = 1,
+		LINE_LOST = 20,
+		LINE_LOST1 = 21,
+
+		JUNCTION = 30,
+
+		TOTALLY_LOST = 40
+	};
 	LineFollow(Robot& robot);
 
 	bool junction() const;

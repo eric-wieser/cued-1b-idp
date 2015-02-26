@@ -39,50 +39,52 @@ void LineFollow::operator()()
 
 
 	switch (_state) {
-		case 0: // Initial State
+		case BEGIN: // Initial State
 			if (fJunc)
-				_state = 30;
+				_state = JUNCTION;
 			else if (fNone)
-				_state = 20;
+				_state = LINE_LOST;
 			else
-				_state = 1;
+				_state = ON_LINE;
 
 			break;
-		case 1: // On Line
+
+		case ON_LINE: // On Line
 			_robot.drive.move({
 				forward: 0.8f,
 				steer: 0.5f * line.position
 			});
 
 			if (fJunc)
-				_state = 30;
+				_state = JUNCTION;
 			else if (fNone)
-				_state = 20;
+				_state = LINE_LOST;
 
 			break;
 
 
-		case 20: // Off the line, attempt recovery
+		case LINE_LOST: // Off the line, attempt recovery
 			_lineFinder.reset();
-			_state = 21;
+			_state = LINE_LOST1;
 			break;
-		case 21:
+
+		case LINE_LOST1:
 			// Todo: Timeout?
 			_lineFinder();
 
 			if (_lineFinder.found())
-				_state = 1;
+				_state = ON_LINE;
 			else if (_lineFinder.completelyLost())
-				_state = 40;
+				_state = TOTALLY_LOST;
 
 			break;
 
-		case 30: // At junction (end state)
+		case JUNCTION: // At junction (end state)
 			// It's up to the caller to stop the motors.
 			// This allows for smoother passing through junctions.
 			break;
 
-		case 40: // Completely Lost
+		case TOTALLY_LOST: // Completely Lost
 			// Maybe try reversing?
 			throw std::runtime_error("I got lost...");
 			break;
@@ -112,12 +114,12 @@ void LineFinder::reset()
 
 bool LineFinder::found() const
 {
-	return _state == 30;
+	return _state == LINE_FOUND;
 }
 
 bool LineFinder::completelyLost() const
 {
-	return _state == 20;
+	return _state == STILL_LOST;
 }
 
 void LineFinder::operator()()
@@ -131,9 +133,9 @@ void LineFinder::operator()()
 		throw std::runtime_error("Sensor Error");
 
 	switch (_state) {
-		case 0: // Initial State
+		case BEGIN: // Initial State
 			if (fLine)
-				_state = 30;
+				_state = LINE_FOUND;
 			else {
 				_robot.drive.move({
 					forward: 0.0f,
@@ -141,14 +143,14 @@ void LineFinder::operator()()
 				});
 
 				_timer = timing::now();
-				_state = 1;
+				_state = SWEEP_LEFT;
 			}
 
 			break;
 
-		case 1: // Sweep left 5s
-			if (fLine) 
-				_state = 30;
+		case SWEEP_LEFT: // Sweep left 5s
+			if (fLine)
+				_state = LINE_FOUND;
 			else if (timing::diff(_timer) > 5000.0) { // Goto sweep right
 				_robot.drive.move({
 					forward: 0.0f,
@@ -156,12 +158,12 @@ void LineFinder::operator()()
 				});
 
 				_timer = timing::now();
-				_state = 2;
+				_state = SWEEP_RIGHT;
 			}
 			break;
-		case 2: // Sweep right 10s
+		case SWEEP_RIGHT: // Sweep right 10s
 			if (fLine)
-				_state = 30;
+				_state = LINE_FOUND;
 			else if (timing::diff(_timer) > 10000.0) {
 				throw std::runtime_error("Line lost");
 			}
