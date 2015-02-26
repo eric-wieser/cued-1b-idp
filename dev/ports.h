@@ -7,7 +7,8 @@
 namespace port {
 	enum Name{
 		P0,  P1,  P2,  P3,  P4,  P5,  P6,  P7,
-		PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7
+		PA0, PA1, PA2, PA3, PA4, PA5, PA6, PA7,
+		NUM_PORTS
 	};
 
 	inline command_instruction write_instr(Name p) {
@@ -26,6 +27,7 @@ namespace port {
 }
 
 class Port : public Device {
+	static uint8_t lastWrites[port::NUM_PORTS];
 private:
 	port::Name _port;
 	uint8_t _mask;
@@ -39,8 +41,9 @@ public:
 	inline void operator=(uint8_t val) {
 		if(_mask != 0xFF) {
 			// only bother reading if some bits are not masked
-			val |= ~_mask & _r.request(port::read_instr(_port));
+			val = (val & _mask) | (~_mask & lastWrites[_port]);
 		}
+		lastWrites[_port] = val;
 		_r.command(port::write_instr(_port), val);
 	}
 
