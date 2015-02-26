@@ -29,7 +29,7 @@ Port 2 - arm
 	6  ---
 	7  BSF  Box Switch Front
 
-Port 2 - courier indicator leds
+Port 3 - courier indicator leds
 	0  C1W  Courier bottom - white egg indicator LED
 	1  C1B  Courier bottom - brown egg indicator LED
 	2  C1T  Courier bottom - tasty egg indicator LED
