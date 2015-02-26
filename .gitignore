@@ -4,6 +4,7 @@
 *.arm.robot
 *.robot
 .depend
+*.~vsdx
 
 *.sublime-project
 *.sublime-workspace
