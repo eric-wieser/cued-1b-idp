@@ -1,0 +1,1 @@
+make tests/$1.wifi && tests/$1.wifi
