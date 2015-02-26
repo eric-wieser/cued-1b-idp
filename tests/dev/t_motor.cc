@@ -1,5 +1,5 @@
-#include "../dev/rlink.h"
-#include "../dev/drive.h"
+#include "dev/rlink.h"
+#include "dev/drive.h"
 #include <robot_delay.h>
 #include <cstdint>
 #include <iostream>

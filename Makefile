@@ -3,7 +3,7 @@ CC = g++
 
 RM = rm -f
 
-override CFLAGS += -g -std=gnu++0x -Wall -I/export/teach/1BRobot
+override CFLAGS += -g -std=gnu++0x -Wall -I/export/teach/1BRobot -I.
 override LDFLAGS += -lrobot
 
 SRCS := $(wildcard *.cc) $(wildcard utils/*.cc) $(wildcard dev/*.cc)
@@ -39,7 +39,7 @@ include .depend
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 
-tests/t_drive.wifi: LDFLAGS += -lncurses
+tests/dev/t_drive.wifi: LDFLAGS += -lncurses
 tests/t_robotdrive.wifi: LDFLAGS += -lncurses
 
 clean:
