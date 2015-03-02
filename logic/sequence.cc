@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "../robot.h"
+#include "../timing.h"
 
 #include "sequence.h"
 
@@ -18,7 +19,7 @@ Sequence::~Sequence()
 
 
 StateMachine::StateMachine(Robot& robot)
-		: Sequence(robot), _state(0), debug(false)
+		: Sequence(robot), lastState(-1), _state(0), _timer(0), debug(false)
 {
 }
 
@@ -44,8 +45,12 @@ void StateMachine::step()
 {
 	// if we're entering a new state, debug
 	_transition = _state != _lastState;
-	if(debug && _transition) {
-		std::cout << "S" << _state << std::endl;
+	if (_transition) {
+		if (debug) {
+			std::cout << "S" << _state << std::endl;
+		}
+
+		_timer = timing::now();
 	}
 
 	// store the current state so that _lastState is valid inside _step()
@@ -55,11 +60,16 @@ void StateMachine::step()
 }
 
 
+double stateTime() const {
+	return timing::diff(_timer);
+}
+
+
 void StateMachine::run()
 {
 	do
 	{
-		this->operator()();
+		this->step();
 	} while (!end());
 }
 
@@ -71,7 +81,7 @@ int StateMachine::run()
 
 	do
 	{
-		sm();
+		sm.step();
 	} while (!sm.end());
 
 	return sm.state();
