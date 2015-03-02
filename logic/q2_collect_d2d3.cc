@@ -24,7 +24,6 @@ void q2_collect_d2d3::_step()
 		case 10: // Rotating about left wheel
 			if (_transition) {
 				_robot.drive.setWheelSpeeds(0.0f, 1.0f);
-				std::cout << "ok" << std::endl;
 			}
 
 			if (ls.lsc) {
