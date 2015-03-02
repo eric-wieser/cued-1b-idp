@@ -10,5 +10,5 @@ class q2_collect_d2d3 : public StateMachine
 public:
 	q2_collect_d2d3(Robot& robot);
 
-	void operator()();
+	virtual void _step();
 };

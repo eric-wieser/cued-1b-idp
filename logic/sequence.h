@@ -11,32 +11,30 @@ protected:
 public:
 	Sequence(Robot& robot);
 	~Sequence();
-	
+
 	void reset() {};
 	bool end() const {return false;};
-	int state() const {return 0;};
 
-	virtual void operator()() = 0;
+	virtual void step() = 0;
 };
 
 
 class StateMachine : public Sequence
 {
 protected:
+	int _lastState;
 	int _state;
 	bool _transition;
+	virtual void _step() = 0;
 public:
 	bool debug;
 
 	StateMachine(Robot& robot);
 	~StateMachine();
-	
+
 	void reset();
 	bool end() const;
-	int state() const;
-	void state(int st);
-
-	virtual void operator()() = 0;
+	void step();
 
 	void run();
 

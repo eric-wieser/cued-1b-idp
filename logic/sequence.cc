@@ -30,29 +30,28 @@ StateMachine::~StateMachine()
 
 void StateMachine::reset()
 {
-	state(0);
+	_state = 0;
 }
 
 
 bool StateMachine::end() const
 {
-	return state() == -1;
+	return _state == -1;
 }
 
 
-int StateMachine::state() const
+void StateMachine::step()
 {
-	return _state;
-}
-
-void StateMachine::state(int st)
-{
-	_state = st;
-	_transition = true;
-
-	if (debug) {
-		std::cout << "S" << st << std::endl;
+	// if we're entering a new state, debug
+	_transition = _state != _lastState;
+	if(debug && _transition) {
+		std::cout << "S" << _state << std::endl;
 	}
+
+	// store the current state so that _lastState is valid inside _step()
+	int last = _state;
+	_step();
+	_lastState = last;
 }
 
 

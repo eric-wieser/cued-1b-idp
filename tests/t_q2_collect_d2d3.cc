@@ -17,7 +17,7 @@ struct RobotLogic
 	}
 
 	void operator()() {
-		q2();
+		q2.step();
 
 		if (q2.end()) {
 			robot.drive.stop();

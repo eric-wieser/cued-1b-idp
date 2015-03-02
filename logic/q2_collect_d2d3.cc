@@ -12,22 +12,23 @@ q2_collect_d2d3::q2_collect_d2d3(Robot& robot)
 }
 
 
-void q2_collect_d2d3::operator()()
+void q2_collect_d2d3::_step()
 {
 	auto ls = _robot.ls.read();
 
 	switch(_state) {
 		case 0: // Initial State
-			state(10);
+			_state = 10;
 			break;
 
 		case 10: // Rotating about left wheel
 			if (_transition) {
 				_robot.drive.setWheelSpeeds(0.0f, 1.0f);
+				std::cout << "ok" << std::endl;
 			}
 
 			if (ls.lsc) {
-				state(11);
+				_state = 11;
 			}
 			break;
 
@@ -40,19 +41,19 @@ void q2_collect_d2d3::operator()()
 			}
 
 			if (ls.state == LineSensors::Reading::JUNCTION) {
-				state(12);
+				_state = 12;
 			}
 			break;
 
 		case 12: // Reverse through junction
 			if (ls.state != LineSensors::Reading::JUNCTION) {
-				state(13);
+				_state = 13;
 			}
 			break;
 
 		case 13: // Reverse to 2nd junction
 			if (ls.state == LineSensors::Reading::JUNCTION) {
-				state(14);
+				_state = 14;
 			}
 			break;
 		case 14: // Rotate on the spot
@@ -61,7 +62,7 @@ void q2_collect_d2d3::operator()()
 			}
 
 			if (ls.lsc) {
-				state(15);
+				_state = 15;
 			}
 
 			break;
@@ -74,12 +75,12 @@ void q2_collect_d2d3::operator()()
 			}
 
 			if (ls.lsa) {
-				state(20);
+				_state = 20;
 			}
 			break;
 
 		case 20: // Lower Arm
-			state(-1);
+			_state = -1;
 			break;
 
 		case 30: // Check Egg
@@ -100,12 +101,10 @@ void q2_collect_d2d3::operator()()
 			}
 
 			if (ls.lsa) {
-				state(20);
+				_state = 20;
 			}
 
 			break;
 
 	}
-
-	_transition = false;
 }
