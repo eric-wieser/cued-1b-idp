@@ -6,8 +6,9 @@ RM = rm -f
 override CFLAGS += -g -std=gnu++0x -Wall -I/export/teach/1BRobot -I.
 override LDFLAGS += -lrobot
 
-SRCS := $(wildcard *.cc) $(wildcard util/*.cc) $(wildcard dev/*.cc)
-OBJSRCS := $(filter-out main.cc,$(SRCS))
+DIRS := . util dev logic
+SRCS := $(sort $(foreach d, $(DIRS), $(wildcard $(d)/*.cc)))
+OBJSRCS := $(filter-out ./main.cc,$(SRCS))
 
 OBJS := $(OBJSRCS:.cc=.o)
 OBJS_ARM := $(OBJSRCS:.cc=.arm.o)
@@ -43,7 +44,10 @@ tests/dev/t_drive.wifi: LDFLAGS += -lncurses
 tests/t_robotdrive.wifi: LDFLAGS += -lncurses
 
 clean:
-	$(RM) $(OBJS) $(OBJS_ARM) ./html
+	$(RM) $(OBJS) $(OBJS_ARM) ./html tests/*.wifi
 
 docs:
 	doxygen
+
+echosources:
+	echo $(OBJSRCS)
