@@ -134,40 +134,46 @@ void LineFinder::operator()()
 
 	switch (_state) {
 		case BEGIN: // Initial State
-			if (fLine)
+			if (fLine) {
 				_state = LINE_FOUND;
-			else {
-				_robot.drive.move({
-					forward: 0.0f,
-					steer: -1.0f
-				});
-
-				_timer = timing::now();
-				_state = SWEEP_LEFT;
+				break;
 			}
+			_robot.drive.move({
+				forward: 0.0f,
+				steer: -1.0f
+			});
 
+			_timer = timing::now();
+			_state = SWEEP_LEFT;
 			break;
 
 		case SWEEP_LEFT: // Sweep left 5s
-			if (fLine)
+			if (fLine) {
 				_state = LINE_FOUND;
-			else if (timing::diff(_timer) > 5000.0) { // Goto sweep right
-				_robot.drive.move({
-					forward: 0.0f,
-					steer: 1.0f
-				});
+				break;
+			}
+			if (timing::diff(_timer) < 5000.0)
+				break;
 
-				_timer = timing::now();
-				_state = SWEEP_RIGHT;
-			}
+			_robot.drive.move({
+				forward: 0.0f,
+				steer: 1.0f
+			});
+
+			_timer = timing::now();
+			_state = SWEEP_RIGHT;
 			break;
+
 		case SWEEP_RIGHT: // Sweep right 10s
-			if (fLine)
+			if (fLine) {
 				_state = LINE_FOUND;
-			else if (timing::diff(_timer) > 10000.0) {
-				throw std::runtime_error("Line lost");
+				break;
 			}
-			break;
+			else if (timing::diff(_timer) < 10000.0) {
+				break;
+			}
+
+			throw std::runtime_error("Line lost");
 	}
 }
 
