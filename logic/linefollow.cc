@@ -87,7 +87,12 @@ void LineFollow::_step()
 			// Maybe try reversing?
 			throw std::runtime_error("I got lost...");
 			break;
+
+		default:
+			throw std::logic_error("Impossible state reached.");
 	}
+
+	return;
 }
 
 
@@ -132,14 +137,15 @@ void LineFinder::_step()
 				break;
 			}
 
-			_state = SWEEP_LEFT;
+			_state = (line.position < 0.0f) ? SWEEP_RIGHT1 : SWEEP_LEFT2;
 			break;
 
-		case SWEEP_LEFT: // Sweep left 5s
+		case SWEEP_LEFT1: // Sweep left 5s
+		case SWEEP_RIGHT2: // Sweep right 5s
 			if (_transition) {
 				_robot.drive.move({
 					forward: 0.0f,
-					steer: -1.0f
+					steer: (_state == SWEEP_LEFT1) ? -1.0f : 1.0f
 				});
 			}
 
@@ -147,16 +153,17 @@ void LineFinder::_step()
 				_state = LINE_FOUND;
 			}
 			else if (_stateTime > 5000.0) {
-				_state = SWEEP_RIGHT;
+				_state = (_state == SWEEP_LEFT1) ? SWEEP_RIGHT1 : SWEEP_LEFT2;
 			}
 
 			break;
 
-		case SWEEP_RIGHT: // Sweep right 10s
+		case SWEEP_RIGHT1: // Sweep right 10s
+		case SWEEP_LEFT2: // Sweep left 10s
 			if (_transition) {
 				_robot.drive.move({
 					forward: 0.0f,
-					steer: 1.0f
+					steer: (_state == SWEEP_RIGHT1) ? 1.0f : -1.0f
 				});
 			}
 
@@ -174,5 +181,10 @@ void LineFinder::_step()
 
 		case STILL_LOST:
 			break;
+
+		default:
+			throw std::logic_error("Impossible state reached.");
 	}
+
+	return;
 }
