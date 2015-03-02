@@ -18,9 +18,9 @@ EggSensor::Reading EggSensor::read() {
 		delay(READ_DELAY);
 		res.g = _r.request(ADC0);
 
-		_port = ~(1 << PIN_LEDB);
+		_port = ~(1 << PIN_LEDW);
 		delay(READ_DELAY);
-		res.b = _r.request(ADC0);
+		res.w = _r.request(ADC0);
 
 		_port = 0;
 		delay(READ_DELAY);
@@ -49,5 +49,5 @@ EggSensor::Reading EggSensor::read() {
 }
 
 std::ostream& operator <<(std::ostream& stream, const EggSensor::Reading& r) {
-	return stream << "{egg: " << r.bestGuess << ",r: " << r.r << ", g: " << r.g << ", b: " << r.b << ", a: " << r.a << "}";
+	return stream << "{egg: " << r.bestGuess << ",r: " << r.r << ", g: " << r.g << ", w: " << r.w << ", a: " << r.a << "}";
 }

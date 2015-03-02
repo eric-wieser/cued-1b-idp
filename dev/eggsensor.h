@@ -38,7 +38,7 @@ public:
 
 		float r;
 		float g;
-		float b;
+		float w;
 		float a; /// ambient
 
 		friend std::ostream& operator<< (std::ostream& stream, const Reading& matrix);
