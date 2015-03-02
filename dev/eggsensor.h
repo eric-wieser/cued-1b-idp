@@ -30,7 +30,7 @@ public:
 	enum {
 		PIN_LEDR = 0,
 		PIN_LEDG = 1,
-		PIN_LEDB = 2
+		PIN_LEDW = 2
 	};
 	struct Reading {
 		std::array<float, 3> probabilities;
