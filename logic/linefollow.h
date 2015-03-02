@@ -11,6 +11,8 @@ private:
 	int _nLine;
 	int _nInvalid;
 
+	void _step();
+
 public:
 	enum State{
 		BEGIN = 0,
@@ -26,20 +28,20 @@ public:
 	LineFinder(Robot& robot);
 	bool found() const;
 	bool completelyLost() const;
+	bool end() const;
 };
 
 
-class LineFollow
+class LineFollow : public StateMachine
 {
 private:
-	Robot& _robot;
-	int _state;
 	int _nJunc;
 	int _nNone;
 	int _nInvalid;
 	int _nLine;
-	t_timer _timer;
 	LineFinder _lineFinder;
+
+	void _step();
 
 public:
 	enum State{
@@ -52,12 +54,9 @@ public:
 
 		TOTALLY_LOST = 40
 	};
+
 	LineFollow(Robot& robot);
 
 	bool junction() const;
-	void reset();
-
-	void operator()();
-
-	static void gotoJunction(Robot& robot);
+	bool end() const;
 };
