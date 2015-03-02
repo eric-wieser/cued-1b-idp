@@ -48,8 +48,8 @@ Timeout Drive::straight(float dist, float speed) {
 
 void Drive::setWheelSpeeds(float left, float right) {
 	// apply any sign corrections here
-	uint8_t left_i = convertSpeed(left);
-	uint8_t right_i = convertSpeed(-right);
+	uint8_t left_i = convertSpeed(-left);
+	uint8_t right_i = convertSpeed(right);
 
 	if (left_i == right_i) {
 		_r.command(BOTH_MOTORS_GO_SAME, left_i);
