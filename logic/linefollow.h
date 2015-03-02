@@ -3,34 +3,29 @@
 
 #include "timing.h"
 #include "robot.h"
+#include "sequence.h"
 
-
-class LineFinder
+class LineFinder : public StateMachine
 {
 private:
-	Robot& _robot;
-	int _state;
 	int _nLine;
 	int _nInvalid;
-	t_timer _timer;
 
 public:
 	enum State{
 		BEGIN = 0,
-		SWEEP_LEFT = 1,
-		SWEEP_RIGHT = 2,
+		SWEEP_LEFT1 = 1,
+		SWEEP_RIGHT1 = 2,
+		SWEEP_RIGHT2 = 3,
+		SWEEP_LEFT2 = 4,
 
 		STILL_LOST = 20,
 		LINE_FOUND = 30
 	};
+
 	LineFinder(Robot& robot);
-	void reset();
 	bool found() const;
 	bool completelyLost() const;
-
-	void operator()();
-
-	static bool run(Robot& robot);
 };
 
 

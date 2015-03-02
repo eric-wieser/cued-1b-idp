@@ -6,7 +6,7 @@
 #include "../logging.h"
 #include "../timing.h"
 #include "../dev/rlink.h"
-#include "../linefollow.h"
+#include "../logic/linefollow.h"
 
 struct RobotLogic
 {
