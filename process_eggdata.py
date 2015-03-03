@@ -40,7 +40,7 @@ class NormReading(object):
 order = ["none", "white", "brown", "cream"]
 
 # load the old file
-with open('eggdataback.csv') as f:
+with open('eggdata.csv') as f:
 	data = [Reading(r) for r in csv.DictReader(f)]
 
 stats = {}

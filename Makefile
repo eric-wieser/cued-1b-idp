@@ -40,8 +40,6 @@ include .depend
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 
-tests/dev/t_drive.wifi: LDFLAGS += -lncurses
-tests/t_robotdrive.wifi: LDFLAGS += -lncurses
 
 clean:
 	$(RM) $(OBJS) $(OBJS_ARM) ./html tests/*.wifi
@@ -49,5 +47,8 @@ clean:
 docs:
 	doxygen
 
-echosources:
-	echo $(OBJSRCS)
+tests/dev/t_drive.wifi: LDFLAGS += -lncurses
+tests/t_robotdrive.wifi: LDFLAGS += -lncurses
+
+egg_stats.cc: eggdata.csv
+	python process_eggdata.py
