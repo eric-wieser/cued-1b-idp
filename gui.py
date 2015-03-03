@@ -122,7 +122,7 @@ class TableRenderer(Screen):
 
 	def drawPath(self, cr):
 		cr.save()
-		cr.translate(-1.2 + 0.36, -0.6)
+		cr.translate(-1.2 + 0.36 - 0.15, -0.6)
 		at = self.time
 
 
