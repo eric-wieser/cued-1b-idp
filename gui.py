@@ -35,24 +35,28 @@ class Screen(gtk.DrawingArea):
 		self.draw(*self.window.get_size())
 
 import table
-from odometry import Movement, total_seconds
+from odometry import Movement, total_seconds, load_from
 from datetime import datetime, timedelta
 
 start = datetime.now()
-movement = [
-	Movement(left=1, right=1, at=start),
-	Movement(left=0.4, right=1, at=start + timedelta(seconds=5)),
-	Movement(left=0.4, right=0.4, at=start + timedelta(seconds=6)),
-	Movement(left=1, right=-1, at=start + timedelta(seconds=7)),
-	Movement(left=-1, right=-1, at=start + timedelta(seconds=10)),
-	Movement(left=0, right=0, at=start + timedelta(seconds=12))
-]
+with open('movement.dat') as f:
+	movement = list(load_from(f))
+
+print movement
+# movement = [
+# 	Movement(left=1, right=1, at=start),
+# 	Movement(left=0.4, right=1, at=start + timedelta(seconds=5)),
+# 	Movement(left=0.4, right=0.4, at=start + timedelta(seconds=6)),
+# 	Movement(left=1, right=-1, at=start + timedelta(seconds=7)),
+# 	Movement(left=-1, right=-1, at=start + timedelta(seconds=10)),
+# 	Movement(left=0, right=0, at=start + timedelta(seconds=12))
+# ]
 
 class TableRenderer(Screen):
 	def __init__(self):
 		super(TableRenderer,self).__init__()
 
-		self.time = start
+		self.time = 0
 
 	def draw(self, w, h):
 		self.cr.save()
@@ -178,7 +182,9 @@ class TableRenderer(Screen):
 		t.start()
 
 def main():
-	start = datetime.now()
+	gui_start = datetime.now()
+	round_start = movement[0].at
+
 
 	tr = TableRenderer()
 	vbox = gtk.VBox(spacing=0)
@@ -195,14 +201,18 @@ def main():
 
 	tr.offset = timedelta(0)
 
+	def gui_time():
+		return datetime.now() - gui_start
+
 	def update_time():
-		tr.time = datetime.now() - tr.offset
-		scale.set_value(total_seconds(tr.time - start))
+		t = gui_time() - tr.offset
+		tr.time = round_start + t
+		scale.set_value(total_seconds(t))
 		return True
 
 
 	def scale_changed(range):
-		tr.offset = datetime.now() - (start + timedelta(seconds=range.get_value()))
+		tr.offset = gui_time() - timedelta(seconds=range.get_value())
 
 	scale.connect('value-changed', scale_changed)
 

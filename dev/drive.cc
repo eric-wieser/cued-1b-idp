@@ -4,10 +4,23 @@
 #include <cmath>
 #include <iostream>
 #include <chrono>
-
+#include <fstream>
 
 const Drive::Configuration Drive::_defConfig {0.0f, 0.0f, 0.0f};
 
+namespace {
+	std::ofstream moveLog("movement.dat");
+
+	void writeLog(float left, float right) {
+		auto now = std::chrono::system_clock::now();
+		uint64_t t = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+
+		struct { uint64_t t; float r; float l; } data = {t, left, right};
+
+		moveLog.write(reinterpret_cast<char const*>(&data), sizeof data);
+		moveLog.flush();
+	}
+}
 
 Drive::Drive(RLink& r, Configuration c) : Device(r), maxSpeeds(c) {
 	_r.command(RAMP_TIME, 10);
@@ -47,6 +60,8 @@ Timeout Drive::straight(float dist, float speed) {
 }
 
 void Drive::setWheelSpeeds(float left, float right) {
+	writeLog(left, right);
+
 	// apply any sign corrections here
 	uint8_t left_i = convertSpeed(-left);
 	uint8_t right_i = convertSpeed(right);

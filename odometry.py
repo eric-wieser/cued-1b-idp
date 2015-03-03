@@ -19,6 +19,9 @@ class Movement(object):
 		self.r = right
 		self.at = at
 
+	def __repr__(self):
+		return "Movement({s.l}, {s.r}, {s.at!r})".format(s=self)
+
 	@property
 	def arc_radius(self):
 		"""
@@ -64,14 +67,38 @@ class Movement(object):
 				)
 			else:
 				cr.move_to(0, 0)
-				cr.arc( #xc=
+				cr.arc_negative( #xc=
 					0, #yc=
 					self.arc_radius, #radius=
 					abs(self.arc_radius), #angle1=
-					math.pi / 2 - self.omega * dt, #angle2=
-					math.pi / 2
+					math.pi / 2, #angle2=
+					math.pi / 2 + self.omega * dt
 				)
 			cr.translate(0, self.arc_radius)
 			cr.rotate(self.omega * dt)
 			cr.translate(0, -self.arc_radius)
+
+
+def load_from(f):
+	from struct import Struct
+	from datetime import datetime
+
+	s = Struct('Qff')
+
+	while True:
+		packet = f.read(s.size)
+		if len(packet) != s.size:
+			break
+
+		t_i, l, r = s.unpack(packet)
+
+		if l > 1: l = 1
+		if l < -1: l = -1
+
+		if r > 1: r = 1
+		if r < -1: r = -1
+
+		t = datetime.fromtimestamp(t_i / 1000.0)
+
+		yield Movement(l, r, t)
 
