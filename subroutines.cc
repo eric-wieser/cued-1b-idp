@@ -1,6 +1,6 @@
 #include "robot.h"
+#include "subroutines.h"
 
-struct negate { LineSensors::Reading::State s; };
 
 void waitForLine(Robot& r, LineSensors::Reading::State s) {
 	while(r.ls.read().state == s);
