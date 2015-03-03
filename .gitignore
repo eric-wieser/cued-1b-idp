@@ -5,6 +5,7 @@
 *.robot
 .depend
 *.~vsdx
+*.pyc
 
 *.sublime-project
 *.sublime-workspace
