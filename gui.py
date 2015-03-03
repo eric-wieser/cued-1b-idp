@@ -43,8 +43,9 @@ movement = [
 	Movement(left=1, right=1, at=start),
 	Movement(left=0.4, right=1, at=start + timedelta(seconds=5)),
 	Movement(left=0.4, right=0.4, at=start + timedelta(seconds=6)),
-	Movement(left=1, right=-1, at=start + timedelta(seconds=8)),
-	Movement(left=-1, right=-1, at=start + timedelta(seconds=10))
+	Movement(left=1, right=-1, at=start + timedelta(seconds=7)),
+	Movement(left=-1, right=-1, at=start + timedelta(seconds=10)),
+	Movement(left=0, right=0, at=start + timedelta(seconds=12))
 ]
 
 class TableRenderer(Screen):
@@ -85,6 +86,13 @@ class TableRenderer(Screen):
 		cr.set_line_width(max(cr.device_to_user_distance(1,1)))
 		cr.set_source_rgb(0.5, 0.5, 0.5)
 		cr.stroke()
+
+
+		for (x, y) in table.boxes:
+			cr.rectangle(x-table.box_size/2, y-table.box_size/2, table.box_size, table.box_size)
+
+		cr.set_source_rgb(1, 0.75, 0.75)
+		self.cr.fill()
 
 		cr.restore()
 
@@ -153,6 +161,7 @@ class TableRenderer(Screen):
 		window = gtk.Window()
 		window.connect("delete-event", gtk.main_quit)
 		window.set_title("IDP table map")
+		window.set_size_request(500, 500)
 		window.add(self)
 		window.present()
 
