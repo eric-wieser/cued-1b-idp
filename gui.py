@@ -35,7 +35,7 @@ class Screen(gtk.DrawingArea):
 		self.draw(*self.window.get_size())
 
 import table
-from odometry import Movement
+from odometry import Movement, total_seconds
 from datetime import datetime, timedelta
 
 start = datetime.now()
@@ -49,6 +49,10 @@ movement = [
 ]
 
 class TableRenderer(Screen):
+	def __init__(self):
+		super(TableRenderer,self).__init__()
+
+		self.time = start
 
 	def draw(self, w, h):
 		self.cr.save()
@@ -98,10 +102,14 @@ class TableRenderer(Screen):
 
 
 	def initScaling(self, cr, w, h):
+		cr.rectangle(0, 0, w, h)
+		cr.set_source_rgb(0.25, 0.25, 0.25)
+		cr.fill()
+
 		#Move to the middle of the screen
 		cr.translate(w/2, h/2)
 
-		margin = 10 #px
+		margin = 0 #px
 		actualWidth, actualHeight = table.width, table.height
 		scaleFactor = min( (w - 2*margin) /actualWidth, (h - 2*margin)/actualHeight)
 
@@ -111,7 +119,7 @@ class TableRenderer(Screen):
 	def drawPath(self, cr):
 		cr.save()
 		cr.translate(-1.2 + 0.36, -0.6)
-		at = datetime.now()
+		at = self.time
 
 
 		cr.set_line_width(max(cr.device_to_user_distance(3,3)))
@@ -170,10 +178,45 @@ class TableRenderer(Screen):
 		t.start()
 
 def main():
-	mr = TableRenderer()
-	mr.startInNewWindow()
+	start = datetime.now()
 
-	while True:
-		pass
+	tr = TableRenderer()
+	vbox = gtk.VBox(spacing=0)
+	vbox.pack_start(tr, expand=True, fill=True)
+
+	scale = gtk.HScale()
+	scale.set_range(0, 300)
+	scale.add_mark(60, gtk.POS_TOP, None)
+	scale.add_mark(120, gtk.POS_TOP, None)
+	scale.add_mark(180, gtk.POS_TOP, None)
+	scale.add_mark(240, gtk.POS_TOP, None)
+	scale.set_value(0)
+	vbox.pack_end(scale, expand=False)
+
+	tr.offset = timedelta(0)
+
+	def update_time():
+		tr.time = datetime.now() - tr.offset
+		scale.set_value(total_seconds(tr.time - start))
+		return True
+
+
+	def scale_changed(range):
+		tr.offset = datetime.now() - (start + timedelta(seconds=range.get_value()))
+
+	scale.connect('value-changed', scale_changed)
+
+
+
+	gobject.timeout_add(50, update_time)
+
+	window = gtk.Window()
+	window.connect("delete-event", gtk.main_quit)
+	window.set_title("IDP table map")
+	window.set_size_request(500, 500)
+	window.add(vbox)
+	window.show_all()
+
+	gtk.main()
 
 main()

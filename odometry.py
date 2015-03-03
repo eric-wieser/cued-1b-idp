@@ -9,7 +9,7 @@ linear_speed = (2 * math.pi * radius) * (rpm/60)
 rotary_speed = linear_speed / (spacing / 2)
 
 # path for py 2.6 -> 2.7
-def _total_seconds(td):
+def total_seconds(td):
 	return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
 class Movement(object):
@@ -45,7 +45,7 @@ class Movement(object):
 
 
 	def draw(self, cr, to):
-		dt = _total_seconds(to - self.at)
+		dt = total_seconds(to - self.at)
 
 		if self.is_straight:
 			cr.move_to(0, 0)
