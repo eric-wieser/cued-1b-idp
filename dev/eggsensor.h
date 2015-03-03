@@ -28,12 +28,12 @@ private:
 
 public:
 	enum {
-		PIN_LEDR = 0,
-		PIN_LEDG = 1,
-		PIN_LEDW = 2
+		PIN_LEDR = 4,
+		PIN_LEDG = 5,
+		PIN_LEDW = 6
 	};
 	struct Reading {
-		std::array<float, 3> probabilities;
+		std::array<float, EGG_TYPE_COUNT> probabilities;
 		EggType bestGuess;
 
 		float r;
@@ -46,5 +46,5 @@ public:
 
 	Reading read();
 	EggSensor(RLink& r, port::Name port)
-		: Device(r), _port(r, port, 0x7) {};
+		: Device(r), _port(r, port, (1 << PIN_LEDR) | (1 << PIN_LEDG) | (1 << PIN_LEDW)) {};
 };
