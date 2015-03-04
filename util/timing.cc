@@ -1,6 +1,6 @@
 
 
-#include "util/timing.h"
+#include "timing.h"
 
 
 t_ticks timing::_ticks = 0;
