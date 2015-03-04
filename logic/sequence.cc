@@ -19,7 +19,7 @@ Sequence::~Sequence()
 
 
 StateMachine::StateMachine(Robot& robot)
-		: Sequence(robot), lastState(-1), _state(0), _timer(0), debug(false)
+		: Sequence(robot), _lastState(-1), _state(0), _timer(0), debug(false)
 {
 }
 
@@ -60,7 +60,7 @@ void StateMachine::step()
 }
 
 
-double stateTime() const {
+double StateMachine::stateTime() const {
 	return timing::diff(_timer);
 }
 
