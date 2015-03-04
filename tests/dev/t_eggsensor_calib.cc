@@ -18,7 +18,10 @@ int main() {
 
 	f << "egg,r,g,w,a" << std::endl;
 
-	for(const char* name : {"brown", "white", "cream", "none"}) {
+	const char* names[EGG_TYPE_COUNT] = {"brown", "white", "cream", "none"};
+
+	for(int i = 0; i < EGG_TYPE_COUNT; i++) {
+		auto name = names[i];
 		char c;
 		std::cout << name << std::endl;
 		while((c = getchar()) != '\n' && c != EOF);
