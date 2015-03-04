@@ -50,5 +50,5 @@ docs:
 tests/dev/t_drive.wifi: LDFLAGS += -lncurses
 tests/t_robotdrive.wifi: LDFLAGS += -lncurses
 
-egg_stats.cc: eggdata.csv
+egg_stats.cc: eggdata.csv process_eggdata.py
 	python process_eggdata.py
