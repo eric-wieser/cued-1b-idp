@@ -6,12 +6,15 @@
 #include "dev/linesensors.h"
 #include "dev/eggsensor.h"
 #include "dev/arm.h"
+#include "eggtype.h"
 
 struct Robot {
 	Drive drive;
 	Arm arm;
 	LineSensors ls;
 	EggSensor detector;
+	int eggsLoaded;
+	EggType[3] eggTypes;
 
 	Robot(RLink& rlink);
 };
