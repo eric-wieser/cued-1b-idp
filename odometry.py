@@ -12,12 +12,16 @@ rotary_speed = linear_speed / (spacing / 2)
 def total_seconds(td):
 	return (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
-class Movement(object):
+class Event(object):
+	def __init__(self, at):
+		self.at = at
+
+class Movement(Event):
 	def __init__(self, left, right, at):
 		"""left and right are motor speeds, at is a timestamp"""
 		self.l = left
 		self.r = right
-		self.at = at
+		super(Movement, self).__init__(at)
 
 	def __repr__(self):
 		return "Movement({s.l}, {s.r}, {s.at!r})".format(s=self)
@@ -78,27 +82,56 @@ class Movement(object):
 			cr.rotate(self.omega * dt)
 			cr.translate(0, -self.arc_radius)
 
+class LineSpot(Event):
+	pass
+
+class Pose(Event):
+	def __init__(x, y, theta, at):
+		"""left and right are motor speeds, at is a timestamp"""
+		self.x = x
+		self.y = y
+		self.theta = theta
+		super(Pose, self).__init__(at)
+
 
 def load_from(f):
 	from struct import Struct
 	from datetime import datetime
 
-	s = Struct('Qff')
+	structs = {
+		'M': Struct('Qff'),
+		'P': Struct('Qfff'),
+		'L': Struct('Q')
+	}
 
 	while True:
-		packet = f.read(s.size)
-		if len(packet) != s.size:
+		header = f.read(1)
+		fmt = structs.get(header)
+		assert fmt
+
+		packet = f.read(fmt.size)
+		if len(packet) != fmt.size:
 			break
 
-		t_i, l, r = s.unpack(packet)
-
-		if l > 1: l = 1
-		if l < -1: l = -1
-
-		if r > 1: r = 1
-		if r < -1: r = -1
-
+		args = fmt.unpack(packet)
+		t_i, args = args[0], args[1:]
 		t = datetime.fromtimestamp(t_i / 1000.0)
 
-		yield Movement(l, r, t)
+		if header == 'M':
+			l, r = args
 
+			if l > 1: l = 1
+			if l < -1: l = -1
+
+			if r > 1: r = 1
+			if r < -1: r = -1
+
+			yield Movement(l, r, t)
+
+		elif header == 'P':
+			x, y, theta = args
+
+			yield Pose(x, y, theta, t)
+
+		elif header == 'L':
+			yield LineSpot(t)

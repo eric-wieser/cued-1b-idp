@@ -1,13 +1,50 @@
 width = 2.4
 height = 2.4
 
+class LineSegment(object):
+	def __init__(self, (x1, y1), (x2, y2)):
+		self.p1 = x1, y1
+		self.p2 = x2, y2
+
+	def nearest(self, p):
+		import math
+
+		def dist(p2, p1):
+			return p2[0] - p1[0], p2[1] - p1[1]
+
+		def dot(p1, p2):
+			return p2[0] * p1[0] + p2[1] * p1[1]
+
+		# test vector
+		t = dist(p, self.p1)
+
+		# normal vector
+		n = dist(self.p2, self.p1)
+
+		f = dot(n, t) / dot(n, n)
+
+		if f < 0:
+			f = 0
+		elif f > 1:
+			f = 1
+
+		return self.p1[0] + n[0] * f, self.p1[1] + n[1] * f
+
+	def __iter__(self):
+		yield self.p1
+		yield self.p2
+
+def nearest_line(p):
+	line_ps = [l.nearest(p) for l in lines]
+	return min(line_ps, key=lambda lp: (lp[0] - p[0])**2 + (lp[1] - p[1])**2)
+
 tape_width = 0.022
 
 def hline(xs, y):
-	return ((xs[0], y), (xs[1], y))
+	return LineSegment((xs[0], y), (xs[1], y))
 
 def vline(x, ys):
-	return ((x, ys[0]), (x, ys[1]))
+	return LineSegment((x, ys[0]), (x, ys[1]))
 
 lines = [
 	# outer square
