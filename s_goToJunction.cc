@@ -47,6 +47,9 @@ void goToJunction_inner(Robot& r, float distance) {
 	duration<float> tPredicted(distance / r.drive.maxSpeeds.linear * 1.1f);
 	Timeout timeout = tPredicted;
 
+	// assume we started on a junction
+	bool atJunction = true;
+
 	while(1) {
 		// read the line sensors
 		auto line = r.ls.read();
@@ -71,8 +74,12 @@ void goToJunction_inner(Robot& r, float distance) {
 		int nInvalid = std::count(ALL(history), LineSensors::Reading::INVALID);
 
 		// if 3 of the last 5 readings have been junctions, we're done
-		if(nJunc >= 3)
+		if(!atJunction && nJunc >= 3)
 			return;
+
+		// if we started at a junction, and we're no longer on one, clear the flag
+		if(line.state != LineSensors::Reading::JUNCTION)
+			atJunction = false;
 
 		// if the last 5 readings have been no line, we've failed
 		if(nNone == 5)
