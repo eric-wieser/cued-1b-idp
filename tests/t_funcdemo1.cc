@@ -8,7 +8,13 @@
 #include <robot_delay.h>
 namespace sm {
 	void goToJunction(Robot& r, float d) {
-		return LineFollow::gotoJunction(r);
+		LineFollow lf;
+
+		lf.run();
+
+		if (!lf.junction()) {
+			throw std::runtime_error("I got lost...");
+		}
 	}
 }
 
