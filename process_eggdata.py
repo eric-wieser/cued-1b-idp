@@ -2,20 +2,22 @@ from __future__ import division
 import csv
 import itertools
 import math
+import numpy as np
 
 # represents one line of the log file
 class Reading(object):
 	def __init__(self, d):
-		self.r = int(d['r'])
-		self.g = int(d['g'])
-		self.w = int(d['w'])
+		self.c = np.array([int(d['r']), int(d['g']), int(d['w'])])
 		self.a = int(d['a'])
 
 		self.actual = d['egg']
 
 
 	def __repr__(self):
-		return "<{s.actual} - r:{s.r} g:{s.g} w:{s.w} a:{s.a}>".format(s=self)
+		return "<{s.actual} - rgw:{s.c} a:{s.a}>".format(s=self)
+
+	def norm(self):
+		return self.c - self.a
 
 # normalized to remove ambient light
 class NormReading(object):
@@ -27,9 +29,9 @@ class NormReading(object):
 	@classmethod
 	def of(cls, r):
 		return cls(
-			r=(r.r - r.a) / r.a,
-			g=(r.g - r.a) / r.a,
-			w=(r.w - r.a) / r.a
+			r=(r.r - r.a),
+			g=(r.g - r.a),
+			w=(r.w - r.a)
 		)
 
 	def __repr__(self):
@@ -43,43 +45,24 @@ order = ["none", "white", "brown", "cream"]
 with open('eggdata.csv') as f:
 	data = [Reading(r) for r in csv.DictReader(f)]
 
+if len(data) < 4:
+	raise SystemExit(0)
+
 stats = {}
 
 # find mean and variance
 # TODO: covariance?
 for t, rs in itertools.groupby(data, key=lambda e: e.actual):
-	rs = list(rs)
+	rs = np.array([r.norm() for r in rs])
 
-	mean = NormReading()
-	mean_sq = NormReading()
+	mean = np.mean(rs, axis=0)
+	mean_sq = np.mean(rs*rs)
 
-	for r in rs:
-		nr = NormReading.of(r)
+	cov = np.cov(rs, rowvar=False)
 
-		mean.r += nr.r
-		mean.g += nr.g
-		mean.w += nr.w
+	print t, mean, cov
 
-		mean_sq.r += nr.r * nr.r
-		mean_sq.g += nr.g * nr.g
-		mean_sq.w += nr.w * nr.w
-
-	mean.r /= len(rs)
-	mean.g /= len(rs)
-	mean.w /= len(rs)
-
-	mean_sq.r /= len(rs)
-	mean_sq.g /= len(rs)
-	mean_sq.w /= len(rs)
-
-	var = NormReading(
-		r=mean_sq.r - (mean.r*mean.r),
-		g=mean_sq.g - (mean.g*mean.g),
-		w=mean_sq.w - (mean.w*mean.w)
-	)
-
-	stats[t] = (mean, var)
-
+	stats[t] = (mean, cov)
 
 # output the c file we need
 top_template = '''\
@@ -88,21 +71,24 @@ top_template = '''\
 
 using namespace egg_stats;
 
-EggExpectation egg_stats::expectations[EGG_TYPE_COUNT] = {{
+MultivariateNormal<3> egg_stats::expectations[EGG_TYPE_COUNT] = {{
 	{0}
 }};
 '''
 
 single_template = '''\
 // {name}
-(EggExpectation) {{
-	(NormValue) {{{mean.r}, {mean.g}, {mean.w}}},
-	(NormValue) {{{var.r}, {var.g}, {var.w}}}
+(MultivariateNormal<3>) {{
+	(Matrix<float,3,1>() << {mean}).finished(),
+	(Matrix<float,3,3>() << {cov}).finished()
 }}'''
 
 text = top_template.format(
 	',\n'.join(
-		single_template.format(mean=stats[name][0], var=stats[name][1], name=name)
+		single_template.format(
+			mean=', '.join(str(c) for c in stats[name][0]),
+			cov=(',\n\t' + ' '*len('(Matrix<float,3,3>() << ')).join(', '.join(str(c) for c in row) for row in stats[name][1]),
+			name=name)
 		for name in order
 	).replace('\n', '\n\t')
 )

@@ -3,6 +3,8 @@
 #include <robot_delay.h>
 #include "eggsensor.h"
 #include "egg_stats.h"
+#include <Eigen/Dense>
+using namespace Eigen;
 
 EggSensor::Reading EggSensor::read() {
 	const int READ_DELAY = 50; // ms
@@ -28,19 +30,17 @@ EggSensor::Reading EggSensor::read() {
 		res.a = _r.request(ADC0);
 	}
 
-	egg_stats::NormValue normed = {
-		static_cast<double>(res.r - res.a) / res.a,
-		static_cast<double>(res.g - res.a) / res.a,
-		static_cast<double>(res.w - res.a) / res.a
-	};
+	Matrix<float,3,1> normed;
+	normed << static_cast<float>(res.r - res.a), static_cast<float>(res.g - res.a), static_cast<float>(res.w - res.a);
+
 	// do some processing
 	for(int i = 0; i < EGG_TYPE_COUNT; i++) {
-		res.probabilities[i] = egg_stats::expectations[i].likelyhood(normed);
+		res.probabilities[i] = egg_stats::expectations[i].mahalanobisDistanceSq(normed);
 	}
 
 
 	// find the egg with the best chance
-	auto best = std::max_element(res.probabilities.begin(), res.probabilities.end());
+	auto best = std::min_element(res.probabilities.begin(), res.probabilities.end());
 
 	// convert pointer -> index -> egg_type
 	res.bestGuess = static_cast<EggType>(best - res.probabilities.begin());

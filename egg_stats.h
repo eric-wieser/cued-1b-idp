@@ -1,58 +1,23 @@
 #pragma once
 #include "eggtype.h"
+#include <cmath>
+#include <iostream>
+#include <iomanip>
+#include <Eigen/Dense>
+using namespace Eigen;
+
+
+template<int N>
+struct MultivariateNormal {
+	Matrix<float, N, 1> mean;
+	Matrix<float, N, N> covariance;
+
+	// generalization of [(x - mu) / sigma]^2 to N variables - http://en.wikipedia.org/wiki/Mahalanobis_distance
+	double mahalanobisDistanceSq(Matrix<float, N, 1> value) const {
+		return (value - mean).transpose() * covariance.inverse() * (value - mean);
+	}
+};
 
 namespace egg_stats {
-
-struct NormValue {
-	double r;
-	double g;
-	double w;
-
-	NormValue& operator+=(const NormValue &other) {
-		r += other.r;
-		g += other.g;
-		w += other.w;
-		return *this;
-	};
-	NormValue& operator-=(const NormValue &other) {
-		r -= other.r;
-		g -= other.g;
-		w -= other.w;
-		return *this;
-	};
-
-	NormValue operator/=(const NormValue &v) {
-		r /= v.r;
-		g /= v.g;
-		w /= v.w;
-		return *this;
-	}
-	NormValue operator*=(const NormValue &v) {
-		r *= v.r;
-		g *= v.g;
-		w *= v.w;
-		return *this;
-	}
-
-	double sum() const { return r + g + w; }
-};
-inline NormValue operator+(NormValue lhs, const NormValue& rhs) { return lhs += rhs; }
-inline NormValue operator-(NormValue lhs, const NormValue& rhs) { return lhs -= rhs; }
-inline NormValue operator*(NormValue lhs, const NormValue& rhs) { return lhs *= rhs; }
-inline NormValue operator/(NormValue lhs, const NormValue& rhs) { return lhs /= rhs; }
-
-struct EggExpectation {
-	NormValue mean;
-	NormValue variance;
-
-	// arbitrary units - normal distributions are hard
-	double likelyhood(NormValue reading) const {
-		auto diff = (reading - mean);
-		auto scaled = diff*diff / variance;
-		return 1 / scaled.sum();
-	}
-};
-
-extern EggExpectation expectations[EGG_TYPE_COUNT];
-
+	extern MultivariateNormal<3> expectations[EGG_TYPE_COUNT];
 }
