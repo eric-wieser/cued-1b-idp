@@ -4,7 +4,7 @@
 
 #include "../robot.h"
 #include "../logging.h"
-#include "../timing.h"
+#include "../util/timing.h"
 #include "../dev/rlink.h"
 #include "../logic/linefollow.h"
 

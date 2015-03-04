@@ -1,7 +1,7 @@
 
 #include <stdexcept>
 #include "../util/signals.h"
-#include "../timing.h"
+#include "../util/timing.h"
 #include "../robot.h"
 #include "../util/signals.h"
 

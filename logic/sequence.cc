@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include "../robot.h"
-#include "../timing.h"
+#include "../util/timing.h"
 
 #include "sequence.h"
 

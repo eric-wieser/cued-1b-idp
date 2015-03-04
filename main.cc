@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "robot.h"
-#include "timing.h"
+#include "util/timing.h"
 #include "dev/rlink.h"
 #include "logging.h"
 

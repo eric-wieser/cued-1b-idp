@@ -3,7 +3,7 @@
 
 #include "../robot.h"
 #include "../logging.h"
-#include "../timing.h"
+#include "../util/timing.h"
 #include "../dev/rlink.h"
 #include "../logic/q2_collect_d2d3.h"
 
