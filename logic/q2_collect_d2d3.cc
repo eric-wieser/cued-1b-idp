@@ -1,4 +1,5 @@
 
+#include <stdexcept>
 #include "../dev/drive.h"
 
 
@@ -7,7 +8,7 @@
 
 
 q2_collect_d2d3::q2_collect_d2d3(Robot& robot)
-		: StateMachine(robot)
+		: StateMachine(robot), currentEgg(EGG_NONE), conveyorPos(0)
 {
 }
 
@@ -26,12 +27,31 @@ void q2_collect_d2d3::_step()
 				_robot.drive.setWheelSpeeds(0.0f, 1.0f);
 			}
 
-			if (ls.lsc) {
+			if (!ls.lsc) {
 				_state = 11;
 			}
 			break;
 
-		case 11: // Reverse to 1st junction
+		case 11: // Keep Rotating
+			if (ls.lsc) {
+				_state = 12;
+			}
+			break;
+
+		case 12: // Keep Rotating
+			if (!ls.lsc) {
+				_state = 13;
+			}
+			break;
+
+		case 13: // Keep Rotating
+			if (ls.lsc) {
+				_state = 14;
+			}
+			break;
+
+
+		case 14: // Reverse to 1st junction
 			if (_transition) {
 				_robot.drive.move({
 					forward: -1.0f,
@@ -40,32 +60,32 @@ void q2_collect_d2d3::_step()
 			}
 
 			if (ls.state == LineSensors::Reading::JUNCTION) {
-				_state = 12;
+				_state = 15;
 			}
 			break;
 
-		case 12: // Reverse through junction
+		case 15: // Reverse through junction
 			if (ls.state != LineSensors::Reading::JUNCTION) {
-				_state = 13;
+				_state = 16;
 			}
 			break;
 
-		case 13: // Reverse to 2nd junction
+		case 16: // Reverse to 2nd junction
 			if (ls.state == LineSensors::Reading::JUNCTION) {
-				_state = 14;
+				_state = 17;
 			}
 			break;
-		case 14: // Rotate on the spot
+		case 17: // Rotate on the spot
 			if (_transition) {
 				_robot.drive.setWheelSpeeds(0.5f, -0.5f);
 			}
 
 			if (ls.lsc) {
-				_state = 15;
+				_state = 20;
 			}
 
 			break;
-		case 15: // Forwards
+		case 20: // Forwards
 			if (_transition) {
 				_robot.drive.move({
 					forward: 1.0f,
@@ -74,24 +94,28 @@ void q2_collect_d2d3::_step()
 			}
 
 			if (ls.lsa) {
-				_state = 20;
+				_robot.drive.stop();
+				conveyorPos++;
+				_state = 30;
 			}
-			break;
-
-		case 20: // Lower Arm
-			_state = -1;
 			break;
 
 		case 30: // Check Egg
+			currentEgg = _robot.detector.read().bestGuess;
+			// Retry if failed?
+
+			switch (currentEgg) {
+				case EGG_BROWN:
+				case EGG_TASTY:
+					_state = 40;
+					break;
+				default:
+					_state = 20;
+					break;
+			}
 			break;
 
-		case 40: // Grab Egg
-			break;
-
-		case 50: // Raise Arm
-			break;
-
-		case 60: // Move Forwards
+		case 40: // Forwards to Arm sensor
 			if (_transition) {
 				_robot.drive.move({
 					forward: 1.0f,
@@ -100,10 +124,41 @@ void q2_collect_d2d3::_step()
 			}
 
 			if (ls.lsa) {
-				_state = 20;
+				_robot.drive.stop();
+				_state = 50;
 			}
-
 			break;
 
+		case 50: // Lower Arm
+			// Power Actuator 1 Bore
+
+			_state = 60;
+			break;
+
+		case 60: // Grab Egg
+			// Power Actuator 2 Bore
+
+			_state = 70;
+			break;
+
+		case 70: // Raise Arm
+			// Power Actuator 1 Annulus
+
+			_robot.eggTypes[_robot.eggsLoaded] = currentEgg;
+			_robot.eggsLoaded++;
+
+			if (_robot.eggsLoaded == 3
+					|| conveyorPos == 5) {
+				_state = -1;
+			}
+			else {
+				_state = 20;
+			}
+			break;
+
+		default:
+			throw std::logic_error("Invalid state reached.");
 	}
+
+	return;
 }
