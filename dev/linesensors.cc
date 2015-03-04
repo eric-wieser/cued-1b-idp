@@ -7,6 +7,7 @@
 #include "device.h"
 
 #include "linesensors.h"
+#include "tracker.h"
 
 
 LineSensors::LineSensors(RLink& r, port::Name p)
@@ -65,6 +66,8 @@ LineSensors::Reading LineSensors::read() {
 			// Todo: Consider alternative cases.
 			break;
 	}
+
+	if(auto t = Tracker::instance()) t->logLineSpot();
 
 	ret.position = pos;
 	_reading = ret;

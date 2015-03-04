@@ -35,28 +35,39 @@ class Screen(gtk.DrawingArea):
 		self.draw(*self.window.get_size())
 
 import table
-from odometry import Movement, total_seconds, load_from
+from odometry import Movement, LineSpot, total_seconds, load_from
 from datetime import datetime, timedelta
+from contextlib import contextmanager
+
+@contextmanager
+def cairo_scoped(cr):
+	cr.save()
+	try:
+		yield
+	finally:
+		cr.restore()
 
 start = datetime.now()
-with open('movement.dat') as f:
-	movement = list(load_from(f))
+# with open('tracker.dat') as f:
+# 	movement = list(load_from(f))
 
-print movement
-# movement = [
-# 	Movement(left=1, right=1, at=start),
-# 	Movement(left=0.4, right=1, at=start + timedelta(seconds=5)),
-# 	Movement(left=0.4, right=0.4, at=start + timedelta(seconds=6)),
-# 	Movement(left=1, right=-1, at=start + timedelta(seconds=7)),
-# 	Movement(left=-1, right=-1, at=start + timedelta(seconds=10)),
-# 	Movement(left=0, right=0, at=start + timedelta(seconds=12))
-# ]
+# print movement
+movement = [
+	Movement(left=0.4, right=1, at=start),
+	Movement(left=1, right=1, at=start + timedelta(seconds=0.5)),
+	LineSpot(at=start + timedelta(seconds=3)),
+	Movement(left=0.4, right=1, at=start + timedelta(seconds=5)),
+	Movement(left=0.4, right=0.4, at=start + timedelta(seconds=6)),
+	Movement(left=1, right=-1, at=start + timedelta(seconds=7)),
+	Movement(left=-1, right=-1, at=start + timedelta(seconds=10)),
+	Movement(left=0, right=0, at=start + timedelta(seconds=12))
+]
 
 class TableRenderer(Screen):
 	def __init__(self):
 		super(TableRenderer,self).__init__()
 
-		self.time = 0
+		self.time = None
 
 	def draw(self, w, h):
 		self.cr.save()
@@ -121,28 +132,73 @@ class TableRenderer(Screen):
 		cr.scale(scaleFactor, -scaleFactor)
 
 	def drawPath(self, cr):
-		cr.save()
-		cr.translate(-1.2 + 0.36 - 0.15, -0.6)
-		at = self.time
+		with cairo_scoped(cr):
+			origin = cr.get_matrix()
+			origin.invert()
+
+			cr.translate(-1.2 + 0.36 - 0.15, -0.6)
+			at = self.time
+
+			with cairo_scoped(cr):
+				cr.set_line_width(max(cr.device_to_user_distance(3,3)))
+				last_m = movement[0]
+				for m in movement + [None]:
+					if at < last_m.at:
+						break
+
+					elif not m or at <= m.at:
+						last_m.draw(cr, at)
+						break
+
+					last_m.draw(cr, m.at)
+					cr.set_source_rgb(1, 0, 0)
+					cr.stroke()
+
+					if isinstance(m, Movement):
+						last_m = m
+
+					elif isinstance(m, LineSpot):
+						currmatrix = cr.get_matrix().multiply(origin)
+						loc = currmatrix.transform_point(0, 0)
+						new_loc = table.nearest_line(loc)
+						inv = cairo.Matrix(*currmatrix)
+						inv.invert()
+
+						cr.move_to(0, 0)
+
+						cr.transform(inv)
+						cr.translate(-loc[0], -loc[1])
+						cr.translate(*new_loc)
+						cr.transform(currmatrix)
+						cr.line_to(0, 0)
+						cr.set_source_rgb(1, 0.5, 0)
+						cr.stroke()
+
+						last_m = Movement(last_m.l, last_m.r, at=m.at)
 
 
-		cr.set_line_width(max(cr.device_to_user_distance(3,3)))
-		cr.set_source_rgb(1, 0, 0)
-		for m1, m2 in zip(movement, movement[1:] + [None]):
-			if at < m1.at:
-				break
+				final = cr.get_matrix()
 
-			elif not m2 or at <= m2.at:
-				m1.draw(cr, at)
-				break
+			loc = final.multiply(origin)
 
-			else:
-				m1.draw(cr, m2.at)
+			loc_p = loc.transform_point(0, 0)
 
+			cr.set_line_width(max(cr.device_to_user_distance(3,3)))
+			cr.set_source_rgb(1, 0, 0)
+			cr.stroke()
+
+		line_p = table.nearest_line(loc_p)
+
+		cr.move_to(*loc_p)
+		cr.line_to(*line_p)
+		cr.set_line_width(max(cr.device_to_user_distance(1,1)))
+		cr.set_source_rgb(1, 0, 1)
 		cr.stroke()
 
-		self.drawRobot(cr)
-		cr.restore()
+
+		with cairo_scoped(cr):
+			cr.transform(loc)
+			self.drawRobot(cr)
 
 	def drawRobot(self, cr):
 		cr.save()
@@ -150,7 +206,7 @@ class TableRenderer(Screen):
 			-0.05, -0.15,
 			0.4, 0.3
 		)
-		cr.set_source_rgb(0.5, 0.5, 0.5)
+		cr.set_source_rgba(0.5, 0.5, 0.5, 0.5)
 		cr.fill()
 
 		cr.set_source_rgb(1, 1, 1)
@@ -187,6 +243,8 @@ def main():
 
 
 	tr = TableRenderer()
+	tr.time = round_start
+
 	vbox = gtk.VBox(spacing=0)
 	vbox.pack_start(tr, expand=True, fill=True)
 
