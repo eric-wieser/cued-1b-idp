@@ -14,7 +14,7 @@ struct Robot {
 	LineSensors ls;
 	EggSensor detector;
 	int eggsLoaded;
-	EggType[3] eggTypes;
+	EggType eggTypes[3];
 
 	Robot(RLink& rlink);
 };
