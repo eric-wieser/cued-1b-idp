@@ -6,6 +6,7 @@
 .depend
 *.~vsdx
 *.pyc
+tracker.dat
 
 *.sublime-project
 *.sublime-workspace
