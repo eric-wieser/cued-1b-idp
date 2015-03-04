@@ -9,7 +9,7 @@
 
 
 LineFollow::LineFollow(Robot& robot)
-		: StateMachine(robot) _nJunc(0), _nNone(0), _nInvalid(0), _nLine(0), _lineFinder(robot)
+		: StateMachine(robot), _nJunc(0), _nNone(0), _nInvalid(0), _nLine(0), _lineFinder(robot)
 {
 }
 
@@ -21,7 +21,7 @@ bool LineFollow::junction() const
 
 bool LineFollow::end() const
 {
-	return( _state == JUNCTION || _state = TOTALLY_LOST );
+	return( (_state == JUNCTION) || (_state == TOTALLY_LOST) );
 }
 
 
@@ -32,7 +32,7 @@ void LineFollow::_step()
 	bool fJunc = delay_rising(_nJunc, line.state == LineSensors::Reading::JUNCTION, 3);
 	bool fNone = delay_rising(_nNone, line.state == LineSensors::Reading::NONE, 5);
 	bool fInvalid = delay_rising(_nInvalid, line.state == LineSensors::Reading::INVALID, 5);
-	bool fLine = delay_rising(_nLine, line.state == LineSensors::Reading::LINE, 3);
+	// bool fLine = delay_rising(_nLine, line.state == LineSensors::Reading::LINE, 3);
 
 	if (fInvalid)
 		throw std::runtime_error("Sensor Error");
@@ -152,7 +152,7 @@ void LineFinder::_step()
 			if (fLine) {
 				_state = LINE_FOUND;
 			}
-			else if (_stateTime > 5000.0) {
+			else if (stateTime() > 5000.0) {
 				_state = (_state == SWEEP_LEFT1) ? SWEEP_RIGHT1 : SWEEP_LEFT2;
 			}
 
@@ -170,7 +170,7 @@ void LineFinder::_step()
 			if (fLine) {
 				_state = LINE_FOUND;
 			}
-			else if (_stateTime > 10000.0) {
+			else if (stateTime() > 10000.0) {
 				_state = STILL_LOST;
 			}
 
