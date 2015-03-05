@@ -67,7 +67,8 @@ LineSensors::Reading LineSensors::read() {
 			break;
 	}
 
-	if(auto t = Tracker::instance()) t->logLineSpot();
+	if (ret.state != Reading::NONE)
+		if(auto t = Tracker::instance()) t->logLineSpot();
 
 	ret.position = pos;
 	_reading = ret;
