@@ -1,5 +1,6 @@
 #include "robot.h"
 #include "subroutines.h"
+#include "tracker.h"
 
 
 void waitForLine(Robot& r, LineSensors::Reading::State s) {
@@ -50,6 +51,7 @@ void demos::f1(Robot& r) {
 		while(r.ls.read().lsl == 1);
 		while(r.ls.read().lsl == 0);
 		r.drive.stop();
+		Tracker::instance()->logPose(-0.4 + 0.2 * i - 0.2, -0.8, 0);
 
 		delay(100);
 		auto reading = r.detector.read();
@@ -59,6 +61,7 @@ void demos::f1(Robot& r) {
 }
 
 void demos::f2(Robot& r) {
+	Tracker::instance()->logPose(0.2, -0.8, 0);
 	r.drive.move({forward: 1, steer: 0.5});
 
 	delay(1000);
@@ -81,6 +84,7 @@ void demos::f2(Robot& r) {
 }
 
 void demos::f3(Robot& r) {
+	Tracker::instance()->logPose(-1.2 + 0.36 + 0.2, 1.2 - 0.36, M_PI);
 	// add some virtual eggs if we don't yet have any
 	if(r.courier.volume() < 3) r.courier.recordEggAdded(EGG_BROWN);
 	if(r.courier.volume() < 3) r.courier.recordEggAdded(EGG_TASTY);
