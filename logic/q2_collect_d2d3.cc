@@ -144,10 +144,10 @@ void q2_collect_d2d3::_step()
 		case 70: // Raise Arm
 			// Power Actuator 1 Annulus
 
-			_robot.eggTypes[_robot.eggsLoaded] = currentEgg;
-			_robot.eggsLoaded++;
+			_robot.courier.recordEggAdded(currentEgg);
 
-			if (_robot.eggsLoaded == 3
+
+			if (_robot.courier.volume() == 3
 					|| conveyorPos == 5) {
 				_state = -1;
 			}

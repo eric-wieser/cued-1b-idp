@@ -49,9 +49,10 @@ Robot::Robot(RLink& rlink) :
 		spacing: 0.28,
 		rpm: 40
 	}),
-	arm(rlink, port::P3),
+	arm(rlink, port::P2),
 	ls(rlink, port::P1),
-	detector(rlink, port::P2) { }
+	detector(rlink, port::P1),
+	courier(rlink, port::P3) { }
 
 const LineSensors::Reading& CachingRobot::ls() {
 	if (_lsUpdated < ticks()) {

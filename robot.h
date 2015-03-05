@@ -5,6 +5,7 @@
 #include "dev/drive.h"
 #include "dev/linesensors.h"
 #include "dev/eggsensor.h"
+#include "dev/courier.h"
 #include "dev/arm.h"
 #include "eggtype.h"
 
@@ -13,8 +14,7 @@ struct Robot {
 	Arm arm;
 	LineSensors ls;
 	EggSensor detector;
-	int eggsLoaded;
-	EggType eggTypes[3];
+	Courier courier;
 
 	Robot(RLink& rlink);
 };
