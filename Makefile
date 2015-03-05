@@ -48,6 +48,7 @@ docs:
 	doxygen
 
 tests/dev/t_drive.wifi: LDFLAGS += -lncurses
+tests/t_remote.wifi: LDFLAGS += -lncurses
 tests/t_robotdrive.wifi: LDFLAGS += -lncurses
 
 egg_stats.cc: eggdata.csv process_eggdata.py
