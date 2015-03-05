@@ -49,7 +49,7 @@ EggSensor::Reading EggSensor::read() {
 }
 
 std::ostream& operator <<(std::ostream& stream, const EggSensor::Reading& r) {
-	return stream << "{egg: " << EnumNames<EggType>::of(r.bestGuess)
+	return stream << "{egg: " << r.bestGuess
 		<< ", r: " << r.r
 		<< ", g: " << r.g
 		<< ", w: " << r.w

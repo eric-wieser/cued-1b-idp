@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 enum EggType {
 	EGG_NONE,
@@ -8,15 +9,7 @@ enum EggType {
 	EGG_TYPE_COUNT
 };
 
-template<typename E>
-struct EnumNames {
-};
-
-
-template<>
-struct EnumNames<EggType> {
-	static const char* of(EggType e) {
-		static const char* values[EGG_TYPE_COUNT] = {"none", "white", "brown", "tasty"};
-		return values[e];
-	}
-};
+inline std::ostream& operator <<(std::ostream& stream, const EggType& r) {
+	static const char* values[EGG_TYPE_COUNT] = {"none", "white", "brown", "tasty"};
+	return stream << values[r];
+}
