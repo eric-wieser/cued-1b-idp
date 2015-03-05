@@ -60,33 +60,33 @@ class Movement(Event):
 			cr.translate(self.path_speed * dt, 0)
 		else:
 			r = self.arc_radius
+			cr.move_to(0, 0)
 			if r > 0:
-				cr.move_to(0, 0)
-				cr.arc( #xc=
+				(cr.arc if self.omega > 0 else cr.arc_negative)( #xc=
 					0, #yc=
-					self.arc_radius, #radius=
-					self.arc_radius, #angle1=
+					abs(r), #radius=
+					r, #angle1=
 					-math.pi / 2, #angle2=
 					-math.pi / 2 + self.omega * dt
 				)
+
 			else:
-				cr.move_to(0, 0)
-				cr.arc_negative( #xc=
+				(cr.arc if self.omega > 0 else cr.arc_negative)( #xc=
 					0, #yc=
-					self.arc_radius, #radius=
-					abs(self.arc_radius), #angle1=
+					r, #radius=
+					abs(r), #angle1=
 					math.pi / 2, #angle2=
 					math.pi / 2 + self.omega * dt
 				)
-			cr.translate(0, self.arc_radius)
+			cr.translate(0, r)
 			cr.rotate(self.omega * dt)
-			cr.translate(0, -self.arc_radius)
+			cr.translate(0, -r)
 
 class LineSpot(Event):
 	pass
 
 class Pose(Event):
-	def __init__(x, y, theta, at):
+	def __init__(self, x, y, theta, at):
 		"""left and right are motor speeds, at is a timestamp"""
 		self.x = x
 		self.y = y
