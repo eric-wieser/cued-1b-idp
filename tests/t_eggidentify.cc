@@ -18,7 +18,7 @@ int main() {
 
 	while(1){
 		auto reading = es.read();
-		std::cout << reading << std::endl;
+		std::cout << reading.bestGuess << std::endl;
 		delay(250);
 	}
 }
