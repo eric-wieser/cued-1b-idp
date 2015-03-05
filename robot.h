@@ -7,6 +7,7 @@
 #include "dev/eggsensor.h"
 #include "dev/courier.h"
 #include "dev/arm.h"
+#include "dev/ports.h"
 #include "eggtype.h"
 
 struct Robot {
@@ -15,6 +16,8 @@ struct Robot {
 	LineSensors ls;
 	EggSensor detector;
 	Courier courier;
+
+	Port limits;
 
 	Robot(RLink& rlink);
 };

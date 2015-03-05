@@ -52,7 +52,8 @@ Robot::Robot(RLink& rlink) :
 	arm(rlink, port::P2),
 	ls(rlink, port::P1),
 	detector(rlink, port::P1),
-	courier(rlink, port::P3) { }
+	courier(rlink, port::P3),
+	limits(rlink, port::P2) { }
 
 const LineSensors::Reading& CachingRobot::ls() {
 	if (_lsUpdated < ticks()) {
