@@ -35,7 +35,7 @@ class Screen(gtk.DrawingArea):
 		self.draw(*self.window.get_size())
 
 import table
-from odometry import Movement, LineSpot, total_seconds, load_from
+from odometry import Movement, LineSpot, Pose, total_seconds, load_from
 from datetime import datetime, timedelta
 from contextlib import contextmanager
 
@@ -143,6 +143,23 @@ class TableRenderer(Screen):
 
 					if isinstance(m, Movement):
 						last_m = m
+
+					elif isinstance(m, Pose):
+						last_m = Movement(last_m.l, last_m.r, at=m.at)
+
+
+						cr.move_to(0, 0)
+
+						currmatrix = cr.get_matrix().multiply(origin)
+						inv = cairo.Matrix(*currmatrix)
+						inv.invert()
+						cr.transform(inv)
+						cr.translate(m.x, m.y)
+						cr.rotate(m.theta)
+
+						cr.line_to(0, 0)
+						cr.set_source_rgb(1, 1, 0)
+						cr.stroke()
 
 					elif isinstance(m, LineSpot):
 						currmatrix = cr.get_matrix().multiply(origin)
