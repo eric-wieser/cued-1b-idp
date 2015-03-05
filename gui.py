@@ -50,6 +50,9 @@ def cairo_scoped(cr):
 with open('tracker.dat') as f:
 	movement = list(load_from(f))
 
+
+light_loc = (.20, 0)
+
 class TableRenderer(Screen):
 	def __init__(self):
 		super(TableRenderer,self).__init__()
@@ -163,13 +166,14 @@ class TableRenderer(Screen):
 
 					elif isinstance(m, LineSpot):
 						currmatrix = cr.get_matrix().multiply(origin)
-						loc = currmatrix.transform_point(0, 0)
+						loc = currmatrix.transform_point(*light_loc)
 						new_loc = table.nearest_line(loc)
-						inv = cairo.Matrix(*currmatrix)
-						inv.invert()
 
 						cr.move_to(0, 0)
 
+						# add translation from old to new point
+						inv = cairo.Matrix(*currmatrix)
+						inv.invert()
 						cr.transform(inv)
 						cr.translate(-loc[0], -loc[1])
 						cr.translate(*new_loc)
@@ -212,6 +216,15 @@ class TableRenderer(Screen):
 		)
 		cr.set_source_rgba(0.5, 0.5, 0.5, 0.5)
 		cr.fill()
+
+		with cairo_scoped(cr):
+			cr.translate(*light_loc)
+			cr.rectangle(
+				-0.02, -0.02,
+				0.04, 0.04
+			)
+			cr.set_source_rgb(1, 1, 0)
+			cr.fill()
 
 		cr.set_source_rgb(1, 1, 1)
 		cr.set_line_width(max(cr.device_to_user_distance(1,1)))
