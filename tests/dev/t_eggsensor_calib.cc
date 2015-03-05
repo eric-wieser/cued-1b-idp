@@ -18,12 +18,14 @@ int main() {
 
 	f << "egg,r,g,w,a" << std::endl;
 
+	std::cout << "Try and vary the ambient light while sampling" << std::endl;
+
 	const char* names[EGG_TYPE_COUNT] = {"brown", "white", "cream", "none"};
 
 	for(int i = 0; i < EGG_TYPE_COUNT; i++) {
 		auto name = names[i];
 		char c;
-		std::cout << name << std::endl;
+		std::cout << "Place over " << name << " egg, and hit enter" << std::endl;
 		while((c = getchar()) != '\n' && c != EOF);
 
 

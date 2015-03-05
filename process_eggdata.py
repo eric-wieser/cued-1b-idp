@@ -7,9 +7,7 @@ import numpy as np
 # represents one line of the log file
 class Reading(object):
 	def __init__(self, d):
-		self.c = np.array([int(d['r']), int(d['g']), int(d['w'])])
-		self.a = int(d['a'])
-
+		self.c = np.array([int(d['r']), int(d['g']), int(d['w']), int(d['a'])])
 		self.actual = d['egg']
 
 
@@ -53,7 +51,7 @@ stats = {}
 # find mean and variance
 # TODO: covariance?
 for t, rs in itertools.groupby(data, key=lambda e: e.actual):
-	rs = np.array([r.norm() for r in rs])
+	rs = np.array([r.c for r in rs])
 
 	mean = np.mean(rs, axis=0)
 	mean_sq = np.mean(rs*rs)
@@ -71,23 +69,23 @@ top_template = '''\
 
 using namespace egg_stats;
 
-MultivariateNormal<3> egg_stats::expectations[EGG_TYPE_COUNT] = {{
+MultivariateNormal<4> egg_stats::expectations[EGG_TYPE_COUNT] = {{
 	{0}
 }};
 '''
 
 single_template = '''\
 // {name}
-(MultivariateNormal<3>) {{
-	(Matrix<float,3,1>() << {mean}).finished(),
-	(Matrix<float,3,3>() << {cov}).finished()
+(MultivariateNormal<4>) {{
+	(Matrix<float,4,1>() << {mean}).finished(),
+	(Matrix<float,4,4>() << {cov}).finished()
 }}'''
 
 text = top_template.format(
 	',\n'.join(
 		single_template.format(
 			mean=', '.join(str(c) for c in stats[name][0]),
-			cov=(',\n\t' + ' '*len('(Matrix<float,3,3>() << ')).join(', '.join(str(c) for c in row) for row in stats[name][1]),
+			cov=(',\n\t' + ' '*len('(Matrix<float,4,4>() << ')).join(', '.join(str(c) for c in row) for row in stats[name][1]),
 			name=name)
 		for name in order
 	).replace('\n', '\n\t')

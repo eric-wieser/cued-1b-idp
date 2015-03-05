@@ -30,8 +30,8 @@ EggSensor::Reading EggSensor::read() {
 		res.a = _r.request(ADC0);
 	}
 
-	Matrix<float,3,1> normed;
-	normed << static_cast<float>(res.r - res.a), static_cast<float>(res.g - res.a), static_cast<float>(res.w - res.a);
+	Matrix<float,4,1> normed;
+	normed << res.r, res.g, res.w, res.a;
 
 	// do some processing
 	for(int i = 0; i < EGG_TYPE_COUNT; i++) {

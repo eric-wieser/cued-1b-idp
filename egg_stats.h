@@ -19,5 +19,5 @@ struct MultivariateNormal {
 };
 
 namespace egg_stats {
-	extern MultivariateNormal<3> expectations[EGG_TYPE_COUNT];
+	extern MultivariateNormal<4> expectations[EGG_TYPE_COUNT];
 }
