@@ -1,8 +1,5 @@
 #pragma once
 #include "eggtype.h"
-#include <cmath>
-#include <iostream>
-#include <iomanip>
 #include <Eigen/Dense>
 using namespace Eigen;
 
@@ -19,5 +16,5 @@ struct MultivariateNormal {
 };
 
 namespace egg_stats {
-	extern MultivariateNormal<4> expectations[EGG_TYPE_COUNT];
+	extern std::array<MultivariateNormal<4>, EGG_TYPE_COUNT> expectations;
 }
