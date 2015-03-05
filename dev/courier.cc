@@ -5,6 +5,13 @@
 #include "robot_delay.h"
 #include "drive.h"
 
+
+Courier::Courier(RLink& r, port::Name ledPort)
+		: Device(r), _ledPort(r, ledPort), _volume(0)
+{
+	r.command(MOTOR_3_GO, Drive::convertSpeed(-0.1));
+}
+
 void Courier::_updateLeds() {
 	uint8_t mask = 0;
 

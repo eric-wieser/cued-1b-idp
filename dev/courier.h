@@ -23,6 +23,5 @@ public:
 	/// The number of eggs on the rail
 	int volume();
 
-	Courier(RLink& r, port::Name ledPort)
-		: Device(r), _ledPort(r, ledPort), _volume(0) {};
+	Courier(RLink& r, port::Name ledPort);
 };
