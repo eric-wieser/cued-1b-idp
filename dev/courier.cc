@@ -6,10 +6,14 @@
 #include "drive.h"
 
 
+static const float holdSpeed = -0.5;
+static const float dropSpeed = 1;
+static const float liftSpeed = -1;
+
 Courier::Courier(RLink& r, port::Name ledPort)
 		: Device(r), _ledPort(r, ledPort), _volume(0)
 {
-	r.command(MOTOR_3_GO, Drive::convertSpeed(-0.1));
+	r.command(MOTOR_3_GO, Drive::convertSpeed(holdSpeed));
 }
 
 void Courier::_updateLeds() {
@@ -41,26 +45,24 @@ void Courier::recordEggAdded(EggType egg_t) {
 	assert(_volume < 3);
 
 	_contents[++_volume] = egg_t;
-	_updateLeds();
+	// _updateLeds();
 }
 
 void Courier::unloadEgg() {
 	assert(_volume != 0);
 
 	// move the motor. TODO: use light gate
-	_r.command(MOTOR_3_GO, Drive::convertSpeed(0.5));
+	_r.command(MOTOR_3_GO, Drive::convertSpeed(dropSpeed));
 	delay(1000);
-	_r.command(MOTOR_3_GO, 0);
-	delay(1000);
-	_r.command(MOTOR_3_GO, Drive::convertSpeed(-0.5));
-	delay(1000);
-	_r.command(MOTOR_3_GO, 0);
+	_r.command(MOTOR_3_GO, Drive::convertSpeed(liftSpeed));
+	delay(2000);
+	_r.command(MOTOR_3_GO, Drive::convertSpeed(holdSpeed));
 
 	// update internal state, if we succeed
 	_contents[0] = _contents[1];
 	_contents[1] = _contents[2];
 	_contents[2] = EGG_NONE;
-	_updateLeds();
+	// _updateLeds();
 }
 
 int Courier::volume() { return _volume; }
