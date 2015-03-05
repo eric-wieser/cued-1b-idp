@@ -47,21 +47,8 @@ def cairo_scoped(cr):
 	finally:
 		cr.restore()
 
-start = datetime.now()
-# with open('tracker.dat') as f:
-# 	movement = list(load_from(f))
-
-# print movement
-movement = [
-	Movement(left=0.4, right=1, at=start),
-	Movement(left=1, right=1, at=start + timedelta(seconds=0.5)),
-	LineSpot(at=start + timedelta(seconds=3)),
-	Movement(left=0.4, right=1, at=start + timedelta(seconds=5)),
-	Movement(left=0.4, right=0.4, at=start + timedelta(seconds=6)),
-	Movement(left=1, right=-1, at=start + timedelta(seconds=7)),
-	Movement(left=-1, right=-1, at=start + timedelta(seconds=10)),
-	Movement(left=0, right=0, at=start + timedelta(seconds=12))
-]
+with open('tracker.dat') as f:
+	movement = list(load_from(f))
 
 class TableRenderer(Screen):
 	def __init__(self):
