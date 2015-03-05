@@ -106,6 +106,9 @@ def load_from(f):
 
 	while True:
 		header = f.read(1)
+		if not header:
+			break
+
 		fmt = structs.get(header)
 		assert fmt
 
