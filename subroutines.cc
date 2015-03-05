@@ -1,6 +1,6 @@
 #include "robot.h"
 #include "subroutines.h"
-#include "tracker.h"
+#include "util/tracker.h"
 
 
 void waitForLine(Robot& r, LineSensors::Reading::State s) {

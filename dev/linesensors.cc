@@ -7,7 +7,7 @@
 #include "device.h"
 
 #include "linesensors.h"
-#include "tracker.h"
+#include "util/tracker.h"
 
 
 LineSensors::LineSensors(RLink& r, port::Name p)
