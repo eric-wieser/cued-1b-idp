@@ -46,7 +46,7 @@ Port 3 - courier indicator LEDs & Lightgate
 Robot::Robot(RLink& rlink) :
 	drive(rlink, {
 		radius: 0.054,
-		spacing: 0.28,
+		spacing: 0.26,
 		rpm: 40
 	}),
 	arm(rlink, port::P2),
