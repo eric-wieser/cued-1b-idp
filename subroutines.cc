@@ -38,3 +38,74 @@ void goToConveyor(Robot& r) {
 	// wait till we leave the second line and arrive at the third
 	waitForLine(r, negate { LineSensors::Reading::NONE });
 }
+
+void demos::f1(Robot& r) {
+	Drive::move_args args = {forward: 1, steer: -0.2};
+
+	goToConveyor(r);
+
+	for(int i  = 0; i < 5; i++) {
+		r.drive.move(args);
+		while(r.ls.read().lsl == 1);
+		while(r.ls.read().lsl == 0);
+		r.drive.stop();
+
+		delay(100);
+		auto reading = r.detector.read();
+		std::cout << "Egg at station " << i << ": " << reading.bestGuess << std::endl;
+	}
+
+}
+
+void demos::f2(Robot& r) {
+	r.drive.move({forward: 1, steer: 0.5});
+
+	delay(1000);
+	while(r.ls.read().state == LineSensors::Reading::LINE);
+	while(r.ls.read().state != LineSensors::Reading::LINE);
+	std::cout << "Departed conveyor and found line" << std::endl;
+
+	goToJunction(r, 1);
+	turnAtJunction(r);
+	std::cout << "Looking up ramp" << std::endl;
+
+	goToJunction(r, 4);
+	turnAtJunction(r);
+	std::cout << "Looking along plateau" << std::endl;
+
+	goToJunction(r, 1);
+	r.drive.straight(0.1).wait();
+	goToJunction(r, 1);
+	std::cout << "At delivery nexus" << std::endl;
+}
+
+void demos::f3(Robot& r) {
+	// add some virtual eggs if we don't yet have any
+	if(r.courier.volume() < 3) r.courier.recordEggAdded(EGG_BROWN);
+	if(r.courier.volume() < 3) r.courier.recordEggAdded(EGG_TASTY);
+
+	// rotate to D2 delivery
+	r.drive.straight(0.1).wait();
+	r.drive.move({forward: 0.8, steer: 1});
+
+	while(r.ls.read().state == LineSensors::Reading::LINE);
+	while(r.ls.read().state != LineSensors::Reading::LINE);
+	std::cout << "At D2" << std::endl;
+	r.drive.stop();
+	r.courier.unloadEgg();
+
+	// rotate back to nexus, then drive to D3
+	r.drive.move({forward: -0.8, steer: -1});
+	while(r.ls.read().state == LineSensors::Reading::LINE);
+	while(r.ls.read().state != LineSensors::Reading::LINE);
+	r.drive.straight(0.1).wait();
+	std::cout << "At D3" << std::endl;
+	r.drive.stop();
+	r.courier.unloadEgg();
+}
+
+void demos::all(Robot& r) {
+	f1(r);
+	f2(r);
+	f3(r);
+}
