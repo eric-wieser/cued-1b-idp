@@ -7,8 +7,8 @@ private:
 	Port _port;
 public:
 	enum {
-		PIN_UP_DOWNB = 0,
-		PIN_OPEN_CLOSEB = 1
+		PIN_DOWN_UPB = 6,
+		PIN_CLOSED_OPENB = 7
 	};
 	void up();
 	void down();
