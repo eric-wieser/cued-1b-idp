@@ -29,22 +29,23 @@ private:
 public:
 	enum {
 		PIN_LEDR = 4,
-		PIN_LEDG = 5,
+		PIN_LEDB = 5,
 		PIN_LEDW = 6
 	};
 	struct Reading {
+		float r;  /// red
+		float b;  /// blue
+		float w;  /// white
+		float a;  /// ambient
+
 		std::array<float, EGG_TYPE_COUNT> probabilities;
 		EggType bestGuess;
-
-		float r;
-		float g;
-		float w;
-		float a; /// ambient
 
 		friend std::ostream& operator<< (std::ostream& stream, const Reading& matrix);
 	};
 
+	EggSensor(RLink& r, port::Name port);
+	~EggSensor();
+
 	Reading read();
-	EggSensor(RLink& r, port::Name port)
-		: Device(r), _port(r, port, (1 << PIN_LEDR) | (1 << PIN_LEDG) | (1 << PIN_LEDW)) {};
 };

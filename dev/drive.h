@@ -4,12 +4,12 @@
 #include "../util/timeout.h"
 
 /**
-Class abtracting the drive motors
+    Interface to the two-wheeled drive system
 
-Intended usage
+    Intended usage
 
     \code{.cpp}
-    Drive d(robot);
+    Drive d(rlink);
 
     // forward, steer with center of curvature on left
     d.move({forward: 0.9, .steer: 0.1});

@@ -10,10 +10,9 @@
 #include "util/tracker.h"
 
 
-LineSensors::LineSensors(RLink& r, port::Name p)
-		: Device(r), _port(r, p)
-{
-}
+LineSensors::LineSensors(RLink& r, port::Name p) :
+	Device(r),
+	_port(r, p) { }
 
 LineSensors::Reading LineSensors::read() {
 	LineSensors::Reading ret;
@@ -67,10 +66,11 @@ LineSensors::Reading LineSensors::read() {
 			break;
 	}
 
-	if (ret.state != Reading::NONE)
+	if (ret.state != Reading::NONE) {
 		if(auto t = Tracker::instance()) t->logLineSpot();
+	}
 
 	ret.position = pos;
 	_reading = ret;
-	return( ret );
+	return ret ;
 }

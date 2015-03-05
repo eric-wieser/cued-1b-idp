@@ -1,9 +1,17 @@
 #pragma once
+
 #include <array>
 #include "device.h"
 #include "ports.h"
 #include "../eggtype.h"
 
+/**
+	Interface to the runner holding the eggs, its indicator LEDs, the light
+	gate that verifies the presence of an egg, and the bucket at the end of the
+	runner which delivers the eggs into their cups.
+
+	Affectionately known as the courier, as it carries things
+*/
 class Courier : public Device {
 private:
 	std::array<EggType, 3> _contents;
@@ -12,6 +20,8 @@ private:
 
 	void _updateLeds();
 public:
+	Courier(RLink& r, port::Name ledPort);
+
 	/**
 		Indicate that a new egg has been added to the rail. This updates the
 		internal record of currently-held eggs, and turns on the appropriate
@@ -22,6 +32,4 @@ public:
 	void unloadEgg();
 	/// The number of eggs on the rail
 	int volume();
-
-	Courier(RLink& r, port::Name ledPort);
 };

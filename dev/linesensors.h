@@ -5,27 +5,20 @@
 #include "rlink.h"
 
 /**
-Intended usage:
-
-	LineSensors ls(robot);
-
-	auto r = ls.read();
-
-	if(r.state == r::LINE) {
-		drive.move({
-			.forward = 0.5,
-			.steer=r.position * 0.2
-		})
-	}
-
+	Interface to the three front-mounted line sensors
 */
 class LineSensors : public Device {
 public:
 	struct Reading {
+		bool lsl;  /// left
+		bool lsc;  /// right
+		bool lsr;  /// center
+		bool lsa;  /// arm
+
 		enum State { NONE, LINE, JUNCTION, INVALID };
 		State state;
+
 		float position; // between -1 and 1, or +-Inf if no line, or NaN if invalid
-		bool lsl, lsc, lsr, lsa;
 	};
 
 private:

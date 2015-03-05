@@ -6,6 +6,20 @@
 #include <Eigen/Dense>
 using namespace Eigen;
 
+
+EggSensor::EggSensor(RLink& r, port::Name port) :
+	Device(r),
+	_port(r, port, (1 << PIN_LEDR) | (1 << PIN_LEDB) | (1 << PIN_LEDW))
+{
+	// turn off LEDs at startup
+	_port = 0xff;
+};
+
+EggSensor::~EggSensor() {
+	// turn off LEDs on shutdown too
+	_port = 0xff;
+}
+
 EggSensor::Reading EggSensor::read() {
 	const int READ_DELAY = 50; // ms
 
@@ -17,9 +31,9 @@ EggSensor::Reading EggSensor::read() {
 		delay(READ_DELAY);
 		res.r = _r.request(ADC0);
 
-		_port = ~(1 << PIN_LEDG);
+		_port = ~(1 << PIN_LEDB);
 		delay(READ_DELAY);
-		res.g = _r.request(ADC0);
+		res.b = _r.request(ADC0);
 
 		_port = ~(1 << PIN_LEDW);
 		delay(READ_DELAY);
@@ -31,7 +45,7 @@ EggSensor::Reading EggSensor::read() {
 	}
 
 	Matrix<float,4,1> normed;
-	normed << res.r, res.g, res.w, res.a;
+	normed << res.r, res.b, res.w, res.a;
 
 	// do some processing
 	for(int i = 0; i < EGG_TYPE_COUNT; i++) {
@@ -49,16 +63,17 @@ EggSensor::Reading EggSensor::read() {
 }
 
 std::ostream& operator <<(std::ostream& stream, const EggSensor::Reading& r) {
-	return stream << "{egg: " << r.bestGuess
-		<< ", r: " << r.r
-		<< ", g: " << r.g
-		<< ", w: " << r.w
-		<< ", a: " << r.a
-		<< ", p: {"
-			<< "n: " << r.probabilities[EGG_NONE]
-			<< ", w: " << r.probabilities[EGG_WHITE]
-			<< ", b: " << r.probabilities[EGG_BROWN]
-			<< ", c: " << r.probabilities[EGG_TASTY]
+	return stream << "{"
+		<< "egg: " << r.bestGuess << ", "
+		<< "r: " << r.r << ", "
+		<< "b: " << r.b << ", "
+		<< "w: " << r.w << ", "
+		<< "a: " << r.a << ", "
+		<< "p: {"
+			<< "n: " << r.probabilities[EGG_NONE] << ", "
+			<< "w: " << r.probabilities[EGG_WHITE] << ", "
+			<< "b: " << r.probabilities[EGG_BROWN] << ", "
+			<< "c: " << r.probabilities[EGG_TASTY]
 		<< "}"
-		<< "}";
+	<< "}";
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "eggtype.h"
+#include <array>
 #include <Eigen/Dense>
 using namespace Eigen;
 
