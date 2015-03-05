@@ -29,20 +29,21 @@ void goToConveyor(Robot& r) {
 	// wait for the second junction
 	waitForLine(r, LineSensors::Reading::JUNCTION);
 
+	// wait for the third junction
+	waitForLine(r, LineSensors::Reading::JUNCTION);
+
+
 	// turn
-	r.drive.move({forward: 0.0f, steer: -1.0f});
-
-	// wait till we leave the first line and arrive at the second
-	waitForLine(r, negate { LineSensors::Reading::NONE });
-
-	// wait till we leave the second line and arrive at the third
-	waitForLine(r, negate { LineSensors::Reading::NONE });
+	r.drive.move({forward: 1.0f, steer: -1.0f});
+	Timeout(std::chrono::duration<float>(180 / r.drive.maxSpeeds.rotary)).wait();
+	Timeout(std::chrono::duration<float>(1)).wait();
 }
 
 void demos::f1(Robot& r) {
 	Drive::move_args args = {forward: 1, steer: -0.2};
 
 	goToConveyor(r);
+	r.drive.stop();
 
 	for(int i  = 0; i < 5; i++) {
 		r.drive.move(args);
@@ -86,21 +87,24 @@ void demos::f3(Robot& r) {
 
 	// rotate to D2 delivery
 	r.drive.straight(0.1).wait();
-	r.drive.move({forward: 0.8, steer: 1});
+	r.drive.move({forward: 0.7, steer: 1});
 
-	while(r.ls.read().state == LineSensors::Reading::LINE);
-	while(r.ls.read().state != LineSensors::Reading::LINE);
-	std::cout << "At D2" << std::endl;
+	while(r.ls.read().lsc);
+	while(!r.ls.read().lsc);
 	r.drive.stop();
+	std::cout << "At D2" << std::endl;
 	r.courier.unloadEgg();
 
 	// rotate back to nexus, then drive to D3
-	r.drive.move({forward: -0.8, steer: -1});
+	r.drive.move({forward: -0.7, steer: -1});
 	while(r.ls.read().state == LineSensors::Reading::LINE);
 	while(r.ls.read().state != LineSensors::Reading::LINE);
-	r.drive.straight(0.1).wait();
-	std::cout << "At D3" << std::endl;
 	r.drive.stop();
+
+	delay(1000);
+	r.drive.straight(0.05).wait();
+	r.drive.stop();
+	std::cout << "At D3" << std::endl;
 	r.courier.unloadEgg();
 }
 
