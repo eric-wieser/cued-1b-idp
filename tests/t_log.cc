@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "../logging.h"
+#include "util/logging.h"
 
 
 int main(int argc, char const *argv[])

@@ -55,20 +55,3 @@ Robot::Robot(RLink& rlink) :
 	detector(rlink, port::P1),
 	courier(rlink, port::P3),
 	limits(rlink, port::P2) { }
-
-const LineSensors::Reading& CachingRobot::ls() {
-	if (_lsUpdated < ticks()) {
-		_lsReading = Robot::ls.read();
-	}
-
-	return( _lsReading );
-}
-
-
-const EggSensor::Reading& CachingRobot::eld() {
-	if (_esUpdated < ticks()) {
-		_esReading = detector.read();
-	}
-
-	return( _esReading );
-}

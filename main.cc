@@ -4,7 +4,7 @@
 #include "robot.h"
 #include "util/timing.h"
 #include "dev/rlink.h"
-#include "logging.h"
+#include "util/logging.h"
 
 void robotLogic(Robot& robot) {
 

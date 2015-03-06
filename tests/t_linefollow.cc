@@ -1,5 +1,6 @@
-#include "../robot.h"
-#include "../subroutines.h"
+
+#include "robot.h"
+#include "routines/subroutines.h"
 
 #include <cstdint>
 #include <iostream>
