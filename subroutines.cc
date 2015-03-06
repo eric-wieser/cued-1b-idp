@@ -43,6 +43,9 @@ void goToConveyor(Robot& r) {
 void demos::f1(Robot& r) {
 	Drive::move_args args = {forward: 1, steer: -0.2};
 
+	r.arm.open();
+	r.arm.up();
+
 	goToConveyor(r);
 	r.drive.stop();
 
@@ -56,6 +59,16 @@ void demos::f1(Robot& r) {
 		delay(100);
 		auto reading = r.detector.read();
 		std::cout << "Egg at station " << i << ": " << reading.bestGuess << std::endl;
+
+		if (reading.bestGuess == EGG_WHITE) {
+			r.drive.straight(0.1).wait();
+			r.drive.stop();
+			
+			r.arm.down();
+			r.arm.close();
+			r.arm.up();
+			r.arm.open();
+		}
 	}
 
 }
