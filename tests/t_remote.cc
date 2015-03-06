@@ -45,49 +45,59 @@ int main() {
 	Robot robot(r);
 
 	// ncurses stuff
-	nc::newterm(NULL, stdin, stdout);
+	auto sc = nc::newterm(NULL, stdin, stdout);
 	nc::noecho();
 	nc::cbreak();
 	nc::keypad(nc::stdscr, true);
 
-	while(1)
-	{
-		int c = nc::wgetch(nc::stdscr);
+	try {
+		while(1)
+		{
+			int c = nc::wgetch(nc::stdscr);
 
-		float f = 1, t = 1;
+			float f = 1, t = 1;
 
-		switch(c) {
-			case '8': robot.drive.move({ f,  0}); break;
-			case '9': robot.drive.move({ f, -t}); break;
-			case '6': robot.drive.move({ 0, -t}); break;
-			case '3': robot.drive.move({-f, -t}); break;
-			case '2': robot.drive.move({-f,  0}); break;
-			case '1': robot.drive.move({-f,  t}); break;
-			case '4': robot.drive.move({ 0,  t}); break;
-			case '7': robot.drive.move({ f,  t}); break;
-			default:  robot.drive.move({ 0,  0}); break;
+			switch(c) {
+				case '8': robot.drive.move({ f,  0}); break;
+				case '9': robot.drive.move({ f, -t}); break;
+				case '6': robot.drive.move({ 0, -t}); break;
+				case '3': robot.drive.move({-f, -t}); break;
+				case '2': robot.drive.move({-f,  0}); break;
+				case '1': robot.drive.move({-f,  t}); break;
+				case '4': robot.drive.move({ 0,  t}); break;
+				case '7': robot.drive.move({ f,  t}); break;
+				default:  robot.drive.move({ 0,  0}); break;
+			}
+
+			switch(c) {
+				case '+': robot.arm.down();  break;
+				case '-': robot.arm.up();    break;
+				case '/': robot.arm.open();  break;
+				case '*': robot.arm.close(); break;
+
+				case '.':
+					std::cout << "Egg type: " << robot.detector.read().bestGuess << std::endl;
+					break;
+				case '0':
+					std::cout << "Line position: " << robot.ls.read().position << std::endl;
+					break;
+
+				case '\n':
+					robot.courier.recordEggAdded(EGG_BROWN);
+					robot.courier.unloadEgg();
+					break;
+			}
+
+			std::cout.flush();
 		}
-
-		switch(c) {
-			case '+': robot.arm.down();  break;
-			case '-': robot.arm.up();    break;
-			case '/': robot.arm.open();  break;
-			case '*': robot.arm.close(); break;
-
-			case '.':
-				std::cout << "Egg type: " << robot.detector.read().bestGuess << std::endl;
-				break;
-			case '0':
-				std::cout << "Line position: " << robot.ls.read().position << std::endl;
-				break;
-
-			case '\n':
-				robot.courier.recordEggAdded(EGG_BROWN);
-				robot.courier.unloadEgg();
-				break;
-		}
-
-		std::cout.flush();
 	}
+	catch(...) {
+		nc::delscreen(sc);
+		nc::endwin();
+		throw;
+	}
+
+	nc::delscreen(sc);
+	nc::endwin();
 	return 0;
 }
