@@ -6,7 +6,7 @@ RM = rm -f
 override CFLAGS += -g -std=gnu++0x -Wall -I/export/teach/1BRobot -I.
 override LDFLAGS += -lrobot
 
-DIRS := . util dev logic
+DIRS := . util dev routines
 SRCS := $(sort $(foreach d, $(DIRS), $(wildcard $(d)/*.cc)))
 OBJSRCS := $(filter-out ./main.cc,$(SRCS))
 

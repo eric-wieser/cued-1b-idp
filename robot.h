@@ -10,6 +10,7 @@
 #include "dev/ports.h"
 #include "eggtype.h"
 
+
 struct Robot {
 	Drive drive;
 	Arm arm;
@@ -21,6 +22,7 @@ struct Robot {
 
 	Robot(RLink& rlink);
 };
+
 
 class CachingRobot : private Robot
 {
@@ -48,6 +50,7 @@ public:
 
 	inline Arm& arm() { return Robot::arm; }
 };
+
 
 namespace simple_robot {
 }

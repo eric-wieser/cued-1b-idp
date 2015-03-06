@@ -5,6 +5,8 @@
 #include "../logging.h"
 #include "../util/timing.h"
 #include "../dev/rlink.h"
+#include "../subroutines.h"
+
 #include "../logic/q2_collect_d2d3.h"
 
 struct RobotLogic
