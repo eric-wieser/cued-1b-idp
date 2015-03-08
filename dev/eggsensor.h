@@ -47,5 +47,5 @@ public:
 	EggSensor(RLink& r, port::Name port);
 	~EggSensor();
 
-	Reading read();
+	Reading read(int samples = 5);
 };

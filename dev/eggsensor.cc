@@ -20,7 +20,14 @@ EggSensor::~EggSensor() {
 	_port = 0xff;
 }
 
-EggSensor::Reading EggSensor::read() {
+static int sampleADC(RLink& r, int samples) {
+	int res = 0;
+	for(int i = 0; i < samples; i++)
+		res += r.request(ADC0);
+	return res / samples;
+}
+
+EggSensor::Reading EggSensor::read(int samples) {
 	const int READ_DELAY = 50; // ms
 
 	Reading res;
@@ -29,19 +36,19 @@ EggSensor::Reading EggSensor::read() {
 	{
 		_port = ~(1 << PIN_LEDR);
 		delay(READ_DELAY);
-		res.r = _r.request(ADC0);
+		res.r = sampleADC(_r, samples);
 
 		_port = ~(1 << PIN_LEDB);
 		delay(READ_DELAY);
-		res.b = _r.request(ADC0);
+		res.b = sampleADC(_r, samples);
 
 		_port = ~(1 << PIN_LEDW);
 		delay(READ_DELAY);
-		res.w = _r.request(ADC0);
+		res.w = sampleADC(_r, samples);
 
 		_port = 0xff;
 		delay(READ_DELAY);
-		res.a = _r.request(ADC0);
+		res.a = sampleADC(_r, samples);
 	}
 
 	Matrix<float,4,1> normed;
