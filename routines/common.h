@@ -1,12 +1,8 @@
 #pragma once
 
+#include "dev/linesensors.h"
 #include "robot.h"
 
-
-
-void goToJunction(Robot& r, float distance);
-void turnAtJunction(Robot& r);
-void goToConveyor(Robot& r);
 void dropCreme(Robot& r);
 void dropWhite(Robot& r);
 
