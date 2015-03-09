@@ -31,19 +31,30 @@ void Drive::move(move_args args) {
 	setWheelSpeeds(left, right);
 }
 
+
+Timeout::duration_type Drive::timeForTurn(float angle, float speed) {
+	speed = copysignf(speed, angle);
+	return Timeout::duration_type(
+		angle / (maxSpeeds.rotary * speed)
+	);
+}
+Timeout::duration_type Drive::timeForStraight(float dist, float speed) {
+	speed = copysignf(speed, dist);
+	return Timeout::duration_type(
+		dist / (maxSpeeds.linear * speed)
+	);
+}
+
+
 Timeout Drive::turn(float angle, float speed) {
 	speed = copysignf(speed, angle);
 	move({forward: 0, steer: speed});
-	return std::chrono::duration<float>(
-		angle / (maxSpeeds.rotary * speed)
-	);
+	return timeForTurn(angle, speed);
 }
 Timeout Drive::straight(float dist, float speed) {
 	speed = copysignf(speed, dist);
 	move({forward: speed, steer: 0});
-	return std::chrono::duration<float>(
-		dist / (maxSpeeds.linear * speed)
-	);
+	return timeForStraight(dist, speed);
 }
 
 void Drive::setWheelSpeeds(float left, float right) {

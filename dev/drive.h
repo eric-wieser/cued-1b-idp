@@ -67,9 +67,11 @@ public:
 
     /// Move in a straight line, and return a timeout indicating expected completion
     Timeout straight(float dist, float speed = 1);
+    Timeout::duration_type timeForStraight(float dist, float speed = 1);
 
     /// Turn an angle on the spot, and return a timeout indicating expected completion
     Timeout turn(float angle, float speed = 1);
+    Timeout::duration_type timeForTurn(float angle, float speed = 1);
 
     /// low-level motor access
     void setWheelSpeeds(float left, float right);

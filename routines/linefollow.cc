@@ -102,52 +102,35 @@ void reFindLine(Robot& r, float lastPos) {
 	const float steerAngle = 45;
 	const float steerSpeed = 0.5;
 
-
 	float sign = copysignf(1, lastPos);
+
+	Drive d = r.drive;
 
 	// lost the line behind us
 	if(sign == 0) {
 		// reverse until we find a line
-		try {
-			Drive d = r.drive;
-			Timeout timeout = d.straight(-reverseDist, reverseSpeed);
-			while(r.ls.read().state != LineSensors::Reading::LINE) {
-				timeout.check();
-			}
-
-			return;
+		Timeout timeout = d.straight(-reverseDist, reverseSpeed);
+		while(!timeout.hasexpired()) {
+			if(r.ls.read().state == LineSensors::Reading::LINE) return;
 		}
-		catch(Timeout::Expired) {}
 
 		// pick a side for further searching
 		sign = 1;
 	}
-
-	// turn in the direction we think we lost the line
-	try {
-		Drive d = r.drive;
+	{
+		// turn in the direction we think we lost the line
 		Timeout timeout = d.turn(sign*steerAngle, steerSpeed);
-		while(r.ls.read().state != LineSensors::Reading::LINE) {
-			timeout.check();
+		while(!timeout.hasexpired()) {
+			if(r.ls.read().state == LineSensors::Reading::LINE) return;
 		}
-
-		return;
 	}
-	catch(Timeout::Expired) {}
-
-	// turn in the other direction
-	try {
-		Drive d = r.drive;
+	{
+		// turn in the other direction
 		Timeout timeout = d.turn(-2*sign*steerAngle, steerSpeed);
-		while(r.ls.read().state != LineSensors::Reading::LINE) {
-			timeout.check();
+		while(!timeout.hasexpired()) {
+			if(r.ls.read().state == LineSensors::Reading::LINE) return;
 		}
-
-		return;
 	}
-	catch(Timeout::Expired) {}
-
-
 	throw NoLineFound();
 }
 
@@ -201,8 +184,10 @@ void turnAtJunction(Robot& r, bool left) {
 
 	{
 		Drive d = r.drive;
-		auto t = d.turn(left ? 90 : -90);
-		t.add(std::chrono::duration<float>(0.5));
+		Timeout real_t = d.turn(left ? 90 : -90);
+		Timeout late_t = real_t + d.timeForTurn(left ? 20 : -20);
+
+		auto& t = late_t;
 
 		int state = pastLine ? 1 : 0;
 		while (state != 3) {
