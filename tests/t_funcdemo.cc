@@ -13,9 +13,6 @@ namespace demos {
 
 
 void f1(Robot& r) {
-	r.arm.open();
-	r.arm.up();
-
 	q2_collect_d2d3(r);
 }
 
