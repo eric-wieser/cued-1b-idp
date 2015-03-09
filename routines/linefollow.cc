@@ -196,7 +196,7 @@ void turnAtJunction(Robot& r, bool left) {
 	catch (LineLost& lost) {
 		r.drive.straight(lost.distanceLeft).wait();
 
-		pastLine = !(left ^ (lost.lastReading.position < 0.0f));
+		pastLine = (left == (lost.lastReading.position < 0.0f));
 	}
 
 	{
@@ -204,7 +204,7 @@ void turnAtJunction(Robot& r, bool left) {
 		auto t = d.turn(left ? 90 : -90);
 		t.add(std::chrono::duration<float>(0.5));
 
-		int state = pastLine ? 2 : 0;
+		int state = pastLine ? 1 : 0;
 		while (state != 3) {
 			auto line = r.ls.read();
 
