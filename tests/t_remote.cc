@@ -75,15 +75,26 @@ int main() {
 				case '/': robot.arm.open();  break;
 				case '*': robot.arm.close(); break;
 
-				case '.':
-					std::cout << "Egg type: " << robot.detector.read().bestGuess << std::endl;
+				case '.': {
+						auto egg = robot.detector.read().bestGuess;
+						std::cout << "Egg type: " << egg << "\r\n";
+						if(robot.courier.volume() < 3) {
+							robot.courier.recordEggAdded(egg);
+						}
+						else {
+							std::cout << "Too many eggs" << std::endl;
+						}
+					}
 					break;
 				case '0':
-					std::cout << "Line position: " << robot.ls.read().position << std::endl;
+					std::cout << "Line position: " << robot.ls.read().position << "\r\n";
 					break;
 
 				case '\n':
-					robot.courier.recordEggAdded(EGG_BROWN);
+					if(robot.courier.volume() == 0) {
+						robot.courier.recordEggAdded(EGG_BROWN);
+						std::cout << "Adding dummy egg" << std::endl;
+					}
 					robot.courier.unloadEgg();
 					break;
 			}
