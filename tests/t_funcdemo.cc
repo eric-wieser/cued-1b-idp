@@ -26,11 +26,11 @@ void f2(Robot& r) {
 	std::cout << "Departed conveyor and found line" << std::endl;
 
 	goToJunction(r, 1);
-	turnAtJunction(r);
+	turnAtJunction(r, true);
 	std::cout << "Looking up ramp" << std::endl;
 
 	goToJunction(r, 4);
-	turnAtJunction(r);
+	turnAtJunction(r, true);
 	std::cout << "Looking along plateau" << std::endl;
 
 	goToJunction(r, 1);
