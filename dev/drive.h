@@ -19,21 +19,21 @@
 class Drive : public Device {
 public:
     /**
+    struct indicating maximum speeds, built from a Configuration
+    */
+    struct Speeds {
+        float linear; //< maximum forward/reversing speed in m/s
+        float rotary; //< maximum rotational speed in degrees/s
+    };
+
+    /**
     Describes the physical configuration of the robot
     */
     struct Configuration {
         float radius;  ///< wheel radius, in m
         float spacing; ///< distance between centers of wheels, in m
         float rpm;     ///< motor speed, in rpm
-    };
-
-    /**
-    struct indicating maximum speeds, built from a Configuration
-    */
-    struct Speeds {
-        const float linear; //< maximum forward/reversing speed in m/s
-        const float rotary; //< maximum rotational speed in degrees/s
-        Speeds(Configuration g);
+        operator Speeds();
     };
 
 private:
@@ -83,7 +83,7 @@ public:
     static uint8_t convertSpeed(float s);
 
     /// The maximum speeds the robot is able to acheive
-    const Speeds maxSpeeds;
+    Speeds maxSpeeds;
 };
 
 

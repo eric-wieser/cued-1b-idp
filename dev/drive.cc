@@ -77,7 +77,8 @@ void Drive::setWheelSpeeds(float left, float right) {
 	}
 }
 
-Drive::Speeds::Speeds(Drive::Configuration c) :
-    linear((2 * M_PI * c.radius) * (c.rpm/60)),
-    rotary(linear / (c.spacing / 2) * (180/M_PI)) {}
-
+Drive::Configuration::operator Speeds() {
+    float linear = (2 * M_PI * radius) * (rpm/60);
+    float rotary = (linear / (spacing / 2) * (180/M_PI));
+    return Speeds {linear, rotary};
+}
