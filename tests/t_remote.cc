@@ -66,6 +66,8 @@ int main() {
 				case '1': robot.drive.move({-f,  t}); break;
 				case '4': robot.drive.move({ 0,  t}); break;
 				case '7': robot.drive.move({ f,  t}); break;
+				case '[': robot.drive.turn(90).wait(); robot.drive.stop(); break;
+				case ']': robot.drive.turn(-90).wait(); robot.drive.stop(); break;
 				default:  robot.drive.move({ 0,  0}); break;
 			}
 
