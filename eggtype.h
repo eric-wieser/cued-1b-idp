@@ -11,5 +11,8 @@ enum EggType {
 
 inline std::ostream& operator <<(std::ostream& stream, const EggType& r) {
 	static const char* values[EGG_TYPE_COUNT] = {"none", "white", "brown", "tasty"};
-	return stream << values[r];
+	if(0 <= r && r < 4)
+		return stream << values[r];
+	else
+		return stream << "??? (" << int(r) << ")";
 }
