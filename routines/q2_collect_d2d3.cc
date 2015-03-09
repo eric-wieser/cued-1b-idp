@@ -2,6 +2,7 @@
 #include <stdexcept>
 
 #include "dev/drive.h"
+#include "dev/eggsensor.h"
 #include "util/tracker.h"
 #include "common.h"
 
