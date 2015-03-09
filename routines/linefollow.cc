@@ -65,7 +65,7 @@ GOTOJUNC_RET goToJunction_inner(Robot& r, float distance) {
 
 		// if 3 of the last 5 readings have been junctions, we're done
 		if(!atJunction && nJunc >= 3)
-			break;
+			return RET_JUNCTION;
 
 		// if we started at a junction, and we're no longer on one, clear the flag
 		if(line.state != LineSensors::Reading::JUNCTION)
@@ -83,14 +83,11 @@ GOTOJUNC_RET goToJunction_inner(Robot& r, float distance) {
 		if(history.size() > 5)
 			history.pop_back();
 
-		if (timeout.hasexpired()) {
-			return(RET_TIMEOUT);
-		}
+		if (timeout.hasexpired())
+			return RET_TIMEOUT;
 
 		delay(milliseconds(10));
 	}
-
-	return(RET_JUNCTION);
 }
 
 class NoLineFound : public std::exception {};
@@ -136,13 +133,10 @@ void reFindLine(Robot& r, float lastPos) {
 
 
 GOTOJUNC_RET goToJunction(Robot& r, float distance) {
-	GOTOJUNC_RET ret;
-
 	while(1) {
 		// try to follow the line to the appropriate distance
 		try{
-			ret = goToJunction_inner(r, distance);
-			break;
+			return goToJunction_inner(r, distance);
 		}
 		catch(LineLost& lost) {
 			std::cout << "Lost: " << lost.what() << ", " << lost.distanceLeft << "m remain" << std::endl;
@@ -156,25 +150,24 @@ GOTOJUNC_RET goToJunction(Robot& r, float distance) {
 			}
 		}
 	}
-
-	return(ret);
 }
 
 void turnAtJunction(Robot& r, bool left) {
 #ifdef ZOOLANDER
 	left = false;
 #endif
+	int sign = left ? 1 : -1;
 
 	// Past Line - True if in order to turn we should cross 2 lines
 	// according to the linefollower return.
 	bool pastLine = false;
 
 	try {
-			auto ret = goToJunction_inner(r, 0.2);
+		auto ret = goToJunction_inner(r, 0.2);
 
-			if (ret == RET_JUNCTION) {
-				// Maybe throw an error?
-			}
+		if (ret == RET_JUNCTION) {
+			// Maybe throw an error?
+		}
 	}
 	catch (LineLost& lost) {
 		r.drive.straight(lost.distanceLeft).wait();
@@ -184,8 +177,9 @@ void turnAtJunction(Robot& r, bool left) {
 
 	{
 		Drive d = r.drive;
-		Timeout real_t = d.turn(left ? 90 : -90);
-		Timeout late_t = real_t + d.timeForTurn(left ? 20 : -20);
+		Timeout real_t = d.turn(sign * 90);
+		Timeout early_t = real_t - d.timeForTurn(sign*30);
+		Timeout late_t = real_t + d.timeForTurn(sign*30);
 
 		auto& t = late_t;
 
@@ -214,14 +208,14 @@ void turnAtJunction(Robot& r, bool left) {
 					d.stop();
 					break;
 				case 4: // probably gone too far?
-					t = d.turn(left ? -30 : 30);
+					t = d.turn(sign * -30);
 					state = 5;
 					break;
 				case 5: // Gone to far, sweeping back
 					if (line.lsc) 
 						state = 3;
 					else if (t.hasexpired()) {
-						t = d.turn(left ? 60 : 60);
+						t = d.turn(sign * 60);
 						state = 6;
 					}
 					break;
