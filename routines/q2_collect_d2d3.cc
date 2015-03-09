@@ -55,7 +55,7 @@ void q2_collect_d2d3(Robot& r)
 		auto reading = r.detector.read();
 		std::cout << "Egg at station " << i << ": " << reading.bestGuess << std::endl;
 
-		if (reading.bestGuess == EGG_WHITE) {
+		if (reading.bestGuess == EGG_WHITE || reading.bestGuess == EGG_TASTY) {
 			r.drive.straight(0.1).wait();
 			r.drive.stop();
 			
