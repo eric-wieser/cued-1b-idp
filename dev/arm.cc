@@ -9,7 +9,8 @@ Arm::Arm(RLink& r, port::Name name) :
 	Device(r),
 	_port(r, name)
 {
-	// TODO: the arm is a little dangerous... Do we want initialization to move it?
+	// put the arm open and up
+	_port = 0;
 }
 
 void Arm::down() {
