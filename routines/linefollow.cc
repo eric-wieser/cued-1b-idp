@@ -151,6 +151,7 @@ void reFindLine(Robot& r, float lastPos) {
 	throw NoLineFound();
 }
 
+
 GOTOJUNC_RET goToJunction(Robot& r, float distance) {
 	GOTOJUNC_RET ret;
 
@@ -176,13 +177,78 @@ GOTOJUNC_RET goToJunction(Robot& r, float distance) {
 	return(ret);
 }
 
-void turnAtJunction(Robot& r) {
+void turnAtJunction(Robot& r, bool left) {
+#ifdef ZOOLANDER
+	left = false;
+#endif
+
+	// Past Line - True if in order to turn we should cross 2 lines
+	// according to the linefollower return.
+	bool pastLine = false;
+
+	try {
+			auto ret = goToJunction_inner(r, 0.2);
+
+			if (ret == RET_JUNCTION) {
+				// Maybe throw an error?
+			}
+	}
+	catch (LineLost& lost) {
+		r.drive.straight(lost.distanceLeft).wait();
+
+		pastLine = !(left ^ (lost.lastReading.position < 0.0f));
+	}
+
 	{
 		Drive d = r.drive;
-		d.straight(0.2).wait();
+		auto t = d.turn(left ? 90 : -90);
+		t.add(std::chrono::duration<float>(0.5));
+
+		int state = pastLine ? 2 : 0;
+		while (state != 3) {
+			auto line = r.ls.read();
+
+			if (t.hasexpired()) {
+				state = 4;
+			}
+
+			switch (state) {
+				case 0: // Start, past line
+					if (line.lsc)
+						state = 1;
+					break;
+				case 1: // On first line
+					if (!line.lsc)
+						state = 2;
+					break;
+				case 2: // Past 1st line
+					if (line.lsc)
+						state = 3;
+					break;
+				case 3: // On 2nd line
+					d.stop();
+					break;
+				case 4: // probably gone too far?
+					t = d.turn(left ? -30 : 30);
+					state = 5;
+					break;
+				case 5: // Gone to far, sweeping back
+					if (line.lsc) 
+						state = 3;
+					else if (t.hasexpired()) {
+						t = d.turn(left ? 60 : 60);
+						state = 6;
+					}
+					break;
+				case 6: // Gone to far, sweep forwards again?
+					if (line.lsc) 
+						state = 3;
+					else if (t.hasexpired())
+						throw LineLost(line, 0);
+					break;
+			}
+		}
 	}
-	{
-		Drive d = r.drive;
-		d.turn(90).wait();
-	}
+
+
 }
