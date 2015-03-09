@@ -6,9 +6,6 @@
 #include "util/tracker.h"
 #include "common.h"
 
-#include "q2_collect_d2d3.h"
-
-
 void goToConveyor(Robot& r) {
 	r.drive.move({forward: 1.0f, steer: 1.0f});
 
@@ -58,7 +55,7 @@ void q2_collect_d2d3(Robot& r)
 		if (reading.bestGuess == EGG_WHITE || reading.bestGuess == EGG_TASTY) {
 			r.drive.straight(0.1).wait();
 			r.drive.stop();
-			
+
 			r.arm.down();
 			r.arm.close();
 			r.arm.up();
