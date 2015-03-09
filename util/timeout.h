@@ -39,6 +39,10 @@ public:
 			throw Expired();
 	}
 
+	inline bool hasexpired() {
+		return( clock::now() >= _end );
+	}
+
 	inline std::chrono::duration<float> remaining() {
 		return _end - clock::now();
 	}
