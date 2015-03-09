@@ -52,4 +52,8 @@ public:
 			_end - clock::now()
 		).count());
 	}
+
+	inline void add(std::chrono::duration<float> d) {
+		_end = _end + std::chrono::duration_cast<clock::time_point::duration>(d);
+	}
 };
