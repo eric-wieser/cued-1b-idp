@@ -100,8 +100,11 @@ class TableRenderer(Screen):
 		for (x, y) in table.boxes:
 			cr.rectangle(x-table.box_size/2, y-table.box_size/2, table.box_size, table.box_size)
 
-		cr.set_source_rgb(1, 0.75, 0.75)
+		cr.set_source_rgb(0.75, 0.75, 0.75)
 		self.cr.fill()
+		cr.set_line_width(max(cr.device_to_user_distance(1,1)))
+		cr.set_source_rgb(0.5, 0.5, 0.5)
+		self.cr.stroke()
 
 		cr.restore()
 
