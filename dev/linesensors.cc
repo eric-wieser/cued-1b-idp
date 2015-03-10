@@ -12,7 +12,7 @@
 
 LineSensors::LineSensors(RLink& r, port::Name p) :
 	Device(r),
-	_port(r, p) { }
+	_port(r, p, 0xF) { }
 
 LineSensors::Reading LineSensors::read() {
 	LineSensors::Reading ret;
