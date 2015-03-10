@@ -152,78 +152,93 @@ GOTOJUNC_RET goToJunction(Robot& r, float distance) {
 	}
 }
 
-void turnAtJunction(Robot& r, bool left) {
+// turns = number of 90deg turns, CW +ve
+void turnAtJunction(Robot& r, int turns) {
 #ifdef ZOOLANDER
-	left = false;
+	turns = 1;
 #endif
-	int sign = left ? 1 : -1;
+	if (turns == 0) return;
+
+	int sign = (turns < 0) ? -1 : 1;
 
 	// Past Line - True if in order to turn we should cross 2 lines
 	// according to the linefollower return.
-	bool pastLine = false;
+	int linesLeft = turns*sign;
 
 	try {
-		auto ret = goToJunction_inner(r, 0.16);
+		auto ret = goToJunction_inner(r, 0.14);
 
 		if (ret == RET_JUNCTION) {
 			// Maybe throw an error?
 		}
 
+		// If we are already to the left of the line then
+		// one less to cross over.
 		auto line = r.ls.read();
-		pastLine = !line.lsc && (line.position*sign < 0);
+		if(!line.lsc && (line.position*sign < 0))
+			linesLeft--;
 	}
 	catch (LineLost& lost) {
 		r.drive.straight(lost.distanceLeft).wait();
 
+		// If line was lost behind then don't cross it.
 		if (lost.lastReading.position == 0.0f)
-			pastLine = true;
-		else
-			pastLine = (left == (lost.lastReading.position < 0.0f));
+			linesLeft--;
+		else // If line is lost
+			if ((sign > 0) == (lost.lastReading.position < 0.0f))
+				linesLeft--;
 	}
 
 	{
 		Drive d = r.drive;
-		Timeout real_t = d.turn(sign * 90);
+		Timeout real_t = d.turn(turns * 90);
 		Timeout early_t = real_t - d.timeForTurn(sign*30);
 		Timeout late_t = real_t + d.timeForTurn(sign*30);
 
 		auto& t = late_t;
 
-		int state = pastLine ? 1 : 0;
-		while (state != 3) {
+		int state = 2;
+		while (state != 3 || (linesLeft > 0)) {
 			auto line = r.ls.read();
 
-			if (t.hasexpired() && state < 4) {
+			if (t.hasexpired() && state < 3) {
 				state = 4;
 			}
 
-			std::cout << state << "\n";
-
 			switch (state) {
-				case 0: // Start, past line
-					if (line.lsc)
-						state = 1;
-					break;
-				case 1: // On first line
+				case 1: // On line
 					if (!line.lsc)
 						state = 2;
 					break;
-				case 2: // Past 1st line
-					if (line.lsc)
-						state = 3;
+				case 2: // Past line
+					if (linesLeft <= 0
+							&& ((line.lsr && sign < 0) || (line.lsl && sign > 0))) {
+						d.turn(10, 0.4);
+						state = 7;
+					}
+
+					if (line.lsc) {
+						state = (linesLeft <= 0) ? 3 : 1;
+						linesLeft--;
+					}
 					break;
-				case 3: // On 2nd line
+				case 7: // Slow down to line
+					if (line.lsc) {
+						state = 3;
+					}
+					break;
+				case 3: // On final line
 					d.stop();
 					break;
 				case 4: // probably gone too far?
-					t = d.turn(sign * -30);
+					t = d.turn(sign * 30);
 					state = 5;
 					break;
 				case 5: // Gone to far, sweeping back
 					if (line.lsc) 
 						state = 3;
 					else if (t.hasexpired()) {
-						t = d.turn(sign * 60);
+						t = d.turn(sign * -60);
 						state = 6;
 					}
 					break;

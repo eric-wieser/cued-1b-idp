@@ -22,4 +22,4 @@ enum GOTOJUNC_RET {
 };
 
 GOTOJUNC_RET goToJunction(Robot& r, float distance);
-void turnAtJunction(Robot& r, bool left);
+void turnAtJunction(Robot& r, int turns);
