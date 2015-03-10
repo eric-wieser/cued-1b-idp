@@ -156,6 +156,7 @@ void turnAtJunction(Robot& r, int turns) {
 #ifdef ZOOLANDER
 	turns = 1;
 #endif
+	turns = turns % 4;
 	if (turns == 0) return;
 
 	int sign = (turns < 0) ? -1 : 1;
