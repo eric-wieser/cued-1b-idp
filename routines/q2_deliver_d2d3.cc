@@ -28,11 +28,11 @@ void q2_deliver_d2d3(Robot& r) {
 	std::cout << "Departed conveyor and found line" << std::endl;
 
 	goToJunction(r, 0.30);
-	turnAtJunction(r, -1);
+	turnAtJunction(r, 1);
 	std::cout << "Looking up ramp" << std::endl;
 
 	goToJunction(r, 999999); // ramps takes forever, so just drop the timeout
-	turnAtJunction(r, -1);
+	turnAtJunction(r, 1);
 	std::cout << "At plateau start" << std::endl;
 
 	goToJunction(r, 0.86);
