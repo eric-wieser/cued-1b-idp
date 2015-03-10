@@ -93,6 +93,9 @@ int main() {
 					break;
 
 				case '\n':
+					if(robot.courier.eggDetected()) {
+						std::cout << "Egg detected" << std::endl;
+					}
 					if(robot.courier.volume() == 0) {
 						robot.courier.recordEggAdded(EGG_BROWN);
 						std::cout << "Adding dummy egg" << std::endl;
