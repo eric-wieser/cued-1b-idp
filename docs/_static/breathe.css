@@ -1,7 +1,3 @@
 .breatheparameterlist li tt + p {
     display: inline;
 }
-
-.breathe-sectiondef .variable dd {
-	float: left;
-}
