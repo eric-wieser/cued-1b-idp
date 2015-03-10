@@ -14,6 +14,7 @@ struct LineLost : public std::exception {
 };
 
 
+struct NoLineFound : public std::exception {};
 struct HardwareDamaged : public std::exception {};
 
 enum GOTOJUNC_RET {

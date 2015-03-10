@@ -90,7 +90,6 @@ GOTOJUNC_RET goToJunction_inner(Robot& r, float distance) {
 	}
 }
 
-class NoLineFound : public std::exception {};
 
 void reFindLine(Robot& r, float lastPos) {
 	const float reverseDist = 0.05; //m
