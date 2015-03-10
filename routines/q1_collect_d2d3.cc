@@ -39,21 +39,26 @@ void q1_collect_d2d3(Robot& r) {
 		r.drive.move(args);
 		while(r.ls.read().lsl == 1);
 		while(r.ls.read().lsl == 0);
-		r.drive.stop();
 		Tracker::instance()->logPose(-0.4 + 0.2 * i - 0.2, -0.8, 0);
 
-		delay(100);
-		auto reading = r.detector.read();
-		std::cout << "Egg at station " << i << ": " << reading.bestGuess << std::endl;
-
-		if (reading.bestGuess == EGG_WHITE || reading.bestGuess == EGG_TASTY) {
-			r.drive.straight(0.1).wait();
+		if(r.courier.volume() < 3) {
 			r.drive.stop();
+			delay(100);
+			auto reading = r.detector.read();
+			std::cout << "Egg at station " << i << ": " << reading.bestGuess << std::endl;
 
-			r.arm.down();
-			r.arm.close();
-			r.arm.up();
-			r.arm.open();
+			if (reading.bestGuess == EGG_WHITE || reading.bestGuess == EGG_TASTY) {
+				r.drive.straight(0.1).wait();
+				r.drive.stop();
+
+				r.arm.down();
+				r.arm.close();
+				r.arm.up();
+				r.arm.open();
+
+				r.courier.recordEggAdded(reading.bestGuess);
+			}
 		}
 	}
+	r.drive.stop();
 }
