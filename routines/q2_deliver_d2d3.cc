@@ -5,9 +5,6 @@
 #include "util/tracker.h"
 #include "common.h"
 
-#include "q2_collect_d2d3.h"
-
-
 void dropEggs(Robot& r, int n = 1) {
 	// inch forward until the limit switch is hit
 	r.drive.move({forward: 0.5, steer: 0});
@@ -26,8 +23,7 @@ void dropEggs(Robot& r, int n = 1) {
 	r.drive.straight(-0.05, 0.5).wait();
 }
 
-void q2_deliver_d2d3(Robot& r)
-{
+void q2_deliver_d2d3(Robot& r) {
 	Tracker::instance()->logPose(0.2, -0.8, 0);
 	r.drive.move({forward: 1, steer: 0.5});
 

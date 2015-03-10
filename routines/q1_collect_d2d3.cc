@@ -34,8 +34,7 @@ void goToConveyor(Robot& r) {
 }
 
 
-void q2_collect_d2d3(Robot& r)
-{
+void q1_collect_d2d3(Robot& r) {
 	Drive::move_args args = {forward: 1, steer: -0.2};
 
 	goToConveyor(r);

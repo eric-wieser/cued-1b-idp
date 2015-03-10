@@ -5,8 +5,7 @@
 #include "util/tracker.h"
 #include "common.h"
 
-void q2_return_from_d2d3(Robot& r)
-{
+void q3_return_from_d2d3(Robot& r) {
 	turnAtJunction(r, 90);
 	turnAtJunction(r, 90);
 	goToJunction(r, 0.86);
