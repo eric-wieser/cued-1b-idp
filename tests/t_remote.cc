@@ -89,7 +89,7 @@ int main() {
 					}
 					break;
 				case '0':
-					std::cout << "Line position: " << robot.ls.read().position << "\r\n";
+					std::cout << "Line: " << robot.ls.read() << "\r\n";
 					break;
 
 				case '\n':
