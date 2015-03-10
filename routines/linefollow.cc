@@ -174,8 +174,11 @@ void turnAtJunction(Robot& r, bool left) {
 	}
 	catch (LineLost& lost) {
 		r.drive.straight(lost.distanceLeft).wait();
-
-		pastLine = (left == (lost.lastReading.position < 0.0f));
+		
+		if (lost.lastReading.position == 0.0f) {
+			pastLine = true;
+		else
+			pastLine = (left == (lost.lastReading.position < 0.0f));
 	}
 
 	{
