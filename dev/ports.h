@@ -76,7 +76,7 @@ public:
 	virtual const char* what() const throw() {
 		if(message == "") {
 			std::ostringstream ss;
-			ss << "Attempted to double map port "<< port << ", pins:";
+			ss << "Attempted to double map port " << port << ", pins:";
 			for(int i = 0; i < 8; i++) if((pins >> i) & 1) ss << " " << i;
 			message = ss.str();
 		}
@@ -110,6 +110,10 @@ public:
 			throw PinsDoublyMapped(p, mask & assignedBits[p]);
 		}
 		assignedBits[p] = mask;
+	}
+	~Port() {
+		// unassign this port
+		assignedBits[_port] &= ~_mask;
 	}
 
 	/**
