@@ -124,6 +124,6 @@ public:
 		}
 	}
 
-	inline Port& operator|=(uint8_t val) { *this = *this | val; return *this; }
-	inline Port& operator&=(uint8_t val) { *this = *this & val; return *this; }
+	inline Port& operator|=(uint8_t val) { *this = lastWrites[_port] | val; return *this; }
+	inline Port& operator&=(uint8_t val) { *this = lastWrites[_port] & val; return *this; }
 };
