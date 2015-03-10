@@ -14,6 +14,7 @@ struct LineLost : public std::exception {
 };
 
 
+struct NoLineFound : public std::exception {};
 struct HardwareDamaged : public std::exception {};
 
 enum GOTOJUNC_RET {
@@ -21,5 +22,20 @@ enum GOTOJUNC_RET {
 	RET_TIMEOUT
 };
 
+/** Follows a line to the next junction
+@param r A reference to an initialised Robot
+@param distance The approximate distance to the junction
+@throw LineLost Line was lost and couldn't be recovered.
+@return RET_JUNCTION if a junction was reached, or RET_TIMEOUT if it wasn't
+		reached in the expected time based on distance.
+*/
 GOTOJUNC_RET goToJunction(Robot& r, float distance);
-void turnAtJunction(Robot& r, bool left);
+
+
+/** Turns the robot at a junction
+@param r A reference to an initialised Robot
+@param turns The number of 90 degree turns to go through, counter-clockwise being
+		positive.
+@throw LineLost The target line couldn't be found, recovery failed.
+*/
+void turnAtJunction(Robot& r, int turns);

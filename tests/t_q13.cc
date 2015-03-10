@@ -27,8 +27,8 @@ int main() {
 		int n = -1;
 		std::cin >> n;
 
-		q2_collect_d2d3(r);
+		q1_collect_d2d3(r);
 		q2_deliver_d2d3(r);
-		q2_return_from_d2d3(r);
+		q3_return_from_d2d3(r);
 	}
 }
