@@ -112,8 +112,13 @@
             
   <div class="section" id="hardware-access-layer">
 <span id="hardware"></span><h1>Hardware access layer<a class="headerlink" href="#hardware-access-layer" title="Permalink to this headline">¶</a></h1>
+<p>To ensure hardware is operated correctly, each independant electronic subsystem
+is encapsulated in a class. This also allows us to make meaningful constructors
+and destructors, such as: setting up ports for inputs; turning off LEDs at
+shutdown; driving a motor slowly to hold the deliverer at startup.</p>
 <div class="section" id="low-level">
 <h2>Low level<a class="headerlink" href="#low-level" title="Permalink to this headline">¶</a></h2>
+<p>A bunch of utility classes to help implement the higher-level abstractions.</p>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_r_link"></span><em>class</em> <tt class="descname">RLink</tt></dt>
@@ -141,7 +146,7 @@
 <dl class="function">
 <dt>
 <span class="target" id="project0class_r_link_1af6ee9f47dbe8a3a6367cd90ff1943e08"></span>uint8_t <tt class="descname">status</tt><big>(</big><big>)</big></dt>
-<dd><p>Get the status register, a bitfield containing {comm_err, i2c_err, es_trig, es_mode, moving, ramped, _, _}. </p>
+<dd><p>Get the status register, a bitfield containing <tt class="docutils literal"><span class="pre">{comm_err,</span> <span class="pre">i2c_err,</span> <span class="pre">es_trig,</span> <span class="pre">es_mode,</span> <span class="pre">moving,</span> <span class="pre">ramped,</span> <span class="pre">_,</span> <span class="pre">_}</span></tt> </p>
 <p>Does not throw <a class="reference internal" href="#project0class_link_error"><em>LinkError</em></a> </p>
 </dd></dl>
 
@@ -180,8 +185,8 @@
 <dl class="function">
 <dt>
 <span class="target" id="project0class_port_1abba476140b78dec0983d05997d67fe53"></span><tt class="descname">Port</tt><big>(</big><a class="reference internal" href="#project0class_r_link"><em>RLink</em></a> &amp; <em>r</em>, port::Name <em>p</em>, uint8_t <em>mask</em> = 0xFF<big>)</big></dt>
-<dd><p>Create a port over the connection r, using the port with address p. </p>
-<p>Optionally specify a set of bits to restrict the scope of this instance to. Throws <a class="reference internal" href="#project0struct_pins_doubly_mapped"><em>PinsDoublyMapped</em></a> if multiple instances attempt to use the same ports </p>
+<dd><p>Create a port over the connection <tt class="docutils literal"><span class="pre">r</span></tt>, using the port with address <tt class="docutils literal"><span class="pre">p</span></tt>. </p>
+<p>Optionally specify a set of bits <tt class="docutils literal"><span class="pre">mask</span></tt> to restrict the scope of this instance to. Throws <a class="reference internal" href="#project0struct_pins_doubly_mapped"><em>PinsDoublyMapped</em></a> if multiple instances attempt to use the same ports </p>
 </dd></dl>
 
 <dl class="function">
@@ -201,20 +206,16 @@
 
 <div class="section" id="exceptions">
 <h3>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h3>
+<p>To prevent errors silently occuring without being noticed (or worse, error
+codes being handled as values), exceptions are used for all critical errors.
+These all derive from <cite>std::exception</cite>, and implement the <cite>const char* what()</cite>
+member to give a brief summary of the error to the programmer, to allow them to
+fix the appropriate electrical/network problem.</p>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_link_error"></span><em>class</em> <tt class="descname">LinkError</tt></dt>
 <dd><p>Thrown when an <a class="reference internal" href="#project0class_r_link"><em>RLink</em></a> command or request goes wrong. </p>
 <p>Contains the original error code </p>
-<div class="breathe-sectiondef container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
-<dt>
-<span class="target" id="project0class_link_error_1a6dd2b7730a717d62de2f3bd514b048ac"></span>virtual const char * <tt class="descname">what</tt><big>(</big><big>)</big> const</dt>
-<dd><p>override of std::exception::what() </p>
-</dd></dl>
-
-</div>
 <div class="breathe-sectiondef container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="variable">
@@ -243,15 +244,6 @@
 <span class="target" id="project0struct_port_error"></span><em>struct</em> <tt class="descname">PortError</tt></dt>
 <dd><p>Specialization of <a class="reference internal" href="#project0class_link_error"><em>LinkError</em></a>, thrown when an I2C error occurs when accessing a port. </p>
 <p>Typically implies loss of electrical connection </p>
-<div class="breathe-sectiondef container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
-<dt>
-<span class="target" id="project0struct_port_error_1af8e4defdaa0d7a5020528b1035a97c9a"></span>virtual const char * <tt class="descname">what</tt><big>(</big><big>)</big> const</dt>
-<dd><p>override of std::exception::what() </p>
-</dd></dl>
-
-</div>
 <div class="breathe-sectiondef container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="variable">
@@ -289,6 +281,7 @@
 </div>
 <div class="section" id="actuators">
 <h2>Actuators<a class="headerlink" href="#actuators" title="Permalink to this headline">¶</a></h2>
+<p>Things which cause parts of the robot to move</p>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_drive"></span><em>class</em> <tt class="descname">Drive</tt></dt>
@@ -459,6 +452,7 @@ Should ensure that abs(args.forward) + abs(args.steer) &lt;= 1 <dl class="docuti
 </div>
 <div class="section" id="sensors">
 <h2>Sensors<a class="headerlink" href="#sensors" title="Permalink to this headline">¶</a></h2>
+<p>Things which give the robot information about its surroundings</p>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_egg_sensor"></span><em>class</em> <tt class="descname">EggSensor</tt></dt>
