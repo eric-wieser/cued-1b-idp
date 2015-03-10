@@ -8,6 +8,9 @@
 *.pyc
 tracker.dat
 
+docs/_doxyxml
+docs/_build
+
 *.sublime-project
 *.sublime-workspace
 *.exe

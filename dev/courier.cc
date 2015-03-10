@@ -69,4 +69,5 @@ void Courier::unloadEgg() {
 
 }
 
-int Courier::volume() { return _volume; }
+int Courier::volume() const { return _volume; }
+EggType Courier::egg(int n) const { return _contents[n]; }

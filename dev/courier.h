@@ -30,6 +30,10 @@ public:
 	void recordEggAdded(EggType e);
 	/// Unload the egg at the bottom of the stack, updating state and LEDs 
 	void unloadEgg();
+
+	/// type of the egg n from the bottom
+	EggType egg(int n) const;
+
 	/// The number of eggs on the rail
-	int volume();
+	int volume() const;
 };
