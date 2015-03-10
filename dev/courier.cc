@@ -10,11 +10,17 @@ static const float holdSpeed = -0.5;
 static const float dropSpeed = 1;
 static const float liftSpeed = -1;
 
-Courier::Courier(RLink& r, port::Name ledPort)
-		: Device(r), _ledPort(r, ledPort), _volume(0)
+Courier::Courier(RLink& r, port::Name ledPort, port::Name lightGatePort) :
+		Device(r),
+		_ledPort(r, ledPort, 0b111111),
+		_lightGatePort(r, lightGatePort, 1 << PIN_LIGHTGATE),
+		_volume(0)
 {
 	_contents[0] = _contents[1] = _contents[2] = EGG_NONE;
+	_lightGatePort = 0xff;
 	r.command(MOTOR_3_GO, Drive::convertSpeed(holdSpeed));
+
+	_updateLeds();
 }
 
 void Courier::_updateLeds() {
@@ -71,3 +77,4 @@ void Courier::unloadEgg() {
 
 int Courier::volume() const { return _volume; }
 EggType Courier::egg(int n) const { return _contents[n]; }
+bool Courier::eggDetected() const { std::cout << int(int8_t(_lightGatePort)) << std::endl; return uint8_t(_lightGatePort) != 0; }

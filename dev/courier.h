@@ -16,11 +16,15 @@ class Courier : public Device {
 private:
 	std::array<EggType, 3> _contents;
 	Port _ledPort;
+	Port _lightGatePort;
 	int _volume;
 
 	void _updateLeds();
 public:
-	Courier(RLink& r, port::Name ledPort);
+	enum {
+		PIN_LIGHTGATE = 7
+	};
+	Courier(RLink& r, port::Name ledPort, port::Name lightGatePort);
 
 	/**
 		Indicate that a new egg has been added to the rail. This updates the
@@ -36,4 +40,6 @@ public:
 
 	/// The number of eggs on the rail
 	int volume() const;
+
+	bool eggDetected() const;
 };

@@ -53,7 +53,7 @@ Robot::Robot(RLink& rlink) :
 	arm(rlink, port::P2),
 	ls(rlink, port::P1),
 	detector(rlink, port::P1),
-	courier(rlink, port::P3),
+	courier(rlink, port::P3, port::P1),
 	limits(rlink, port::P2, 0x3)
 {
     drive.maxSpeeds = Drive::Speeds {
