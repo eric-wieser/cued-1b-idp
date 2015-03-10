@@ -1,10 +1,5 @@
-
-#include <stdexcept>
-
-#include "dev/drive.h"
-#include "dev/eggsensor.h"
 #include "util/tracker.h"
-#include "common.h"
+#include "subroutines.h"
 
 void goToConveyor(Robot& r) {
 	r.drive.move({forward: 1.0f, steer: 1.0f});
