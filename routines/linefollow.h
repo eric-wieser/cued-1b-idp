@@ -34,7 +34,7 @@ GOTOJUNC_RET goToJunction(Robot& r, float distance);
 
 /** Turns the robot at a junction
 @param r A reference to an initialised Robot
-@param turns The number of 90 degree turns to go through, clockwise being
+@param turns The number of 90 degree turns to go through, counter-clockwise being
 		positive.
 @throw LineLost The target line couldn't be found, recovery failed.
 */
