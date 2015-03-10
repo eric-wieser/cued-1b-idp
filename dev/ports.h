@@ -71,6 +71,8 @@ public:
 
 	PinsDoublyMapped(port::Name p, uint8_t mask): port(p), pins(mask), message() {}
 
+	~PinsDoublyMapped() throw() {}
+
 	virtual const char* what() const throw() {
 		if(message == "") {
 			std::ostringstream ss;
