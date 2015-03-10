@@ -21,11 +21,9 @@ void goToConveyor(Robot& r) {
 	// wait for the third junction
 	waitForLine(r, LineSensors::Reading::JUNCTION);
 
-
-	// turn
-	r.drive.move({forward: 1.0f, steer: -1.0f});
-	Timeout(std::chrono::duration<float>(180 / r.drive.maxSpeeds.rotary)).wait();
-	Timeout(std::chrono::duration<float>(1)).wait();
+	// turn 90 degrees
+	r.drive.move({forward: 0.5f, steer: -0.5f});
+	Timeout(r.drive.timeForTurn(90 + 10, 0.5)).wait();
 }
 
 
