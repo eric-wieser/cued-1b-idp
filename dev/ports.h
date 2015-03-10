@@ -50,10 +50,17 @@ private:
 public:
 	Port(RLink& r, port::Name p, uint8_t mask=0xFF) : Device(r), _port(p), _mask(mask) {}
 
+	/**
+		Read a word to the port, keeping only the bits specified in the mask
+	*/
 	inline operator uint8_t() {
 		uint8_t word = _r.request(port::read_instr(_port));
 		return word & _mask;
 	}
+
+	/**
+		Write a word to the port, touching only the bits specified in the mask
+	*/
 	inline void operator=(uint8_t val) {
 		if(_mask != 0xFF) {
 			// only bother reading if some bits are not masked

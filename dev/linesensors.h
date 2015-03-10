@@ -10,15 +10,19 @@
 class LineSensors : public Device {
 public:
 	struct Reading {
-		bool lsl;  /// left
-		bool lsc;  /// right
-		bool lsr;  /// center
-		bool lsa;  /// arm
+		bool lsl;  ///< left sensor reading
+		bool lsc;  ///< right sensor reading
+		bool lsr;  ///< center sensor reading
+		bool lsa;  ///< arm sensor reading
 
 		enum State { NONE, LINE, JUNCTION, INVALID };
 		State state;
 
-		float position; // between -1 and 1, or +-Inf if no line, or NaN if invalid
+		/**
+			Line position, where between -1 and 1, with left positive.
+			+-Inf and NaN indicate a lost line
+		*/
+		float position;
 	};
 
 private:
