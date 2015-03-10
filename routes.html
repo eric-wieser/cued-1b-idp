@@ -66,6 +66,7 @@
           
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware access layer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#low-level">Low level</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hardware.html#actuators">Actuators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hardware.html#sensors">Sensors</a></li>
 </ul>
@@ -110,6 +111,45 @@
             
   <div class="section" id="navigation-plan">
 <h1>Navigation plan<a class="headerlink" href="#navigation-plan" title="Permalink to this headline">¶</a></h1>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0subroutines_8h_1afdc246f66b28719c4865c8766c0ba235"></span>void <tt class="descname">q1_collect_d2d3</tt><big>(</big>Robot &amp; <em>r</em><big>)</big></dt>
+<dd><p>[Q1] Collect D2/3 Eggs Start: Starting position End: Last position on conveyor </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0subroutines_8h_1acca352d364399727c765be8a05d3cb47"></span>void <tt class="descname">q2_deliver_d2d3</tt><big>(</big>Robot &amp; <em>r</em><big>)</big></dt>
+<dd><p>[Q2] Deliver D2/3 Eggs Start: Last position on conveyor End: Junction between D2/3 boxes </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0subroutines_8h_1a5123fcaa203bcd77d8182a8d911119cc"></span>void <tt class="descname">q3_return_from_d2d3</tt><big>(</big>Robot &amp; <em>r</em><big>)</big></dt>
+<dd><p>[Q3] Return from D2/3 Boxes Start: Junction between D2/3 boxes End: Starting square (at centre junction, facing west) </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0subroutines_8h_1af43a2bd8cc4978cdeedb7a58c05ed1fd"></span>void <tt class="descname">q4_collect_d1</tt><big>(</big>Robot &amp; <em>r</em><big>)</big></dt>
+<dd><p>[Q4] Collect D1 Eggs Start: Starting square (at centre junction, facing west) End: Last position on conveyor </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0subroutines_8h_1a3dd5f10c8ae1c9fce8da2045be2f95ca"></span>void <tt class="descname">q5_deliver_d1</tt><big>(</big>Robot &amp; <em>r</em><big>)</big></dt>
+<dd><p>[Q5] Deliver D1 Eggs Start: Last position on conveyor End: D1 box </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0subroutines_8h_1a953e6e1a6ef5c824a9dd288222002e2b"></span>void <tt class="descname">q6_return_from_d1</tt><big>(</big>Robot &amp; <em>r</em><big>)</big></dt>
+<dd><p>[Q6] Return from d1 Start: D1 box End: Within starting area </p>
+</dd></dl>
+
+</div>
 </div>
 
 

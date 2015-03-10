@@ -67,6 +67,7 @@
           
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="">Hardware access layer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#low-level">Low level</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#actuators">Actuators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sensors">Sensors</a></li>
 </ul>
@@ -111,6 +112,8 @@
             
   <div class="section" id="hardware-access-layer">
 <span id="hardware"></span><h1>Hardware access layer<a class="headerlink" href="#hardware-access-layer" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="low-level">
+<h2>Low level<a class="headerlink" href="#low-level" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_r_link"></span><em>class</em> <tt class="descname">RLink</tt></dt>
@@ -162,6 +165,44 @@
 
 <dl class="class">
 <dt>
+<span class="target" id="project0class_port"></span><em>class</em> <tt class="descname">Port</tt></dt>
+<dd><p>Interface to a set on pins on a particular port. </p>
+<p>Allows masking of pins, to allow multiple <tt class="docutils literal"><a class="reference internal" href="#project0class_device"><em><span class="pre">Device</span></em></a></tt>s to share a I2C port without interfering with each other&#8217;s bits</p>
+<p>Provides operator overloading for simple use: <div class="highlight-c++"><div class="highlight"><pre><span class="n">Port</span> <span class="nf">sensor</span><span class="p">(</span><span class="n">rlink</span><span class="p">,</span> <span class="n">port</span><span class="o">::</span><span class="n">P2</span><span class="p">,</span> <span class="mh">0xF</span><span class="p">);</span>  <span class="c1">// bottom 4 bits of port 2</span>
+<span class="kt">uint8_t</span> <span class="n">reading</span> <span class="o">=</span> <span class="n">sensor</span><span class="p">;</span>  <span class="c1">// read sensor</span>
+<span class="n">sensor</span> <span class="o">=</span> <span class="mh">0x42</span><span class="p">;</span>  <span class="c1">// write to sensor</span>
+</pre></div>
+</div>
+</p>
+<p>Note that conversion to an int will return the current input, which is not necesarily the previous output </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0class_port_1abba476140b78dec0983d05997d67fe53"></span><tt class="descname">Port</tt><big>(</big><a class="reference internal" href="#project0class_r_link"><em>RLink</em></a> &amp; <em>r</em>, port::Name <em>p</em>, uint8_t <em>mask</em> = 0xFF<big>)</big></dt>
+<dd><p>Create a port over the connection r, using the port with address p. </p>
+<p>Optionally specify a set of bits to restrict the scope of this instance to. Throws <a class="reference internal" href="#project0struct_pins_doubly_mapped"><em>PinsDoublyMapped</em></a> if multiple instances attempt to use the same ports </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_port_1a57ed590d30ac2197978400dbfd86969b"></span><tt class="descname">operator uint8_t</tt><big>(</big><big>)</big> const</dt>
+<dd><p>Read a word to the port, keeping only the bits specified in the mask. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_port_1a56a390077458d9400266546bcdf61885"></span>void <tt class="descname">operator=</tt><big>(</big>uint8_t <em>val</em><big>)</big></dt>
+<dd><p>Write a word to the port, touching only the bits specified in the mask. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<div class="section" id="exceptions">
+<h3>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt>
 <span class="target" id="project0class_link_error"></span><em>class</em> <tt class="descname">LinkError</tt></dt>
 <dd><p>Thrown when an <a class="reference internal" href="#project0class_r_link"><em>RLink</em></a> command or request goes wrong. </p>
 <p>Contains the original error code </p>
@@ -197,34 +238,55 @@
 </div>
 </dd></dl>
 
-<dl class="class">
+<dl class="struct">
 <dt>
-<span class="target" id="project0class_port"></span><em>class</em> <tt class="descname">Port</tt></dt>
-<dd><p>Interface to a set on pins on a particular port. </p>
-<p>Allows masking of pins, to allow multiple <tt class="docutils literal"><a class="reference internal" href="#project0class_device"><em><span class="pre">Device</span></em></a></tt>s to share a I2C port without interfering with each other&#8217;s bits</p>
-<p>Provides operator overloading for simple use: <div class="highlight-c++"><div class="highlight"><pre><span class="kt">uint8_t</span> <span class="n">reading</span> <span class="o">=</span> <span class="n">port</span><span class="p">;</span>
-<span class="n">port</span> <span class="o">=</span> <span class="mh">0x42</span><span class="p">;</span>
-</pre></div>
-</div>
-</p>
-<p>Note that conversion to an int will return the current input, which is not necesarily the previous output </p>
+<span class="target" id="project0struct_port_error"></span><em>struct</em> <tt class="descname">PortError</tt></dt>
+<dd><p>Specialization of <a class="reference internal" href="#project0class_link_error"><em>LinkError</em></a>, thrown when an I2C error occurs when accessing a port. </p>
+<p>Typically implies loss of electrical connection </p>
 <div class="breathe-sectiondef container">
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt>
-<span class="target" id="project0class_port_1aa93570999a8ac4bd166c2325bfcf1ff1"></span><tt class="descname">operator uint8_t</tt><big>(</big><big>)</big></dt>
-<dd><p>Read a word to the port, keeping only the bits specified in the mask. </p>
+<span class="target" id="project0struct_port_error_1af8e4defdaa0d7a5020528b1035a97c9a"></span>virtual const char * <tt class="descname">what</tt><big>(</big><big>)</big> const</dt>
+<dd><p>override of std::exception::what() </p>
 </dd></dl>
 
-<dl class="function">
+</div>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
 <dt>
-<span class="target" id="project0class_port_1a56a390077458d9400266546bcdf61885"></span>void <tt class="descname">operator=</tt><big>(</big>uint8_t <em>val</em><big>)</big></dt>
-<dd><p>Write a word to the port, touching only the bits specified in the mask. </p>
+<span class="target" id="project0struct_port_error_1ac6a9aab1950f118d214c7e7c0caa07f5"></span>const port::Name <tt class="descname">port</tt></dt>
+<dd><p>the disconnected port </p>
 </dd></dl>
 
 </div>
 </dd></dl>
 
+<dl class="struct">
+<dt>
+<span class="target" id="project0struct_pins_doubly_mapped"></span><em>struct</em> <tt class="descname">PinsDoublyMapped</tt></dt>
+<dd><p>Specialization of <a class="reference internal" href="#project0class_link_error"><em>LinkError</em></a>, thrown when an I2C error occurs when accessing a port. </p>
+<p>Typically implies loss of electrical connection </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_pins_doubly_mapped_1a9509f98e82365ded6dc17de5cad46fad"></span>const port::Name <tt class="descname">port</tt></dt>
+<dd><p>the port causing the issue </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_pins_doubly_mapped_1a790b402c0d865c21c2d0c093afb163e7"></span>const uint8_t <tt class="descname">pins</tt></dt>
+<dd><p>the mask of pins that have already been allocated </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
 <div class="section" id="actuators">
 <h2>Actuators<a class="headerlink" href="#actuators" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -368,7 +430,7 @@ Should ensure that abs(args.forward) + abs(args.steer) &lt;= 1 <dl class="docuti
 <p class="breathe-sectiondef-title rubric">Public Functions</p>
 <dl class="function">
 <dt>
-<span class="target" id="project0class_courier_1ab97c33689d3ad0851206b4332cfaed3f"></span>void <tt class="descname">recordEggAdded</tt><big>(</big>EggType <em>e</em><big>)</big></dt>
+<span class="target" id="project0class_courier_1ab97c33689d3ad0851206b4332cfaed3f"></span>void <tt class="descname">recordEggAdded</tt><big>(</big><a class="reference internal" href="colors.html#project0eggtype_8h_1a3c211f42cf9787192be264add1a459e0"><em>EggType</em></a> <em>e</em><big>)</big></dt>
 <dd><p>Indicate that a new egg has been added to the rail. </p>
 <p>This updates the internal record of currently-held eggs, and turns on the appropriate LEDs. </p>
 </dd></dl>
@@ -381,7 +443,7 @@ Should ensure that abs(args.forward) + abs(args.steer) &lt;= 1 <dl class="docuti
 
 <dl class="function">
 <dt>
-<span class="target" id="project0class_courier_1a8de33261b407b3c01312440b93054e4d"></span>EggType <tt class="descname">egg</tt><big>(</big>int <em>n</em><big>)</big> const</dt>
+<span class="target" id="project0class_courier_1a8de33261b407b3c01312440b93054e4d"></span><a class="reference internal" href="colors.html#project0eggtype_8h_1a3c211f42cf9787192be264add1a459e0"><em>EggType</em></a> <tt class="descname">egg</tt><big>(</big>int <em>n</em><big>)</big> const</dt>
 <dd><p>type of the egg n from the bottom </p>
 </dd></dl>
 
@@ -439,7 +501,7 @@ Should ensure that abs(args.forward) + abs(args.steer) &lt;= 1 <dl class="docuti
 
 <dl class="variable">
 <dt>
-<span class="target" id="project0struct_egg_sensor_1_1_reading_1a24d7a804ddec38784a44cd6712c20ebd"></span>EggType <tt class="descname">bestGuess</tt></dt>
+<span class="target" id="project0struct_egg_sensor_1_1_reading_1a24d7a804ddec38784a44cd6712c20ebd"></span><a class="reference internal" href="colors.html#project0eggtype_8h_1a3c211f42cf9787192be264add1a459e0"><em>EggType</em></a> <tt class="descname">bestGuess</tt></dt>
 <dd><p>shorthand for most likely egg type </p>
 </dd></dl>
 
