@@ -163,11 +163,14 @@ void turnAtJunction(Robot& r, bool left) {
 	bool pastLine = false;
 
 	try {
-		auto ret = goToJunction_inner(r, 0.2);
+		auto ret = goToJunction_inner(r, 0.16);
 
 		if (ret == RET_JUNCTION) {
 			// Maybe throw an error?
 		}
+
+		auto line = r.ls.read();
+		pastLine = !line.lsc && (line.position*sign < 0);
 	}
 	catch (LineLost& lost) {
 		r.drive.straight(lost.distanceLeft).wait();
@@ -187,9 +190,11 @@ void turnAtJunction(Robot& r, bool left) {
 		while (state != 3) {
 			auto line = r.ls.read();
 
-			if (t.hasexpired()) {
+			if (t.hasexpired() && state < 4) {
 				state = 4;
 			}
+
+			std::cout << state << "\n";
 
 			switch (state) {
 				case 0: // Start, past line

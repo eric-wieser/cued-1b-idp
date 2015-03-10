@@ -15,6 +15,9 @@ int main() {
 	Robot r(link);
 
 	goToJunction(r, 1);
-	turnAtJunction(r);
+	std::cout << "Junction" << std::endl;
+	turnAtJunction(r, true);
+	std::cout << "Turned" << std::endl;
 	goToJunction(r, 1);
+	std::cout << "Junction" << std::endl;
 }
