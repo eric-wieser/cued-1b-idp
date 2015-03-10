@@ -29,6 +29,42 @@ namespace port {
 	}
 }
 
+
+struct PortError : public LinkError
+{
+public:
+	const port::Name port;
+
+
+	PortError(const LinkError& le, port::Name p)
+			: LinkError(le), port(p) {}
+
+	virtual const char* what() const throw() {
+		switch (port) {
+			case port::P0:
+				return "Port P0 disconnected.";
+			case port::P1:
+				return "Port P1 disconnected.";
+			case port::P2:
+				return "Port P2 disconnected.";
+			case port::P3:
+				return "Port P3 disconnected.";
+			case port::P4:
+				return "Port P4 disconnected.";
+			case port::P5:
+				return "Port P5 disconnected.";
+			case port::P6:
+				return "Port P6 disconnected.";
+			case port::P7:
+				return "Port P7 disconnected.";
+			default:
+				return "Other port disconnected";
+		}
+	}
+	
+};
+
+
 /**
 	Interface to a set on pins on a particular port.
 	Allows masking of pins, to allow multiple `Device`s to share a I2C port
@@ -51,8 +87,17 @@ public:
 	Port(RLink& r, port::Name p, uint8_t mask=0xFF) : Device(r), _port(p), _mask(mask) {}
 
 	inline operator uint8_t() {
-		uint8_t word = _r.request(port::read_instr(_port));
-		return word & _mask;
+		try {
+			uint8_t word = _r.request(port::read_instr(_port));
+			return word & _mask;
+		}
+		catch (const LinkError& le) {
+			if (!le.is_i2c) {
+				throw;
+			}
+
+			throw PortError(le, _port);
+		}
 	}
 	inline void operator=(uint8_t val) {
 		if(_mask != 0xFF) {
@@ -60,7 +105,16 @@ public:
 			val = (val & _mask) | (~_mask & lastWrites[_port]);
 		}
 		lastWrites[_port] = val;
-		_r.command(port::write_instr(_port), val);
+		try {
+			_r.command(port::write_instr(_port), val);
+		}
+		catch (const LinkError& le) {
+			if (!le.is_i2c) {
+				throw;
+			}
+
+			throw PortError(le, _port);
+		}
 	}
 
 	inline Port& operator|=(uint8_t val) { *this = *this | val; return *this; }
