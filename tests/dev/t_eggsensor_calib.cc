@@ -31,7 +31,7 @@ int main() {
 
 		for(int i = 0; i < 20; i++) {
 			auto r = es.read();
-			f << name <<","<< r.r <<","<< r.g <<","<< r.w <<","<< r.a << std::endl;
+			f << name <<","<< int(r.r) <<","<< int(r.b) <<","<< int(r.w) <<","<< int(r.a) << std::endl;
 			delay(250);
 		}
 	}
