@@ -33,3 +33,13 @@ public:
 	LineSensors(RLink& r, port::Name p);
 	Reading read();
 };
+
+inline std::ostream& operator <<(std::ostream& stream, const LineSensors::Reading& r) {
+
+	return stream
+		<< "{position: " << r.position
+		<< ", sensors: ["
+		<< (r.lsl ? '#' : ' ') << " "
+		<< (r.lsc ? '#' : ' ') << " "
+		<< (r.lsr ? '#' : ' ') << "]}";
+}
