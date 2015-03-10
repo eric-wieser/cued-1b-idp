@@ -7,7 +7,7 @@
 
 Arm::Arm(RLink& r, port::Name name) :
 	Device(r),
-	_port(r, name)
+	_port(r, name, (1 << PIN_DOWN_UPB) | (1 << PIN_CLOSED_OPENB))
 {
 	// put the arm open and up
 	_port = 0;
