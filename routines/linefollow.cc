@@ -68,7 +68,7 @@ GOTOJUNC_RET goToJunction_inner(Robot& r, float distance) {
 			return RET_JUNCTION;
 
 		// if we started at a junction, and we're no longer on one, clear the flag
-		if(line.state != LineSensors::Reading::JUNCTION)
+		if(nJunc == 0)
 			atJunction = false;
 
 		// if the last 5 readings have been no line, we've failed
