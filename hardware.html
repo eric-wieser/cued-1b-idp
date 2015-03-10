@@ -1,0 +1,566 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hardware access layer &mdash; Team L205 IDP 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Team L205 IDP 1.0 documentation" href="index.html"/>
+        <link rel="next" title="Color classification" href="colors.html"/>
+        <link rel="prev" title="Index" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> Team L205 IDP</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Hardware access layer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#actuators">Actuators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sensors">Sensors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html">Color classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lines.html">Line following algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Navigation plan</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Team L205 IDP</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Hardware access layer</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/hardware.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="hardware-access-layer">
+<span id="hardware"></span><h1>Hardware access layer<a class="headerlink" href="#hardware-access-layer" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt>
+<span class="target" id="project0class_r_link"></span><em>class</em> <tt class="descname">RLink</tt></dt>
+<dd><p>Wraps robot_link to indicate failures by throwing a <a class="reference internal" href="#project0class_link_error"><em>LinkError</em></a> object. </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0class_r_link_1a7277ca196c6cf04410aa55bb93dbed76"></span>void <tt class="descname">initialise</tt><big>(</big><big>)</big></dt>
+<dd><p>Initialise the link by the most appropriate method for the location the code is running. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_r_link_1af6a9ea4337480b65cbc7126eaff76c33"></span>void <tt class="descname">command</tt><big>(</big>command_instruction <em>cmd</em>, int <em>arg</em><big>)</big></dt>
+<dd><p>Send a command to the robot. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_r_link_1a497340a89ad03261c6a90000547b1adf"></span>int <tt class="descname">request</tt><big>(</big>request_instruction <em>req</em><big>)</big></dt>
+<dd><p>Request data from the robot. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_r_link_1af6ee9f47dbe8a3a6367cd90ff1943e08"></span>uint8_t <tt class="descname">status</tt><big>(</big><big>)</big></dt>
+<dd><p>Get the status register, a bitfield containing {comm_err, i2c_err, es_trig, es_mode, moving, ramped, _, _}. </p>
+<p>Does not throw <a class="reference internal" href="#project0class_link_error"><em>LinkError</em></a> </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<span class="target" id="project0class_device"></span><em>class</em> <tt class="descname">Device</tt></dt>
+<dd><p>Base class for all devices which require a link to the robot. </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Protected Attributes</p>
+<dl class="variable">
+<dt>
+<span class="target" id="project0class_device_1a0344a008783d1d095eda33a3c38ba537"></span><a class="reference internal" href="#project0class_r_link"><em>RLink</em></a> &amp; <tt class="descname">_r</tt></dt>
+<dd><p>internal reference to a robot connection </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<span class="target" id="project0class_link_error"></span><em>class</em> <tt class="descname">LinkError</tt></dt>
+<dd><p>Thrown when an <a class="reference internal" href="#project0class_r_link"><em>RLink</em></a> command or request goes wrong. </p>
+<p>Contains the original error code </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0class_link_error_1a6dd2b7730a717d62de2f3bd514b048ac"></span>virtual const char * <tt class="descname">what</tt><big>(</big><big>)</big> const</dt>
+<dd><p>override of std::exception::what() </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt>
+<span class="target" id="project0class_link_error_1abea6305bfca0a7b42d5b649f73da3b29"></span>const link_err <tt class="descname">err</tt></dt>
+<dd><p>The original error code. </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0class_link_error_1abf3036f843b7e5f7ed324a9bddfa5e75"></span>const bool <tt class="descname">is_fatal</tt></dt>
+<dd><p>Whether the error is marked as fatal by robot_link. </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0class_link_error_1aeece23f161286a9fef58764db4577b7a"></span>const bool <tt class="descname">is_i2c</tt></dt>
+<dd><p>If true, indicates that the error has no code, and is instead a bus error. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<span class="target" id="project0class_port"></span><em>class</em> <tt class="descname">Port</tt></dt>
+<dd><p>Interface to a set on pins on a particular port. </p>
+<p>Allows masking of pins, to allow multiple <tt class="docutils literal"><a class="reference internal" href="#project0class_device"><em><span class="pre">Device</span></em></a></tt>s to share a I2C port without interfering with each other&#8217;s bits</p>
+<p>Provides operator overloading for simple use: <div class="highlight-c++"><div class="highlight"><pre><span class="kt">uint8_t</span> <span class="n">reading</span> <span class="o">=</span> <span class="n">port</span><span class="p">;</span>
+<span class="n">port</span> <span class="o">=</span> <span class="mh">0x42</span><span class="p">;</span>
+</pre></div>
+</div>
+</p>
+<p>Note that conversion to an int will return the current input, which is not necesarily the previous output </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0class_port_1aa93570999a8ac4bd166c2325bfcf1ff1"></span><tt class="descname">operator uint8_t</tt><big>(</big><big>)</big></dt>
+<dd><p>Read a word to the port, keeping only the bits specified in the mask. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_port_1a56a390077458d9400266546bcdf61885"></span>void <tt class="descname">operator=</tt><big>(</big>uint8_t <em>val</em><big>)</big></dt>
+<dd><p>Write a word to the port, touching only the bits specified in the mask. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<div class="section" id="actuators">
+<h2>Actuators<a class="headerlink" href="#actuators" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt>
+<span class="target" id="project0class_drive"></span><em>class</em> <tt class="descname">Drive</tt></dt>
+<dd><p>Interface to the two-wheeled drive system. </p>
+<p>Intended usage</p>
+<p> <pre class="literal-block">
+<a class="reference internal" href="#project0class_drive"><em>Drive</em></a> d(rlink);
+
+// forward, steer with center of curvature on left
+d.move({forward: 0.9, .steer: 0.1});
+</pre>
+</p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0class_drive_1a2b7d429e7324f883017a965364815af8"></span><tt class="descname">Drive</tt><big>(</big><a class="reference internal" href="#project0class_r_link"><em>RLink</em></a> &amp; <em>r</em>, <a class="reference internal" href="#project0struct_drive_1_1_configuration"><em>Configuration</em></a> <em>c</em> = Drive::_defConfig<big>)</big></dt>
+<dd><p>Initialize a drive over a connection. </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><tt class="first docutils literal"><span class="pre">r</span></tt> - <p>the link to the robot </p>
+</li>
+<li><tt class="first docutils literal"><span class="pre">c</span></tt> - <p>the drive geometry and speeds, used to populate <a class="reference internal" href="#project0class_drive_1aecd4b018d28bd2cde496f1ea913578e3"><em>Drive::maxSpeeds</em></a> </p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_drive_1a2dac2d40b998bd07dede04a54e8499c4"></span>void <tt class="descname">move</tt><big>(</big>move_args <em>args</em><big>)</big></dt>
+<dd><p>
+Should ensure that abs(args.forward) + abs(args.steer) &lt;= 1 <dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last">
+<li><tt class="first docutils literal"><span class="pre">args.forward</span></tt> - <p>non-dimensional linear speed: 1 is full speed forwards, -1 is full speed backwards</p>
+</li>
+<li><tt class="first docutils literal"><span class="pre">args.steer</span></tt> - <p>non-dimensional rotational speed: 1 is full speed CCW</p>
+</li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_drive_1a8e7497e4cec510136c63af01f4a301b5"></span>Timeout <tt class="descname">straight</tt><big>(</big>float <em>dist</em>, float <em>speed</em> = 1<big>)</big></dt>
+<dd><p>Move in a straight line, and return a timeout indicating expected completion. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_drive_1a7b6adba25d6b0a93df7e76a56bd52d22"></span>Timeout <tt class="descname">turn</tt><big>(</big>float <em>angle</em>, float <em>speed</em> = 1<big>)</big></dt>
+<dd><p>Turn an angle on the spot, and return a timeout indicating expected completion. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_drive_1a9b39e1da9c6496d332e4b4d5f612b56a"></span>void <tt class="descname">setWheelSpeeds</tt><big>(</big>float <em>left</em>, float <em>right</em><big>)</big></dt>
+<dd><p>low-level motor access </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_drive_1a002bdfaf44a7cad5a360aaa5e0868811"></span>void <tt class="descname">stop</tt><big>(</big><big>)</big></dt>
+<dd><p>shorthand for no motion </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt>
+<span class="target" id="project0class_drive_1aecd4b018d28bd2cde496f1ea913578e3"></span><a class="reference internal" href="#project0struct_drive_1_1_speeds"><em>Speeds</em></a> <tt class="descname">maxSpeeds</tt></dt>
+<dd><p>The maximum speeds the robot is able to acheive. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0class_drive_1a9f71880eaa9fe23b70cb8c52b1b232ca"></span>uint8_t <tt class="descname">convertSpeed</tt><big>(</big>float <em>s</em><big>)</big></dt>
+<dd><p>convert floating point speed to sign/magnitude </p>
+</dd></dl>
+
+</div>
+<dl class="struct">
+<dt>
+<span class="target" id="project0struct_drive_1_1_configuration"></span><em>struct</em> <tt class="descname">Configuration</tt></dt>
+<dd><p>Describes the physical configuration of the robot. </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_drive_1_1_configuration_1ab411836a229facdef075a88f462f937a"></span>float <tt class="descname">radius</tt></dt>
+<dd><p>wheel radius, in m </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_drive_1_1_configuration_1a0ad278a53ede62dbe69fe1f94b22ffdc"></span>float <tt class="descname">spacing</tt></dt>
+<dd><p>distance between centers of wheels, in m </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_drive_1_1_configuration_1a85d4f2aed77d9a8926d34672c2939621"></span>float <tt class="descname">rpm</tt></dt>
+<dd><p>motor speed, in rpm </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="struct">
+<dt>
+<span class="target" id="project0struct_drive_1_1_speeds"></span><em>struct</em> <tt class="descname">Speeds</tt></dt>
+<dd><p>struct indicating maximum speeds, built from a <a class="reference internal" href="#project0struct_drive_1_1_configuration"><em>Configuration</em></a> </p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<span class="target" id="project0class_arm"></span><em>class</em> <tt class="descname">Arm</tt></dt>
+<dd><p>Interface to the egg-grabbing arm of the robot. </p>
+</dd></dl>
+
+<dl class="class">
+<dt>
+<span class="target" id="project0class_courier"></span><em>class</em> <tt class="descname">Courier</tt></dt>
+<dd><p>Interface to the runner holding the eggs, its indicator LEDs, the light gate that verifies the presence of an egg, and the bucket at the end of the runner which delivers the eggs into their cups. </p>
+<p>Affectionately known as the courier, as it carries things </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0class_courier_1ab97c33689d3ad0851206b4332cfaed3f"></span>void <tt class="descname">recordEggAdded</tt><big>(</big>EggType <em>e</em><big>)</big></dt>
+<dd><p>Indicate that a new egg has been added to the rail. </p>
+<p>This updates the internal record of currently-held eggs, and turns on the appropriate LEDs. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_courier_1a82b27279e51813be355cfcb0b7b30ddf"></span>void <tt class="descname">unloadEgg</tt><big>(</big><big>)</big></dt>
+<dd><p>Unload the egg at the bottom of the stack, updating state and LEDs. </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_courier_1a8de33261b407b3c01312440b93054e4d"></span>EggType <tt class="descname">egg</tt><big>(</big>int <em>n</em><big>)</big> const</dt>
+<dd><p>type of the egg n from the bottom </p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<span class="target" id="project0class_courier_1a0229583a962f861eb6c5d2b74815a687"></span>int <tt class="descname">volume</tt><big>(</big><big>)</big> const</dt>
+<dd><p>The number of eggs on the rail. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="sensors">
+<h2>Sensors<a class="headerlink" href="#sensors" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt>
+<span class="target" id="project0class_egg_sensor"></span><em>class</em> <tt class="descname">EggSensor</tt></dt>
+<dd><p>Interface to the LEDs and LDR comprising the egg sensor. </p>
+<p>Includes the algorithm for identifying eggs </p>
+<dl class="struct">
+<dt>
+<span class="target" id="project0struct_egg_sensor_1_1_reading"></span><em>struct</em> <tt class="descname">Reading</tt></dt>
+<dd><div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_egg_sensor_1_1_reading_1a738e86ea9ae2acadae0c803353d4670a"></span>uint8_t <tt class="descname">r</tt></dt>
+<dd><p>reflection from red LED </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_egg_sensor_1_1_reading_1a7817239fb5bf47aa114dca744d9a93c5"></span>uint8_t <tt class="descname">b</tt></dt>
+<dd><p>reflection from blue LED </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_egg_sensor_1_1_reading_1af51e1bbc894db9a85ee6b47dd089c64f"></span>uint8_t <tt class="descname">w</tt></dt>
+<dd><p>reflection from white LED </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_egg_sensor_1_1_reading_1aa9e5476690c56c35c1c804a2a2579852"></span>uint8_t <tt class="descname">a</tt></dt>
+<dd><p>ambient reading </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_egg_sensor_1_1_reading_1ab76a9f3c05c21b4ac7464808ce2732ac"></span>std::array&lt; float, EGG_TYPE_COUNT &gt; <tt class="descname">probabilities</tt></dt>
+<dd><p>&#8220;distances&#8221; to each egg. Lower values indicate greater likelihood </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_egg_sensor_1_1_reading_1a24d7a804ddec38784a44cd6712c20ebd"></span>EggType <tt class="descname">bestGuess</tt></dt>
+<dd><p>shorthand for most likely egg type </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt>
+<span class="target" id="project0class_line_sensors"></span><em>class</em> <tt class="descname">LineSensors</tt></dt>
+<dd><p>Interface to the three front-mounted line sensors. </p>
+<dl class="struct">
+<dt>
+<span class="target" id="project0struct_line_sensors_1_1_reading"></span><em>struct</em> <tt class="descname">Reading</tt></dt>
+<dd><div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_line_sensors_1_1_reading_1a5e14109622244c8cb6ea9b1f75bcde05"></span>bool <tt class="descname">lsl</tt></dt>
+<dd><p>left sensor reading </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_line_sensors_1_1_reading_1a9df3cbd653e2d3553eecf837dde632b6"></span>bool <tt class="descname">lsc</tt></dt>
+<dd><p>right sensor reading </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_line_sensors_1_1_reading_1a9845208f52ec78334c0604ae5e5bba7c"></span>bool <tt class="descname">lsr</tt></dt>
+<dd><p>center sensor reading </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_line_sensors_1_1_reading_1afeae25d543df161ef12bf51ef8584fe3"></span>bool <tt class="descname">lsa</tt></dt>
+<dd><p>arm sensor reading </p>
+</dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_line_sensors_1_1_reading_1a741d7f685ac54eba98d6f623a7c3ed8d"></span>float <tt class="descname">position</tt></dt>
+<dd><p>Line position, where between -1 and 1, with left positive. </p>
+<p>+-Inf and NaN indicate a lost line </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="colors.html" class="btn btn-neutral float-right" title="Color classification">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Index"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Eric Wieser, Matt Diesel.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
