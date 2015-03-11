@@ -29,7 +29,7 @@ enum GOTOJUNC_RET {
 @return RET_JUNCTION if a junction was reached, or RET_TIMEOUT if it wasn't
 		reached in the expected time based on distance.
 */
-GOTOJUNC_RET goToJunction(Robot& r, float distance);
+GOTOJUNC_RET goToJunction(Robot& r, float distance, bool atJunction = true);
 
 
 /** Turns the robot at a junction

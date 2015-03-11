@@ -29,7 +29,7 @@ const char* LineLost::what() const throw() {
 	@throws HardwareDamaged   Line state invalid for too long
 	                          Middle sensor broken? Wheels jammed?
 */
-GOTOJUNC_RET goToJunction_inner(Robot& r, float distance) {
+GOTOJUNC_RET goToJunction_inner(Robot& r, float distance, bool atJunction = true) {
 	std::deque<LineSensors::Reading::State> history;
 	Drive d = r.drive;
 
@@ -38,7 +38,7 @@ GOTOJUNC_RET goToJunction_inner(Robot& r, float distance) {
 	Timeout timeout = tPredicted;
 
 	// assume we started on a junction
-	bool atJunction = true;
+	// bool atJunction = true;
 
 	while(1) {
 		// read the line sensors
@@ -131,11 +131,15 @@ void reFindLine(Robot& r, float lastPos) {
 }
 
 
-GOTOJUNC_RET goToJunction(Robot& r, float distance) {
+GOTOJUNC_RET goToJunction(Robot& r, float distance, bool atJunction) {
 	while(1) {
 		// try to follow the line to the appropriate distance
 		try{
-			return goToJunction_inner(r, distance);
+			auto ret = goToJunction_inner(r, distance, atJunction);
+			if (ret == RET_TIMEOUT) {
+				throw Timeout::Expired();
+			}
+			return ret;
 		}
 		catch(LineLost& lost) {
 			std::cout << "Lost: " << lost.what() << ", " << lost.distanceLeft << "m remain" << std::endl;
