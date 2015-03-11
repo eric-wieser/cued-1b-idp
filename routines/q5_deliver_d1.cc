@@ -39,11 +39,11 @@ void q5_deliver_d1(Robot& r) {
 	} while (!reading.lsc);
 
 	checkpoint(r, "Going to a junction");
-	goToJunction(r, 0.2, false);
+	goToJunction(r, 0.2);
 
 	checkpoint(r, "Turning Right");
-	turnAtJunction(r, 1);
+	turnAtJunction(r, -1);
 
 	checkpoint(r, "Going to the box");
-	dropEggs(r, -1);
+	dropEggs(r, r.courier.volume());
 }
