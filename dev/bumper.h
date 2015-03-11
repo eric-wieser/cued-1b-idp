@@ -11,8 +11,8 @@ private:
 	Port _port;
 public:
 	enum {
-		PIN_LEFT,
-		PIN_RIGHT
+		PIN_LEFT =0,
+		PIN_RIGHT = 1
 	};
 
 	struct Reading {
