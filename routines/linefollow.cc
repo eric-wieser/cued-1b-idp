@@ -211,14 +211,14 @@ void turnAtJunction(Robot& r, int turns) {
 						state = 2;
 					break;
 				case 2: // Past line
-					if (linesLeft <= 0
+					if ((linesLeft <= 0 && early_t.hasexpired())
 							&& ((line.lsr && sign < 0) || (line.lsl && sign > 0))) {
 						d.turn(10, 0.4);
 						state = 7;
 					}
 
 					if (line.lsc) {
-						state = (linesLeft <= 0) ? 3 : 1;
+						state = (linesLeft <= 0 && early_t.hasexpired()) ? 3 : 1;
 						linesLeft--;
 					}
 					break;
