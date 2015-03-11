@@ -83,16 +83,18 @@ void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect)
 	r.drive.stop();
 }
 
-void driveToBumper(Robot& r) {
+Timeout::duration_type driveToBumper(Robot& r) {
+	using namespace std::chrono;
 	Drive d = r.drive;
 
 	d.move({forward: 0.5f, steer: 0});
 
+	auto t = system_clock::now();
 	while(true) {
 		auto bump = r.bumper.read();
 		if(std::isfinite(bump.position)) break;
 	}
-
+	auto ret = duration_cast<Timeout::duration_type>(system_clock::now() - t);
 	// try for one second
 	Timeout straightness_time(Timeout::duration_type(1.0f));
 	while(true) {
@@ -110,11 +112,14 @@ void driveToBumper(Robot& r) {
 		if(bump.position == 0)
 			break;
 	}
+
+	return ret;
 }
 
 void dropEggs(Robot& r, int n) {
 	// inch forward until the limit switch is hit
-	driveToBumper(r);
+	auto returnTime = driveToBumper(r);
+
 
 	for(int i = 0; i < n; i++) {
 		if(i != 0) {
@@ -141,11 +146,11 @@ void dropEggs(Robot& r, int n) {
 
 			// Return to box TODO: TIMEOUT
 			driveToBumper(r);
-
 		}
 		r.courier.unloadEgg();
 	}
 
 	// undo the straight motion (TODO: match time)
-	r.drive.straight(-0.05, 0.5).wait();
+	r.drive.move({forward: -0.5, steer: 0});
+	Timeout(returnTime).wait();
 }
