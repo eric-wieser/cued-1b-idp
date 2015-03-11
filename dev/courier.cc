@@ -78,6 +78,6 @@ void Courier::unloadEgg() {
 
 int Courier::volume() const { return _volume; }
 EggType Courier::egg(int n) const { return _contents[n]; }
-// bool Courier::eggDetected() const { std::cout << int(int8_t(_lightGatePort)) << std::endl; return uint8_t(_lightGatePort) != 0; }
+bool Courier::eggDetected() const { return uint8_t(_lightGatePort) == 0; }
 
-bool Courier::eggDetected() const { return false; }
+// bool Courier::eggDetected() const { return false; }
