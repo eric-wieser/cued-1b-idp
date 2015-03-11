@@ -31,7 +31,9 @@ void q2_deliver_d2d3(Robot& r) {
 	while(r.courier.volume() != 0) {
 		if(r.courier.egg(0) == EGG_BROWN) {
 			// curve left, until we intersect the line
-			r.drive.move({forward: 0.7, steer: 1});
+			r.drive.move({forward: 0.35, steer: 0.65});
+			Timeout(r.drive.timeForTurn(45, 0.65)).wait();
+
 			while(r.ls.read().lsc);
 			while(!r.ls.read().lsc);
 			r.drive.stop();
@@ -40,7 +42,8 @@ void q2_deliver_d2d3(Robot& r) {
 			dropEggs(r, r.courier.egg(1) == EGG_BROWN ? 2 : 1);
 
 			// undo the curved motion
-			r.drive.move({forward: -0.7, steer: -1});
+			r.drive.move({forward: -0.35, steer: -0.65});
+			Timeout(r.drive.timeForTurn(-45, 0.65)).wait();
 			while(r.ls.read().lsc);
 			while(!r.ls.read().lsc);
 			r.drive.stop();
@@ -50,6 +53,6 @@ void q2_deliver_d2d3(Robot& r) {
 		}
 	}
 
-	r.drive.straight(-0.1).wait();
+	r.drive.straight(-0.3).wait();
 	std::cout << "At delivery nexus" << std::endl;
 }
