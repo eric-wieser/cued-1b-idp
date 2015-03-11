@@ -40,8 +40,14 @@ inline std::ostream& operator <<(std::ostream& stream, const port::Name& p) {
 		return stream << "P?" << int(p);
 }
 
+/**
+	Specialization of LinkError, thrown when an I2C error occurs
+	when accessing a port. Typically implies loss of electrical
+	connection
+*/
 struct PortError : public LinkError {
 public:
+	/// the disconnected port
 	const port::Name port;
 
 	PortError(const LinkError& le, port::Name p)
@@ -63,25 +69,30 @@ public:
 };
 
 
+/**
+	Specialization of LinkError, thrown when an I2C error occurs
+	when accessing a port. Typically implies loss of electrical
+	connection
+*/
 struct PinsDoublyMapped : public std::exception {
+private:
+	mutable std::string _message;
 public:
-	const port::Name port;
-	uint8_t pins;
-	mutable std::string message;
+	const port::Name port;  ///< the port causing the issue
+	const uint8_t pins;     ///< the mask of pins that have already been allocated
 
-	PinsDoublyMapped(port::Name p, uint8_t mask): port(p), pins(mask), message() {}
-
+	PinsDoublyMapped(port::Name p, uint8_t mask): port(p), pins(mask), _message() {}
 	~PinsDoublyMapped() throw() {}
 
 	virtual const char* what() const throw() {
-		if(message == "") {
+		if(_message == "") {
 			std::ostringstream ss;
 			ss << "Attempted to double map port " << port << ", pins:";
 			for(int i = 0; i < 8; i++) if((pins >> i) & 1) ss << " " << i;
-			message = ss.str();
+			_message = ss.str();
 		}
 
-		return message.c_str();
+		return _message.c_str();
 	}
 };
 
@@ -92,8 +103,9 @@ public:
 
 	Provides operator overloading for simple use:
 
-		uint8_t reading = port;
-		port = 0x42;
+		Port sensor(rlink, port::P2, 0xF);  // bottom 4 bits of port 2
+		uint8_t reading = sensor;  // read sensor
+		sensor = 0x42;  // write to sensor
 
 	Note that conversion to an int will return the current input, which is not
 	necesarily the previous output
@@ -105,6 +117,11 @@ private:
 	port::Name _port;
 	uint8_t _mask;
 public:
+	/**
+		Create a port over the connection `r`, using the port with address `p`.
+		Optionally specify a set of bits `mask` to restrict the scope of this instance
+		to. Throws PinsDoublyMapped if multiple instances attempt to use the same ports
+	*/
 	Port(RLink& r, port::Name p, uint8_t mask=0xFF) : Device(r), _port(p), _mask(mask) {
 		if(mask & assignedBits[p]) {
 			throw PinsDoublyMapped(p, mask & assignedBits[p]);

@@ -8,6 +8,7 @@
 #include "dev/courier.h"
 #include "dev/arm.h"
 #include "dev/ports.h"
+#include "dev/bumper.h"
 #include "eggtype.h"
 
 
@@ -18,11 +19,8 @@ struct Robot {
 	EggSensor detector;
 	Courier courier;
 
-	Port limits;
+	Bumper bumper;
 
 	Robot(RLink& rlink);
 };
 
-
-namespace simple_robot {
-}
