@@ -19,6 +19,8 @@ Courier::Courier(RLink& r, port::Name ledPort, port::Name lightGatePort) :
 {
 	_contents[0] = _contents[1] = _contents[2] = EGG_NONE;
 	_lightGatePort = 0xff;
+	_r.command(MOTOR_3_GO, Drive::convertSpeed(liftSpeed));
+	delay(1000);
 	r.command(MOTOR_3_GO, Drive::convertSpeed(holdSpeed));
 
 	_updateLeds();
