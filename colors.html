@@ -72,7 +72,10 @@
 <li class="toctree-l2"><a class="reference internal" href="hardware.html#sensors">Sensors</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Color classification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Color classification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#api-documentation">Api documentation</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="lines.html">Line following algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="routes.html">Navigation plan</a></li>
 </ul>
@@ -112,6 +115,19 @@
             
   <div class="section" id="color-classification">
 <h1>Color classification<a class="headerlink" href="#color-classification" title="Permalink to this headline">¶</a></h1>
+<p>The egg sensor reads four variables describing the egg. A range of similar eggs
+can be sampled to calibrate the sensor. From these readings, a normal
+distribution can be fitted to each variable and egg. Considering covariances,
+we can then generalize to a 4-variable normal distribution for each egg.</p>
+<p>To identify the egg, the find the normal distribution with the highest
+probability density at a given point in variable-space.</p>
+<p>The following steppable animation shows how this works for just two variables
+(red and blue).</p>
+<iframe src="http://eric-wieser.github.io/idp-presentation" allowtransparency="true" style="border: 0; width: 100%; height: 50vh"></iframe><p>The conversion of the raw recorded data to a set of normal distribution
+parameters is done with a small python script, that leverages the <cite>numpy</cite>
+numeric toolkit, and generates the <cite>egg_stats.cc</cite> file.</p>
+<div class="section" id="api-documentation">
+<h2>Api documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="enum">
 <dt>
 <span class="target" id="project0eggtype_8h_1a3c211f42cf9787192be264add1a459e0"></span><strong>EggType enum</strong></dt>
@@ -148,8 +164,22 @@
 </dd></dl>
 
 </div>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_multivariate_normal_1a350caa5f9d60eedc549678e978ecd5f2"></span>Matrix&lt; float, N, 1 &gt; <tt class="descname">mean</tt></dt>
+<dd></dd></dl>
+
+<dl class="variable">
+<dt>
+<span class="target" id="project0struct_multivariate_normal_1aa2dc9a914605f385a332cee65cfd4b16"></span>Matrix&lt; float, N, N &gt; <tt class="descname">covariance</tt></dt>
+<dd></dd></dl>
+
+</div>
 </dd></dl>
 
+</div>
 </div>
 
 
