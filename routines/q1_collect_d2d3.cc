@@ -5,7 +5,7 @@
 bool shouldCollectD2D3(EggSensor::Reading& reading)
 {
 	return( (reading.bestGuess == EGG_TASTY)
-			|| (reading.bestGuess == EGG_WHITE));
+			|| (reading.bestGuess == EGG_BROWN));
 }
 
 void q1_collect_d2d3(Robot& r) {

@@ -29,7 +29,7 @@ void q2_deliver_d2d3(Robot& r) {
 	checkpoint(r, "At delivery nexus");
 
 	while(r.courier.volume() != 0) {
-		if(r.courier.egg(0) == EGG_WHITE) {
+		if(r.courier.egg(0) == EGG_BROWN) {
 			// curve left, until we intersect the line
 			r.drive.move({forward: 0.7, steer: 1});
 			while(r.ls.read().lsc);
@@ -37,7 +37,7 @@ void q2_deliver_d2d3(Robot& r) {
 			r.drive.stop();
 
 			// run until the limit switches go
-			dropEggs(r, r.courier.egg(1) == EGG_WHITE ? 2 : 1);
+			dropEggs(r, r.courier.egg(1) == EGG_BROWN ? 2 : 1);
 
 			// undo the curved motion
 			r.drive.move({forward: -0.7, steer: -1});
