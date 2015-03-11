@@ -3,9 +3,11 @@
 #include "dev/linesensors.h"
 #include "robot.h"
 
-void dropCreme(Robot& r);
-void dropWhite(Robot& r);
+typedef bool (*EGG_CALLBACK)(EggSensor::Reading& reading);
 
 struct negate { LineSensors::Reading::State s; };
 void waitForLine(Robot& r, LineSensors::Reading::State s);
 void waitForLine(Robot& r, negate n);
+void goToConveyor(Robot& r, bool east = true);
+void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect);
+
