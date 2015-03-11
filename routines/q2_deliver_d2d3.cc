@@ -4,7 +4,7 @@
 void dropEggs(Robot& r, int n = 1) {
 	// inch forward until the limit switch is hit
 	r.drive.move({forward: 0.5, steer: 0});
-	while(!(r.limits & (1 << 5)));
+	while(r.bumper.read().position != 0);
 	r.drive.stop();
 
 	for(int i = 0; i < n; i++) {
