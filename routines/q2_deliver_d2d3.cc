@@ -19,11 +19,6 @@ void dropEggs(Robot& r, int n = 1) {
 	r.drive.straight(-0.05, 0.5).wait();
 }
 
-void checkpoint(Robot& r, std::string id) {
-	// r.drive.stop();
-	std::cout << "Checkpoint: " << id << std::endl;
-	// std::cin.get();
-}
 
 void q2_deliver_d2d3(Robot& r) {
 	Tracker::instance()->logPose(0.2, -0.8, 0);

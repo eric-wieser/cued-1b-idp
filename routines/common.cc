@@ -43,10 +43,17 @@ void goToConveyor(Robot& r, bool east)
 }
 
 
+void checkpoint(Robot& r, std::string id) {
+	r.drive.stop();
+	std::cout << "Checkpoint: " << id << std::endl;
+	std::cin.get();
+}
+
+
 void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect)
 {
 	Drive::move_args args = {forward: 1, steer: -0.2};
-	
+
 	for(int i  = 0; i < 5; i++) {
 		r.drive.move(args);
 		while(r.ls.read().lsl == 1);
