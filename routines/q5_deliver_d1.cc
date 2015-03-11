@@ -6,19 +6,19 @@ void q5_deliver_d1(Robot& r) {
 	// Rotate CCW 90 around left wheel
 
 	r.drive.move({
-		forward: 0.3,
-		steer: 0.7
+		forward: 0.5,
+		steer: 0.5
 	});
 
-	Timeout(r.drive.timeForTurn(90, 0.7)).wait();
+	Timeout(r.drive.timeForTurn(90, 0.5)).wait();
 
 	checkpoint(r, "Exploring the unknown");
-	r.drive.straight(0.4).wait();
+	r.drive.straight(0.30).wait();
 
 	// Turn CCW
 	checkpoint(r, "Avoiding the ramp");
-	r.drive.turn(20).wait();
-	r.drive.straight(0.2);
+	r.drive.turn(40).wait();
+	r.drive.straight(0.1).wait();
 
 	LineSensors::Reading reading;
 	do {
