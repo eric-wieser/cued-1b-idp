@@ -40,4 +40,10 @@ void q5_deliver_d1(Robot& r) {
 
 	checkpoint(r, "Going to a junction");
 	goToJunction(r, 0.2, false);
+
+	checkpoint(r, "Turning Right");
+	turnAtJunction(r, 1);
+
+	checkpoint(r, "Going to the box");
+	dropEggs(r, -1);
 }
