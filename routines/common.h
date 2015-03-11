@@ -11,3 +11,4 @@ void waitForLine(Robot& r, negate n);
 void goToConveyor(Robot& r, bool east = true);
 void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect);
 void checkpoint(Robot& r, std::string id);
+void dropEggs(Robot& r, int n = 1);

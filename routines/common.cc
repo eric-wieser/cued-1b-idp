@@ -81,3 +81,22 @@ void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect)
 	}
 	r.drive.stop();
 }
+
+
+void dropEggs(Robot& r, int n) {
+	// inch forward until the limit switch is hit
+	r.drive.move({forward: 0.5, steer: 0});
+	while(r.bumper.read().position != 0);
+	r.drive.stop();
+
+	for(int i = 0; i < n; i++) {
+		if(i != 0) {
+			delay(500); // to allow the previous egg to be removed
+		}
+		std::cout << "Dropping egg " << r.courier.egg(0) << std::endl;
+		r.courier.unloadEgg();
+	}
+
+	// undo the straight motion (TODO: match time)
+	r.drive.straight(-0.05, 0.5).wait();
+}
