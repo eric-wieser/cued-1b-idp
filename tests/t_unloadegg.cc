@@ -18,6 +18,9 @@ int main() {
 
 	Robot r(link);
 
+	std::cout << "push enter" << std::endl;
+	std::cin.get();
+
 	link.command(MOTOR_3_GO, Drive::convertSpeed(-0.5));
 
 	r.courier.recordEggAdded(EGG_TASTY);
