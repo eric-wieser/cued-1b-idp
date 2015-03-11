@@ -18,8 +18,8 @@ public:
 
 	/**
 		Get the status register, a bitfield containing
-		{comm_err, i2c_err, es_trig, es_mode,
-		moving, ramped, _, _}
+		`{comm_err, i2c_err, es_trig, es_mode,
+		moving, ramped, _, _}`
 
 		Does not throw LinkError
 	*/
@@ -34,14 +34,9 @@ class LinkError : public std::exception {
 private:
 	RLink& _r;
 public:
-	/// @brief The original error code
-	const link_err err;
-
-	/// Whether the error is marked as fatal by robot_link
-	const bool is_fatal;
-
-	/// If true, indicates that the error has no code, and is instead a bus error
-	const bool is_i2c;
+	const link_err err;  ///< The original error code
+	const bool is_fatal; ///< Whether the error is marked as fatal by robot_link
+	const bool is_i2c;   ///< If true, indicates that the error has no code, and is instead a bus error
 
 	LinkError(RLink& r) :
 		_r(r),
