@@ -83,52 +83,67 @@ void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect)
 	r.drive.stop();
 }
 
+void driveToBumper(Robot& r) {
+	Drive d = r.drive;
+
+	d.move({forward: 0.5f, steer: 0});
+
+	while(true) {
+		auto bump = r.bumper.read();
+		if(std::isfinite(bump.position)) break;
+	}
+
+	// try for one second
+	Timeout straightness_time(Timeout::duration_type(1.0f));
+	while(true) {
+		auto bump = r.bumper.read();
+		if(std::isfinite(bump.position)) {
+			d.move({forward: 0.5f, steer: bump.position*0.7f});
+		}
+		else {
+			d.move({forward: 0.5f, steer: 0});
+		}
+
+		// timeout or straight
+		if(straightness_time.hasexpired())
+			break;
+		if(bump.position == 0)
+			break;
+	}
+}
 
 void dropEggs(Robot& r, int n) {
 	// inch forward until the limit switch is hit
-	r.drive.move({forward: 0.5, steer: 0});
-	while(r.bumper.read().position != 0);
-	r.drive.stop();
+	driveToBumper(r);
 
-	try {
-		for(int i = 0; i < n; i++) {
-			if(i != 0) {
-				delay(500); // to allow the previous egg to be removed
-			}
-			std::cout << "Dropping egg " << r.courier.egg(0) << std::endl;
-
-			// Check light gate
-			if (!r.courier.eggDetected()) {
-				// Wobble
-				
-				r.drive.straight(-0.06f).wait();
-
-				auto line = r.ls.read();
-				for (int i = 0; i < 5 && !r.courier.eggDetected(); i++) {
-					r.drive.turn(10).wait();
-					r.drive.stop();
-					r.drive.turn(-10);
-					do {
-						line = r.ls.read();
-					} while (!line.lsc);
-					r.drive.stop();
-				}
-
-				// Return to box TODO: TIMEOUT
-				r.drive.move({forward: 0.5, steer: 0});
-				while(r.bumper.read().position != 0);
-				r.drive.stop();
-
-				if (!r.courier.eggDetected()) {
-					throw Courier::NoEgg();
-				}
-			}
-			r.courier.unloadEgg();
+	for(int i = 0; i < n; i++) {
+		if(i != 0) {
+			delay(500); // to allow the previous egg to be removed
 		}
-	}
-	catch (const Courier::NoEgg& ne) {
-		// Ignore.
-		throw;
+		std::cout << "Dropping egg " << r.courier.egg(0) << std::endl;
+
+		// Check light gate
+		if (!r.courier.eggDetected()) {
+			// Wobble
+
+			r.drive.straight(-0.06f).wait();
+
+			auto line = r.ls.read();
+			for (int i = 0; i < 5 && !r.courier.eggDetected(); i++) {
+				r.drive.turn(10).wait();
+				r.drive.stop();
+				Timeout t = r.drive.turn(-15);
+				do {
+					line = r.ls.read();
+				} while (!line.lsc && !t.hasexpired());
+				r.drive.stop();
+			}
+
+			// Return to box TODO: TIMEOUT
+			driveToBumper(r);
+
+		}
+		r.courier.unloadEgg();
 	}
 
 	// undo the straight motion (TODO: match time)
