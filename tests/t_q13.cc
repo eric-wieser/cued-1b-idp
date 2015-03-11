@@ -37,7 +37,7 @@ int main() {
 			r.courier.recordEggAdded(EGG_TASTY);
 			r.courier.recordEggAdded(EGG_WHITE);
 		}
-		q2_deliver_d2d3(r);
+		if(n <= 2) q2_deliver_d2d3(r);
 		q3_return_from_d2d3(r);
 	}
 }
