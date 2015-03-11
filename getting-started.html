@@ -1,0 +1,256 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting started &mdash; Team L205 IDP 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/breathe.css" type="text/css" />
+  
+
+  
+    <link rel="top" title="Team L205 IDP 1.0 documentation" href="index.html"/>
+        <link rel="next" title="Hardware access layer" href="hardware.html"/>
+        <link rel="prev" title="Index" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> Team L205 IDP</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#useful-programs">Useful programs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#when-things-go-wrong">When things go wrong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-the-docs">Building the docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware access layer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#low-level">Low level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#actuators">Actuators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hardware.html#sensors">Sensors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html">Color classification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="colors.html#api-documentation">Api documentation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="lines.html">Line following algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="routes.html">Navigation plan</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">Team L205 IDP</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Getting started</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/getting-started.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>A guide for the electronics and mechanics team, when they need to test.</p>
+<p>First of all, you&#8217;ll want to get a copy of the code. We&#8217;re using git for version control, so you can get that like this on the command line:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> <span class="nb">cd</span> ~/idp_shared/&lt;yourcrsid&gt;
+<span class="gp">$</span> git clone ~/idp_shared/Common/repo.git
+<span class="go">Initialized empty Git repository in /groups/IB/idp/idp-l205/efw27/repo/.git/</span>
+<span class="gp">$</span> <span class="nb">cd </span>repo
+</pre></div>
+</div>
+<p>After you&#8217;ve done this once, you should type the following every time the software team change the code:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> <span class="nb">cd</span> ~/idp_shared/&lt;yourcrsid&gt;/repo
+<span class="gp">$</span> git pull
+</pre></div>
+</div>
+<div class="section" id="useful-programs">
+<h2>Useful programs<a class="headerlink" href="#useful-programs" title="Permalink to this headline">¶</a></h2>
+<p>The following launches a keyboard interface for remote controlling the robot. Upon startup, it describes the key-mapping:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> ./test t_remote
+</pre></div>
+</div>
+<p>To test the competition code, use:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> ./test t_all
+</pre></div>
+</div>
+<p>Which allows you to enter the main routine at any point in the sequence</p>
+</div>
+<div class="section" id="when-things-go-wrong">
+<h2>When things go wrong<a class="headerlink" href="#when-things-go-wrong" title="Permalink to this headline">¶</a></h2>
+<p>You&#8217;ll get errors if things aren&#8217;t working. A common one is:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">terminate called after throwing an instance of &#39;LinkError&#39;</span>
+<span class="go">  what():  Host not found on network</span>
+<span class="go">./test: line 1: 22780 Aborted                 tests/$1.wifi</span>
+</pre></div>
+</div>
+<p>If this occurs, the robot is probably not yet powered. Wait for the blue LED. If all fails, pull the plug on it and try again.</p>
+<p>Another one is:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">terminate called after throwing an instance of &#39;PortError&#39;</span>
+<span class="go">  what():  Port P1 disconnected.</span>
+<span class="go">./test: line 1: 22780 Aborted                 tests/$1.wifi</span>
+</pre></div>
+</div>
+<p>Which indicates a missing or broken electronics board. You can debug further with:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> ./test t_conns
+<span class="go">constructed</span>
+<span class="go">initialized</span>
+<span class="go">Testing P1... Connected</span>
+<span class="go">Testing P2... Connected</span>
+<span class="go">Testing P3... Disconnected</span>
+</pre></div>
+</div>
+<p>If all fails, then the controller itself probably needs its power taken away.</p>
+<p><strong>TL;DR:</strong> turn it off and on again</p>
+</div>
+<div class="section" id="building-the-docs">
+<h2>Building the docs<a class="headerlink" href="#building-the-docs" title="Permalink to this headline">¶</a></h2>
+<p>This documentation is autogenerated. Building it is slightly involved, and won&#8217;t work on the department computers. It requires python and doxygen:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> pip install breathe sphinx_rtd_theme   <span class="c"># first time only</span>
+<span class="gp">$</span> <span class="nb">cd </span>docs
+<span class="gp">$</span> doxygen
+<span class="gp">$</span> make html  <span class="c"># or make.bat html on windows</span>
+</pre></div>
+</div>
+<p>The docs will be placed in <tt class="docutils literal"><span class="pre">docs/_build/html</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="hardware.html" class="btn btn-neutral float-right" title="Hardware access layer">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Index"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Eric Wieser, Matt Diesel.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

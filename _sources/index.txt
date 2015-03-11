@@ -4,6 +4,7 @@ Index
 .. toctree::
 	:maxdepth: 2
 
+	getting-started
 	hardware
 	colors
 	lines
