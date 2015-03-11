@@ -77,6 +77,8 @@ int main() {
 				case '/': robot.arm.open();  break;
 				case '*': robot.arm.close(); break;
 
+				case '#': std::cout << robot.bumper.read().position << std::endl; break;
+
 				case '.': {
 						auto egg = robot.detector.read().bestGuess;
 						std::cout << "Egg type: " << egg << "\r\n";
