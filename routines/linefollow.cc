@@ -29,8 +29,31 @@ const char* LineLost::what() const throw() {
 	@throws HardwareDamaged   Line state invalid for too long
 	                          Middle sensor broken? Wheels jammed?
 */
-GOTOJUNC_RET goToJunction_inner(Robot& r, float distance, bool atJunction = true) {
+
+
+bool until_junction(Robot&, const LineSensors::Reading& ls) {
+	return ls.state == LineSensors::Reading::JUNCTION;
+}
+
+bool until_switch(Robot& r, const LineSensors::Reading&) {
+	return std::isfinite(r.bumper.read().position);
+}
+
+bool until_xjunction(Robot&, const LineSensors::Reading& ls) {
+	return ls.state == LineSensors::Reading::JUNCTION && ls.lsa;
+}
+
+bool forever(Robot&, const LineSensors::Reading& ls) {
+	return false;
+}
+
+
+
+
+void followUntil(Robot& r, float distance, linefollowTerminator* terminator) {
 	std::deque<LineSensors::Reading::State> history;
+	std::deque<bool> terminateHistory;
+
 	Drive d = r.drive;
 
 	// Predict the time taken to get there, with a 10% margin
@@ -38,12 +61,13 @@ GOTOJUNC_RET goToJunction_inner(Robot& r, float distance, bool atJunction = true
 	Timeout timeout = tPredicted;
 
 	// assume we started on a junction
-	// bool atJunction = true;
+	bool terminateCleared = false;
 
 	while(1) {
 		// read the line sensors
 		auto line = r.ls.read();
 		history.push_front(line.state);
+		terminateHistory.push_front(terminator(r, line));
 
 		// if we know where the line is, adjust our course
 		if(std::isfinite(line.position)) {
@@ -59,17 +83,18 @@ GOTOJUNC_RET goToJunction_inner(Robot& r, float distance, bool atJunction = true
 		}
 
 		// look back over the history, to deal with bad readings
-		int nJunc = std::count(ALL(history), LineSensors::Reading::JUNCTION);
+		int nTerminated = std::count(ALL(terminateHistory), true);
+
 		int nNone = std::count(ALL(history), LineSensors::Reading::NONE);
 		int nInvalid = std::count(ALL(history), LineSensors::Reading::INVALID);
 
 		// if 3 of the last 5 readings have been junctions, we're done
-		if(!atJunction && nJunc >= 3)
-			return RET_JUNCTION;
+		if(terminateCleared && nTerminated >= 3)
+			return;
 
 		// if we started at a junction, and we're no longer on one, clear the flag
-		if(nJunc == 0)
-			atJunction = false;
+		if(nTerminated == 0)
+			terminateCleared = true;
 
 		// if the last 5 readings have been no line, we've failed
 		if(nNone == 5)
@@ -80,11 +105,12 @@ GOTOJUNC_RET goToJunction_inner(Robot& r, float distance, bool atJunction = true
 			throw HardwareDamaged();
 
 		// only keep the last 5 readings
-		if(history.size() > 5)
+		if(history.size() > 5) {
 			history.pop_back();
+			terminateHistory.pop_back();
+		}
 
-		if (timeout.hasexpired())
-			return RET_TIMEOUT;
+		timeout.check();
 
 		delay(milliseconds(10));
 	}
@@ -131,15 +157,11 @@ void reFindLine(Robot& r, float lastPos) {
 }
 
 
-GOTOJUNC_RET goToJunction(Robot& r, float distance, bool atJunction) {
+void goToJunction(Robot& r, float distance, linefollowTerminator* term) {
 	while(1) {
 		// try to follow the line to the appropriate distance
 		try{
-			auto ret = goToJunction_inner(r, distance, atJunction);
-			if (ret == RET_TIMEOUT) {
-				throw Timeout::Expired();
-			}
-			return ret;
+			return followUntil(r, distance, term);
 		}
 		catch(LineLost& lost) {
 			std::cout << "Lost: " << lost.what() << ", " << lost.distanceLeft << "m remain" << std::endl;
@@ -155,106 +177,34 @@ GOTOJUNC_RET goToJunction(Robot& r, float distance, bool atJunction) {
 	}
 }
 
-// turns = number of 90deg turns, CW +ve
-void turnAtJunction(Robot& r, int turns) {
-#ifdef ZOOLANDER
-	turns = 1;
-#endif
-	turns = turns % 4;
-	if (turns == 0) return;
-
+void turnAtJunction(Robot& r, int turns, bool goForward) {
 	int sign = (turns < 0) ? -1 : 1;
 
-	// Past Line - True if in order to turn we should cross 2 lines
-	// according to the linefollower return.
-	int linesLeft = turns*sign;
+	Drive d = r.drive;
 
-	try {
-		auto ret = goToJunction_inner(r, 0.14);
-
-		if (ret == RET_JUNCTION) {
+	if(goForward) {
+		try {
+			followUntil(r, 0.14, until_junction);
+			std::cout << "Got to junction early" << std::endl;
 			// Maybe throw an error?
 		}
-
-		// If we are already to the left of the line then
-		// one less to cross over.
-		auto line = r.ls.read();
-		if(!line.lsc && (line.position*sign < 0))
-			linesLeft--;
-	}
-	catch (LineLost& lost) {
-		r.drive.straight(lost.distanceLeft).wait();
-
-		// If line was lost behind then don't cross it.
-		if (lost.lastReading.position == 0.0f)
-			linesLeft--;
-		else // If line is lost
-			if ((sign > 0) == (lost.lastReading.position < 0.0f))
-				linesLeft--;
-	}
-
-	{
-		Drive d = r.drive;
-		Timeout real_t = d.turn(turns * 90);
-		Timeout early_t = real_t - d.timeForTurn(sign*30);
-		Timeout late_t = real_t + d.timeForTurn(sign*30);
-
-		auto& t = late_t;
-
-		int state = 2;
-		while (state != 3 || (linesLeft > 0)) {
-			auto line = r.ls.read();
-
-			if (t.hasexpired() && state < 3) {
-				state = 4;
-			}
-
-			switch (state) {
-				case 1: // On line
-					if (!line.lsc)
-						state = 2;
-					break;
-				case 2: // Past line
-					if ((linesLeft <= 0 && early_t.hasexpired())
-							&& ((line.lsr && sign < 0) || (line.lsl && sign > 0))) {
-						d.turn(10, 0.4);
-						state = 7;
-					}
-
-					if (line.lsc) {
-						state = (linesLeft <= 0 && early_t.hasexpired()) ? 3 : 1;
-						linesLeft--;
-					}
-					break;
-				case 7: // Slow down to line
-					if (line.lsc) {
-						state = 3;
-					}
-					break;
-				case 3: // On final line
-					d.stop();
-					break;
-				case 4: // probably gone too far?
-					t = d.turn(sign * 30);
-					state = 5;
-					break;
-				case 5: // Gone to far, sweeping back
-					if (line.lsc) 
-						state = 3;
-					else if (t.hasexpired()) {
-						t = d.turn(sign * -60);
-						state = 6;
-					}
-					break;
-				case 6: // Gone to far, sweep forwards again?
-					if (line.lsc) 
-						state = 3;
-					else if (t.hasexpired())
-						throw LineLost(line, 0);
-					break;
-			}
+		catch (LineLost& lost) {
+			r.drive.straight(lost.distanceLeft).wait();
 		}
+		catch (Timeout::Expired) { }
 	}
 
+	Timeout real_t = d.turn(turns * 90);
+	Timeout early_t = real_t - d.timeForTurn(sign*30);
+	Timeout late_t = real_t + d.timeForTurn(sign*30);
 
+	int lines = 0;
+	while(!early_t.hasexpired());
+
+	while(!late_t.hasexpired()) {
+		auto line = r.ls.read();
+		if(line.state != LineSensors::Reading::NONE) return;
+	}
+
+	reFindLine(r, sign);
 }
