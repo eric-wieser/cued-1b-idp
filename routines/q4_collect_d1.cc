@@ -18,11 +18,12 @@ void q4_collect_d1(Robot& r) {
 	auto line = r.ls.read();
 
 	if (line.state != LineSensors::Reading::JUNCTION) {
-		r.drive.straight(-0.1);
+		r.drive.straight(-0.2).wait();
+		r.drive.move({forward: 1, steer: -0.2});
 
 		do {
 			line = r.ls.read();
-		} while (line.state != LineSensors::Reading::JUNCTION);
+		} while (!line.lsc);
 
 		r.drive.stop();
 	}
