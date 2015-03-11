@@ -45,9 +45,9 @@ void goToConveyor(Robot& r, bool east)
 
 
 void checkpoint(Robot& r, std::string id) {
-	r.drive.stop();
+	// r.drive.stop();
 	std::cout << "Checkpoint: " << id << std::endl;
-	std::cin.get();
+	// std::cin.get();
 }
 
 
