@@ -1,5 +1,6 @@
 #include "robot.h"
 #include "util/tracker.h"
+#include "dev/courier.h"
 
 #include "common.h"
 
@@ -89,12 +90,45 @@ void dropEggs(Robot& r, int n) {
 	while(r.bumper.read().position != 0);
 	r.drive.stop();
 
-	for(int i = 0; i < n; i++) {
-		if(i != 0) {
-			delay(500); // to allow the previous egg to be removed
+	try {
+		for(int i = 0; i < n; i++) {
+			if(i != 0) {
+				delay(500); // to allow the previous egg to be removed
+			}
+			std::cout << "Dropping egg " << r.courier.egg(0) << std::endl;
+
+			// Check light gate
+			if (!r.courier.eggDetected()) {
+				// Wobble
+				
+				r.drive.straight(-0.06f).wait();
+
+				auto line = r.ls.read();
+				for (int i = 0; i < 5 && !r.courier.eggDetected(); i++) {
+					r.drive.turn(10).wait();
+					r.drive.stop();
+					r.drive.turn(-10);
+					do {
+						line = r.ls.read();
+					} while (!line.lsc);
+					r.drive.stop();
+				}
+
+				// Return to box TODO: TIMEOUT
+				r.drive.move({forward: 0.5, steer: 0});
+				while(r.bumper.read().position != 0);
+				r.drive.stop();
+
+				if (!r.courier.eggDetected()) {
+					throw Courier::NoEgg();
+				}
+			}
+			r.courier.unloadEgg();
 		}
-		std::cout << "Dropping egg " << r.courier.egg(0) << std::endl;
-		r.courier.unloadEgg();
+	}
+	catch (const Courier::NoEgg& ne) {
+		// Ignore.
+		throw;
 	}
 
 	// undo the straight motion (TODO: match time)

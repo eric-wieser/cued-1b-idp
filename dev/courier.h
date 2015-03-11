@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <stdexcept>
 #include "device.h"
 #include "ports.h"
 #include "../eggtype.h"
@@ -42,4 +43,6 @@ public:
 	int volume() const;
 
 	bool eggDetected() const;
+
+	struct NoEgg : public std::exception {};
 };

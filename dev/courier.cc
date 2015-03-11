@@ -4,6 +4,7 @@
 #include "ports.h"
 #include "robot_delay.h"
 #include "drive.h"
+#include "linesensors.h"
 
 
 static const float holdSpeed = -0.5;
@@ -58,7 +59,7 @@ void Courier::recordEggAdded(EggType egg_t) {
 void Courier::unloadEgg() {
 	assert(_volume != 0);
 
-	// move the motor. TODO: use light gate
+	// move the motor. 
 	_r.command(MOTOR_3_GO, Drive::convertSpeed(dropSpeed));
 	delay(1000);
 	_r.command(MOTOR_3_GO, Drive::convertSpeed(liftSpeed));
@@ -77,4 +78,6 @@ void Courier::unloadEgg() {
 
 int Courier::volume() const { return _volume; }
 EggType Courier::egg(int n) const { return _contents[n]; }
-bool Courier::eggDetected() const { std::cout << int(int8_t(_lightGatePort)) << std::endl; return uint8_t(_lightGatePort) != 0; }
+// bool Courier::eggDetected() const { std::cout << int(int8_t(_lightGatePort)) << std::endl; return uint8_t(_lightGatePort) != 0; }
+
+bool Courier::eggDetected() const { return false; }
