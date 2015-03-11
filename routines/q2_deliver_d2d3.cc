@@ -34,6 +34,7 @@ void q2_deliver_d2d3(Robot& r) {
 	std::cout << "Departed conveyor and found line" << std::endl;
 
 	goToJunction(r, 0.30);
+	checkpoint(r, "Junction Before Ramp");
 	turnAtJunction(r, 1);
 	checkpoint(r, "Looking up ramp");
 
