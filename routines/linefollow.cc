@@ -104,9 +104,9 @@ void followUntil_once(Robot& r, float distance, linefollowTerminator* terminator
 		if(nNone == 5)
 			throw LineLost(line, timeout.remaining() / tPredicted * distance);
 
-		// if the last 5 readings have been invalid...
-		if(nInvalid == 5)
-			throw HardwareDamaged();
+		// // if the last 5 readings have been invalid...
+		// if(nInvalid == 5)
+		// 	throw HardwareDamaged();
 
 		// only keep the last 5 readings
 		if(history.size() > 5) {
@@ -193,7 +193,7 @@ void turnAtJunction(Robot& r, int turns, bool goForward) {
 
 	if(goForward) {
 		try {
-			followUntil_once(r, 0.18, NULL);
+			followUntil_once(r, 0.17, NULL);
 		}
 		catch (LineLost& lost) {
 			r.drive.straight(lost.distanceLeft).wait();
