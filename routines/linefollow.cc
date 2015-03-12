@@ -54,7 +54,7 @@ void followUntil_once(Robot& r, float distance, linefollowTerminator* terminator
 	std::deque<LineSensors::Reading::State> history;
 	std::deque<bool> terminateHistory;
 
-	Drive& d = r.drive;
+	Drive d = r.drive;
 
 	// Predict the time taken to get there
 	duration<float> tPredicted = r.drive.timeForStraight(distance);
