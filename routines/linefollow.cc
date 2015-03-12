@@ -54,10 +54,14 @@ void followUntil(Robot& r, float distance, linefollowTerminator* terminator) {
 	std::deque<LineSensors::Reading::State> history;
 	std::deque<bool> terminateHistory;
 
-	Drive d = r.drive;
+	Drive& d = r.drive;
 
-	// Predict the time taken to get there, with a 10% margin
-	duration<float> tPredicted(distance / r.drive.maxSpeeds.linear * 1.1f);
+	// Predict the time taken to get there
+	duration<float> tPredicted = r.drive.timeForStraight(distance);
+
+	// add a 25% margin before timing out for non-timed code
+	if(terminator != NULL) tPredicted = tPredicted * 1.25 + duration<float>(0.25);
+
 	Timeout timeout = tPredicted;
 
 	// assume we started on a junction
@@ -67,7 +71,7 @@ void followUntil(Robot& r, float distance, linefollowTerminator* terminator) {
 		// read the line sensors
 		auto line = r.ls.read();
 		history.push_front(line.state);
-		terminateHistory.push_front(terminator(r, line));
+		terminateHistory.push_front(terminator ? terminator(r, line) : false);
 
 		// if we know where the line is, adjust our course
 		if(std::isfinite(line.position)) {
@@ -110,7 +114,12 @@ void followUntil(Robot& r, float distance, linefollowTerminator* terminator) {
 			terminateHistory.pop_back();
 		}
 
-		timeout.check();
+
+		// if a terminator is specified, throw if we reatch a timeout first. Otherwise, return
+		if(terminator != NULL)
+			timeout.check();
+		else if(timeout.hasexpired())
+			return;
 
 		delay(milliseconds(10));
 	}
@@ -184,21 +193,17 @@ void turnAtJunction(Robot& r, int turns, bool goForward) {
 
 	if(goForward) {
 		try {
-			followUntil(r, 0.14, until_junction);
-			std::cout << "Got to junction early" << std::endl;
-			// Maybe throw an error?
+			followUntil(r, 0.18, NULL);
 		}
 		catch (LineLost& lost) {
 			r.drive.straight(lost.distanceLeft).wait();
 		}
-		catch (Timeout::Expired) { }
 	}
 
 	Timeout real_t = d.turn(turns * 90);
 	Timeout early_t = real_t - d.timeForTurn(sign*30);
 	Timeout late_t = real_t + d.timeForTurn(sign*30);
 
-	int lines = 0;
 	while(!early_t.hasexpired());
 
 	while(!late_t.hasexpired()) {
