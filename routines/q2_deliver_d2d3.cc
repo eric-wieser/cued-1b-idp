@@ -39,7 +39,10 @@ void q2_deliver_d2d3(Robot& r) {
 			r.drive.stop();
 
 			// run until the limit switches go
-			dropEggs(r, r.courier.egg(1) == EGG_BROWN ? 2 : 1);
+			int n = 1;
+			if(r.courier.egg(n) == EGG_BROWN) n++;
+			if(r.courier.egg(n) == EGG_BROWN) n++;
+			dropEggs(r, n);
 
 			// undo the curved motion
 			r.drive.move({forward: -0.35, steer: -0.65});
