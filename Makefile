@@ -29,7 +29,6 @@ include .depend
 %.arm.robot: $(OBJS_ARM) %.arm.o
 	$(RCC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 %.robot: %.arm.robot
-	echo $(OBJS_ARM)
 	scp $< team@wlan-robot5.private:$@
 	echo "ssh team@wlan-robot5.private ./$@" > $@
 	chmod +x $@
