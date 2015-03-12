@@ -81,7 +81,7 @@ public:
 	const port::Name port;  ///< the port causing the issue
 	const uint8_t pins;     ///< the mask of pins that have already been allocated
 
-	PinsDoublyMapped(port::Name p, uint8_t mask): port(p), pins(mask), _message() {}
+	PinsDoublyMapped(port::Name p, uint8_t mask): _message(), port(p), pins(mask) {}
 	~PinsDoublyMapped() throw() {}
 
 	virtual const char* what() const throw() {
