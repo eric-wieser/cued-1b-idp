@@ -21,7 +21,8 @@ if len(data) < 4:
 
 # find mean and covariance
 stats = {}
-for t, rs in itertools.groupby(data, key=lambda e: e.actual):
+key_func = lambda e: e.actual
+for t, rs in itertools.groupby(sorted(data, key=key_func), key=key_func):
 	rs = np.array([r.c for r in rs])
 
 	mean = np.mean(rs, axis=0)
