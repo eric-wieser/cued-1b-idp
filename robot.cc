@@ -57,7 +57,7 @@ Robot::Robot(RLink& rlink) :
 	bumper(rlink, port::P2)
 {
     drive.maxSpeeds = Drive::Speeds {
-        linear: 0.185308f,
+        linear: 0.182f,
         rotary: 80.0533689126084f
     };
 }
