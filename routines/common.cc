@@ -136,7 +136,6 @@ void dropEggs(Robot& r, int n) {
 			auto line = r.ls.read();
 			for (int i = 0; i < 5 && !r.courier.eggDetected(); i++) {
 				r.drive.turn(10).wait();
-				r.drive.stop();
 				Timeout t = r.drive.turn(-15);
 				do {
 					line = r.ls.read();
