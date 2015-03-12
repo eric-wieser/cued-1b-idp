@@ -8,7 +8,7 @@ void q2_deliver_d2d3(Robot& r) {
 
 	delay(1000);
 	waitForLine(r, negate { LineSensors::Reading::NONE });
-	std::cout << "Departed conveyor and found line" << std::endl;
+	checkpoint(r, "Departed conveyor and found line");
 
 	followUntil(r, 0.30, until_junction);
 	checkpoint(r, "Junction Before Ramp");
@@ -52,7 +52,7 @@ void q2_deliver_d2d3(Robot& r) {
 			dropEggs(r, 1);
 		}
 	}
+	checkpoint(r, "Returned to delivery nexus");
 
 	r.drive.straight(-0.3).wait();
-	std::cout << "At delivery nexus" << std::endl;
 }
