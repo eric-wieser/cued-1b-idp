@@ -14,9 +14,9 @@ int main() {
 
 	Robot r(link);
 
-	goToJunction(r, 1);
+	followUntil(r, 1, until_junction);
 	std::cout << "Junction" << std::endl;
 	turnAtJunction(r, -2);
 	std::cout << "Turned" << std::endl;
-	goToJunction(r, 1);
+	followUntil(r, 1, until_junction);
 }
