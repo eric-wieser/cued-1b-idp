@@ -33,6 +33,7 @@ void Courier::_updateLeds() {
 		case EGG_WHITE: mask &= ~0b000001; break;
 		case EGG_BROWN: mask &= ~0b000010; break;
 		case EGG_TASTY: mask &= ~0b000011; break;
+		default: break;
 	}
 
 
@@ -40,12 +41,14 @@ void Courier::_updateLeds() {
 		case EGG_WHITE: mask &= ~0b000100; break;
 		case EGG_BROWN: mask &= ~0b001000; break;
 		case EGG_TASTY: mask &= ~0b001100; break;
+		default: break;
 	}
 
 	switch(_contents[0]) {
 		case EGG_WHITE: mask &= ~0b010000; break;
 		case EGG_BROWN: mask &= ~0b100000; break;
 		case EGG_TASTY: mask &= ~0b110000; break;
+		default: break;
 	}
 
 	_ledPort = mask;
