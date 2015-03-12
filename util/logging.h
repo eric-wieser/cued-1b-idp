@@ -51,7 +51,10 @@ public:
 	Logger(Logger&& other);
 
 	~Logger() {
-		*this << "[done]" << std::endl;
+		if(std::uncaught_exception())
+			*this << "[threw]" << std::endl;
+		else
+			*this << "[done]" << std::endl;
 		_active = this->parent;
 	}
 

@@ -1,32 +1,38 @@
 #include "util/tracker.h"
 #include "subroutines.h"
 
+#include "util/logging.h"
+
 
 void q2_deliver_d2d3(Robot& r) {
+	Logger l("Q2: deliver D2 + D3");
+
 	Tracker::instance()->logPose(0.2, -0.8, 0);
 	r.drive.move({forward: 1, steer: 0.5});
 
 	delay(1000);
 	waitForLine(r, negate { LineSensors::Reading::NONE });
-	checkpoint(r, "Departed conveyor and found line");
+
+	l.checkpoint(r, "Departed conveyor and found line");
 
 	followUntil(r, 0.30, until_junction);
-	checkpoint(r, "Junction Before Ramp");
+	l.checkpoint(r, "Junction Before Ramp");
+
 	turnAtJunction(r, 1);
-	checkpoint(r, "Looking up ramp");
+	l.checkpoint(r, "Looking up ramp");
 
 	followUntil(r, 999999, until_junction); // ramps takes forever, so just drop the timeout
-	checkpoint(r, "Top of ramp");
+	l.checkpoint(r, "Top of ramp");
 
 	turnAtJunction(r, 1);
-	checkpoint(r, "Looking along plateau");
+	l.checkpoint(r, "Looking along plateau");
 
 	followUntil(r, 0.86, until_junction);
-	checkpoint(r, "At plateau center");
+	l.checkpoint(r, "At plateau center");
 
 	followUntil(r, 0.86, until_junction);
 	r.drive.straight(0.1).wait();
-	checkpoint(r, "At delivery nexus");
+	l.checkpoint(r, "At delivery nexus");
 
 	while(r.courier.volume() != 0) {
 		if(r.courier.egg(0) == EGG_BROWN) {
@@ -55,7 +61,7 @@ void q2_deliver_d2d3(Robot& r) {
 			dropEggs(r, 1);
 		}
 	}
-	checkpoint(r, "Returned to delivery nexus");
+	l.checkpoint(r, "Returned to delivery nexus");
 
 	r.drive.straight(-0.3).wait();
 }

@@ -2,7 +2,11 @@
 #include "util/tracker.h"
 #include "subroutines.h"
 
+#include "util/logging.h"
+
 void q5_deliver_d1(Robot& r) {
+	Logger l("Q5: deliver D1 + rest");
+
 	// Rotate CCW 90 around left wheel
 
 	r.drive.move({
@@ -12,11 +16,11 @@ void q5_deliver_d1(Robot& r) {
 
 	Timeout(r.drive.timeForTurn(90, 0.5)).wait();
 
-	checkpoint(r, "Exploring the unknown");
+	l.checkpoint(r, "Exploring the unknown");
 	r.drive.straight(0.30).wait();
 
 	// Turn CCW
-	checkpoint(r, "Avoiding the ramp");
+	l.checkpoint(r, "Avoiding the ramp");
 	r.drive.turn(40).wait();
 	r.drive.straight(0.1).wait();
 
@@ -25,10 +29,10 @@ void q5_deliver_d1(Robot& r) {
 		reading = r.ls.read();
 	} while (!reading.lsc);
 
-	checkpoint(r, "Going past the line");
+	l.checkpoint(r, "Going past the line");
 	r.drive.straight(0.14).wait();
 
-	checkpoint(r, "Spinning onto the line");
+	l.checkpoint(r, "Spinning onto the line");
 	r.drive.move({
 		forward: 0.0f,
 		steer: 1.0f
@@ -38,12 +42,12 @@ void q5_deliver_d1(Robot& r) {
 		reading = r.ls.read();
 	} while (!reading.lsc);
 
-	checkpoint(r, "Going to a junction");
+	l.checkpoint(r, "Going to a junction");
 	followUntil(r, 0.2, until_junction);
 
-	checkpoint(r, "Turning Right");
+	l.checkpoint(r, "Turning Right");
 	turnAtJunction(r, -1);
 
-	checkpoint(r, "Going to the box");
+	l.checkpoint(r, "Going to the box");
 	dropEggs(r, r.courier.volume());
 }

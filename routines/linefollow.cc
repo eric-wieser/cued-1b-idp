@@ -5,6 +5,7 @@
 #include <chrono>
 #include "util/utils.h"
 #include "util/timeout.h"
+#include "util/logging.h"
 #include "robot.h"
 
 #include "linefollow.h"
@@ -167,19 +168,20 @@ void reFindLine(Robot& r, float lastPos) {
 
 
 void followUntil(Robot& r, float distance, linefollowTerminator* term) {
+	Logger::active() << "Following line for " << distance << "m..." << std::endl;
 	while(1) {
 		// try to follow the line to the appropriate distance
 		try{
 			return followUntil_once(r, distance, term);
 		}
 		catch(LineLost& lost) {
-			std::cout << "Lost: " << lost.what() << ", " << lost.distanceLeft << "m remain" << std::endl;
+			Logger::active() << "Lost: " << lost.what() << ", " << lost.distanceLeft << "m remain" << std::endl;
 			distance = lost.distanceLeft;
 			try {
 				reFindLine(r, lost.lastReading.position);
 			}
 			catch (NoLineFound) {
-				std::cout << "Could not refind" << std::endl;
+				Logger::active() << "Could not refind" << std::endl;
 				throw lost;
 			}
 		}
@@ -191,14 +193,19 @@ void turnAtJunction(Robot& r, int turns, bool goForward) {
 
 	Drive d = r.drive;
 
+
 	if(goForward) {
 		try {
+			Logger::active() << "Driving over junction" << std::endl;
 			followUntil_once(r, 0.17, NULL);
 		}
 		catch (LineLost& lost) {
+			Logger::active() << "Lost line at junction - continueing" << std::endl;
 			r.drive.straight(lost.distanceLeft).wait();
 		}
 	}
+
+	Logger::active() << "Turning " << (turns * 90) << "deg" << std::endl;
 
 	Timeout real_t = d.turn(turns * 90);
 	Timeout early_t = real_t - d.timeForTurn(sign*30);

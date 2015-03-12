@@ -3,6 +3,8 @@
 #include "dev/courier.h"
 
 #include "common.h"
+#include "util/logging.h"
+#include "linefollow.h"
 
 
 void waitForLine(Robot& r, LineSensors::Reading::State s) {
@@ -53,6 +55,7 @@ void checkpoint(Robot& r, std::string id) {
 
 void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect)
 {
+	Logger& l = Logger::active();
 	Drive::move_args args = {forward: 1, steer: -0.2};
 
 	for(int i  = 0; i < 5; i++) {
@@ -65,7 +68,7 @@ void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect)
 			r.drive.stop();
 			delay(100);
 			auto reading = r.detector.read();
-			std::cout << "Egg at station " << i << ": " << reading.bestGuess << std::endl;
+			l << "Egg at station " << i << ": " << reading.bestGuess << std::endl;
 
 			if (shouldCollect(reading)) {
 				r.drive.straight(0.1).wait();
@@ -78,6 +81,8 @@ void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect)
 
 				r.courier.recordEggAdded(reading.bestGuess);
 			}
+		} else {
+			l << "Egg at station " << i << " ignored" << std::endl;
 		}
 	}
 	r.drive.stop();
@@ -120,21 +125,24 @@ void dropEggs(Robot& r, int n) {
 	// inch forward until the limit switch is hit
 	auto returnTime = driveToBumper(r);
 
+	Logger l = Logger::active().child("Dropping eggs");
 
 	for(int i = 0; i < n; i++) {
 		if(i != 0) {
 			delay(500); // to allow the previous egg to be removed
 		}
-		std::cout << "Dropping egg " << r.courier.egg(0) << std::endl;
+		l << r.courier.egg(0) << " egg" << std::endl;
 
 		// Check light gate
 		if (!r.courier.eggDetected()) {
 			// Wobble
+			l << "egg not in dropper - wiggle";
 
 			r.drive.straight(-0.06f).wait();
 
 			auto line = r.ls.read();
-			for (int i = 0; i < 5 && !r.courier.eggDetected(); i++) {
+			int i;
+			for (i = 0; i < 5 && !r.courier.eggDetected(); i++) {
 				r.drive.turn(10).wait();
 				Timeout t = r.drive.turn(-15);
 				do {
@@ -142,6 +150,7 @@ void dropEggs(Robot& r, int n) {
 				} while (!line.lsc && !t.hasexpired());
 				r.drive.stop();
 			}
+			l << "took " << (i + 1) << " wiggle(s)" << std::endl;
 
 			// Return to box TODO: TIMEOUT
 			driveToBumper(r);

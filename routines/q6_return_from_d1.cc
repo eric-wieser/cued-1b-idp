@@ -2,7 +2,10 @@
 #include "util/tracker.h"
 #include "subroutines.h"
 
+#include "util/logging.h"
+
 void q6_return_from_d1(Robot& r) {
+	Logger l("Q6: return to starting zone");
 	turnAtJunction(r, 1, false);
 	followUntil(r, 1, until_junction);
 	turnAtJunction(r, 1);
