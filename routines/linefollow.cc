@@ -50,7 +50,7 @@ bool forever(Robot&, const LineSensors::Reading& ls) {
 
 
 
-void followUntil(Robot& r, float distance, linefollowTerminator* terminator) {
+void followUntil_once(Robot& r, float distance, linefollowTerminator* terminator) {
 	std::deque<LineSensors::Reading::State> history;
 	std::deque<bool> terminateHistory;
 
@@ -166,11 +166,11 @@ void reFindLine(Robot& r, float lastPos) {
 }
 
 
-void goToJunction(Robot& r, float distance, linefollowTerminator* term) {
+void followUntil(Robot& r, float distance, linefollowTerminator* term) {
 	while(1) {
 		// try to follow the line to the appropriate distance
 		try{
-			return followUntil(r, distance, term);
+			return followUntil_once(r, distance, term);
 		}
 		catch(LineLost& lost) {
 			std::cout << "Lost: " << lost.what() << ", " << lost.distanceLeft << "m remain" << std::endl;
@@ -193,7 +193,7 @@ void turnAtJunction(Robot& r, int turns, bool goForward) {
 
 	if(goForward) {
 		try {
-			followUntil(r, 0.18, NULL);
+			followUntil_once(r, 0.18, NULL);
 		}
 		catch (LineLost& lost) {
 			r.drive.straight(lost.distanceLeft).wait();

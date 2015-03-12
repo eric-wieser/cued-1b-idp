@@ -10,21 +10,21 @@ void q2_deliver_d2d3(Robot& r) {
 	waitForLine(r, negate { LineSensors::Reading::NONE });
 	std::cout << "Departed conveyor and found line" << std::endl;
 
-	goToJunction(r, 0.30);
+	followUntil(r, 0.30, until_junction);
 	checkpoint(r, "Junction Before Ramp");
 	turnAtJunction(r, 1);
 	checkpoint(r, "Looking up ramp");
 
-	goToJunction(r, 999999); // ramps takes forever, so just drop the timeout
+	followUntil(r, 999999, until_junction); // ramps takes forever, so just drop the timeout
 	checkpoint(r, "Top of ramp");
 
 	turnAtJunction(r, 1);
 	checkpoint(r, "Looking along plateau");
 
-	goToJunction(r, 0.86);
+	followUntil(r, 0.86, until_junction);
 	checkpoint(r, "At plateau center");
 
-	goToJunction(r, 0.86);
+	followUntil(r, 0.86, until_junction);
 	r.drive.straight(0.1).wait();
 	checkpoint(r, "At delivery nexus");
 

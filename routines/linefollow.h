@@ -32,7 +32,7 @@ extern linefollowTerminator until_switch;
 extern linefollowTerminator until_xjunction;
 extern linefollowTerminator forever;
 
-void goToJunction(Robot& r, float distance, linefollowTerminator* terminator = &until_junction);
+void followUntil(Robot& r, float distance, linefollowTerminator* terminator = &until_junction);
 
 
 /** Turns the robot at a junction

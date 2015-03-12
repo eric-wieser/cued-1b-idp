@@ -39,7 +39,7 @@ void q5_deliver_d1(Robot& r) {
 	} while (!reading.lsc);
 
 	checkpoint(r, "Going to a junction");
-	goToJunction(r, 0.2);
+	followUntil(r, 0.2, until_junction);
 
 	checkpoint(r, "Turning Right");
 	turnAtJunction(r, -1);

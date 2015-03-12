@@ -4,9 +4,9 @@
 
 void q6_return_from_d1(Robot& r) {
 	turnAtJunction(r, 1, false);
-	goToJunction(r, 1);
+	followUntil(r, 1, until_junction);
 	turnAtJunction(r, 1);
-	goToJunction(r, 0.70);
-	goToJunction(r, 0.25);
+	followUntil(r, 0.70, until_junction);
+	followUntil(r, 0.25, until_junction);
 	r.drive.straight(0.1).wait();
 }
