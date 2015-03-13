@@ -265,8 +265,15 @@ breathe_projects = { "idp": "_doxyxml" }
 breathe_default_project = 'idp'
 breathe_default_members = ('members')
 
-import sphinx_rtd_theme
-html_theme = 'sphinx_rtd_theme'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+
+read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+
+if read_the_docs_build:
+
+    subprocess.call('cd ../doxygen; doxygen', shell=True)
+else:
+	import sphinx_rtd_theme
+	html_theme = 'sphinx_rtd_theme'
+	html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 highlight_language = 'c++'
