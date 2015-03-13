@@ -277,3 +277,6 @@ else:
 	html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 highlight_language = 'c++'
+
+
+graphviz_output_format = 'svg'
