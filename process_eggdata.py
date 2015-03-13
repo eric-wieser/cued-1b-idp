@@ -60,5 +60,18 @@ text = top_template.format(
 )
 
 
+for d in data:
+	r = {}
+	for name in order:
+		mean, cov = stats[name]
+		dx = d.c - mean
+
+		r[name] = np.dot(np.dot(dx.T, np.linalg.inv(cov)), dx)
+
+	which = min(r, key=lambda k: r[k])
+
+	if d.actual != which:
+		print "Actually", d.actual, "Predicted", which, r
+
 with open("egg_stats.cc", "w") as f:
 	print >> f, text
