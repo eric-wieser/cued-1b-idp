@@ -1,6 +1,5 @@
 
 #include "robot.h"
-#include "util/timing.h"
 #include "dev/ports.h"
 
 /*
