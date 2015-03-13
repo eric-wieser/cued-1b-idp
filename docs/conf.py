@@ -30,7 +30,7 @@ import os
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.mathjax', 'breathe'
+	'sphinx.ext.mathjax', 'breathe'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -229,8 +229,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'teaml205idp', 'Team L205 IDP Documentation',
-     ['Eric Wieser, Matt Diesel'], 1)
+	('index', 'teaml205idp', 'Team L205 IDP Documentation',
+	 ['Eric Wieser, Matt Diesel'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -269,8 +269,8 @@ breathe_default_members = ('members')
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 if read_the_docs_build:
-
-    subprocess.call('cd ../doxygen; doxygen', shell=True)
+	import subprocess
+	subprocess.call('doxygen', shell=True)
 else:
 	import sphinx_rtd_theme
 	html_theme = 'sphinx_rtd_theme'
