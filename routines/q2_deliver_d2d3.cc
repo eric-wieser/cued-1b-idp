@@ -36,9 +36,11 @@ void q2_deliver_d2d3(Robot& r) {
 
 	while(r.courier.volume() != 0) {
 		if(r.courier.egg(0) == EGG_BROWN) {
+			Drive::move_args curve = {forward: 0.35, steer: 0.65};
+
 			// curve left, until we intersect the line
-			r.drive.move({forward: 0.35, steer: 0.65});
-			Timeout(r.drive.timeForTurn(45, 0.65)).wait();
+			r.drive.move(curve);
+			Timeout(r.drive.timeForTurn(45, curve.steer)).wait();
 
 			while(r.ls.read().lsc);
 			while(!r.ls.read().lsc);
@@ -51,10 +53,24 @@ void q2_deliver_d2d3(Robot& r) {
 			dropEggs(r, n);
 
 			// undo the curved motion
-			r.drive.move({forward: -0.35, steer: -0.65});
-			Timeout(r.drive.timeForTurn(-45, 0.65)).wait();
-			while(r.ls.read().lsc);
-			while(!r.ls.read().lsc);
+			for(int retries = 0; retries < 2; retries++) {
+				r.drive.move({forward: -curve.forward, steer: -curve.steer});
+
+				// ignore the first 45 degrees of the turn
+				if(retries == 0) Timeout(r.drive.timeForTurn(-45, curve.steer)).wait();
+
+				// wait for the line, but time out reverse and repeat if we hit the box
+				try {
+					Timeout t = r.drive.timeForTurn(-90, curve.steer);
+					while(r.ls.read().lsc) t.check();
+					while(!r.ls.read().lsc) t.check();
+					break;
+				}
+				catch(Timeout::Expired) {
+					l << "Got stuck - reversing" << std::endl;
+					r.drive.straight(-0.1).wait();
+				}
+			}
 			r.drive.stop();
 		}
 		else {
