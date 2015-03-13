@@ -34,7 +34,7 @@
   
     <link rel="top" title="Team L205 IDP 1.0 documentation" href="index.html"/>
         <link rel="next" title="Color classification" href="colors.html"/>
-        <link rel="prev" title="Getting started" href="getting-started.html"/> 
+        <link rel="prev" title="Index" href="index.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -66,22 +66,13 @@
           
           
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting started</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#useful-programs">Useful programs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#when-things-go-wrong">When things go wrong</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting-started.html#building-the-docs">Building the docs</a></li>
-</ul>
-</li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Hardware access layer</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#low-level">Low level</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#actuators">Actuators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sensors">Sensors</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="colors.html">Color classification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="colors.html#api-documentation">Api documentation</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="colors.html">Color classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lines.html">Line following algorithm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="routes.html">Navigation plan</a></li>
 </ul>
@@ -121,13 +112,8 @@
             
   <div class="section" id="hardware-access-layer">
 <span id="hardware"></span><h1>Hardware access layer<a class="headerlink" href="#hardware-access-layer" title="Permalink to this headline">¶</a></h1>
-<p>To ensure hardware is operated correctly, each independant electronic subsystem
-is encapsulated in a class. This also allows us to make meaningful constructors
-and destructors, such as: setting up ports for inputs; turning off LEDs at
-shutdown; driving a motor slowly to hold the deliverer at startup.</p>
 <div class="section" id="low-level">
 <h2>Low level<a class="headerlink" href="#low-level" title="Permalink to this headline">¶</a></h2>
-<p>A bunch of utility classes to help implement the higher-level abstractions.</p>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_r_link"></span><em>class</em> <tt class="descname">RLink</tt></dt>
@@ -215,16 +201,20 @@ shutdown; driving a motor slowly to hold the deliverer at startup.</p>
 
 <div class="section" id="exceptions">
 <h3>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h3>
-<p>To prevent errors silently occuring without being noticed (or worse, error
-codes being handled as values), exceptions are used for all critical errors.
-These all derive from <cite>std::exception</cite>, and implement the <cite>const char* what()</cite>
-member to give a brief summary of the error to the programmer, to allow them to
-fix the appropriate electrical/network problem.</p>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_link_error"></span><em>class</em> <tt class="descname">LinkError</tt></dt>
 <dd><p>Thrown when an <a class="reference internal" href="#project0class_r_link"><em>RLink</em></a> command or request goes wrong. </p>
 <p>Contains the original error code </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0class_link_error_1a6dd2b7730a717d62de2f3bd514b048ac"></span>virtual const char * <tt class="descname">what</tt><big>(</big><big>)</big> const</dt>
+<dd><p>override of std::exception::what() </p>
+</dd></dl>
+
+</div>
 <div class="breathe-sectiondef container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="variable">
@@ -253,6 +243,15 @@ fix the appropriate electrical/network problem.</p>
 <span class="target" id="project0struct_port_error"></span><em>struct</em> <tt class="descname">PortError</tt></dt>
 <dd><p>Specialization of <a class="reference internal" href="#project0class_link_error"><em>LinkError</em></a>, thrown when an I2C error occurs when accessing a port. </p>
 <p>Typically implies loss of electrical connection </p>
+<div class="breathe-sectiondef container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt>
+<span class="target" id="project0struct_port_error_1af8e4defdaa0d7a5020528b1035a97c9a"></span>virtual const char * <tt class="descname">what</tt><big>(</big><big>)</big> const</dt>
+<dd><p>override of std::exception::what() </p>
+</dd></dl>
+
+</div>
 <div class="breathe-sectiondef container">
 <p class="breathe-sectiondef-title rubric">Public Members</p>
 <dl class="variable">
@@ -290,7 +289,6 @@ fix the appropriate electrical/network problem.</p>
 </div>
 <div class="section" id="actuators">
 <h2>Actuators<a class="headerlink" href="#actuators" title="Permalink to this headline">¶</a></h2>
-<p>Things which cause parts of the robot to move</p>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_drive"></span><em>class</em> <tt class="descname">Drive</tt></dt>
@@ -461,7 +459,6 @@ Should ensure that abs(args.forward) + abs(args.steer) &lt;= 1 <dl class="docuti
 </div>
 <div class="section" id="sensors">
 <h2>Sensors<a class="headerlink" href="#sensors" title="Permalink to this headline">¶</a></h2>
-<p>Things which give the robot information about its surroundings</p>
 <dl class="class">
 <dt>
 <span class="target" id="project0class_egg_sensor"></span><em>class</em> <tt class="descname">EggSensor</tt></dt>
@@ -570,7 +567,7 @@ Should ensure that abs(args.forward) + abs(args.steer) &lt;= 1 <dl class="docuti
         <a href="colors.html" class="btn btn-neutral float-right" title="Color classification">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="getting-started.html" class="btn btn-neutral" title="Getting started"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Index"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

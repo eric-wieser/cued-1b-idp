@@ -31,6 +31,27 @@ To test the competition code, use::
 
 Which allows you to enter the main routine at any point in the sequence
 
+Calibration
+~~~~~~~~~~~
+
+To calibrate the eggsensor::
+
+	$ ./test dev/t_eggsensor_calib
+	constructed
+	initialized
+	Try and vary the ambient light while sampling
+	Place over brown egg, and hit enter
+
+This program will expect you to place each egg until it in turn, and will take samples. Do this on the conveyor. Make sure to sample the edges of eggs as well as the centers. Also, spin the creme egg.
+
+Running this will regenerate the ``egg_stats.cc`` file. To check the calibration, run the following, which will show which eggs are being read::
+
+	$ ./test t_eggidentify
+	none
+	none
+	brown
+	...
+
 When things go wrong
 --------------------
 
