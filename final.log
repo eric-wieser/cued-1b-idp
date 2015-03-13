@@ -1,0 +1,123 @@
+efw27@ew129 idp$ ./tests/t_all.robot
+constructed
+initialised
+Choose a start position:
+ Q1 - collect D2 and D3     - start box, facing in
+ Q2 - deliver D2 and D3     - last egg location
+ Q3 - return from D2 and D3 - delivery crossroads, facing D3
+ Q4 - collect remainder     - start box, facing out
+ Q5 - deliver remainder     - last egg location
+ Q3 - return from D1        - facing D1
+Your choice: 1
+Q1: collect D2 + D3:
+	Egg at station 0: tasty
+	Egg at station 1: white
+	Egg at station 2: tasty
+	Egg at station 3: white
+	Egg at station 4: brown
+	[done]
+Q2: deliver D2 + D3:
+	Checkpoint: Departed conveyor and found line
+	Following line for 0.3m...
+	Lost: lost to the right, 0.224046m remain
+	Checkpoint: Junction Before Ramp
+	Driving over junction
+	Turning 90deg
+	Checkpoint: Looking up ramp
+	Following line for 999999m...
+	Checkpoint: Top of ramp
+	Driving over junction
+	Turning 90deg
+	Checkpoint: Looking along plateau
+	Following line for 0.86m...
+	Checkpoint: At plateau center
+	Following line for 0.86m...
+	Checkpoint: At delivery nexus
+	Dropping eggs(2):
+		tasty egg
+		[done]
+	Dropping eggs(2):
+		tasty egg
+		[done]
+	Dropping eggs(2):
+		brown egg
+		egg not in dropper - wiggle		took 6 wiggle(s)
+^CKilled by signal 2.
+efw27@ew129 idp$ ./tests/t_all.robot
+constructed
+initialised
+Choose a start position:
+ Q1 - collect D2 and D3     - start box, facing in
+ Q2 - deliver D2 and D3     - last egg location
+ Q3 - return from D2 and D3 - delivery crossroads, facing D3
+ Q4 - collect remainder     - start box, facing out
+ Q5 - deliver remainder     - last egg location
+ Q3 - return from D1        - facing D1
+Your choice: 1
+Q1: collect D2 + D3:
+	Egg at station 0: tasty
+	Egg at station 1: white
+	Egg at station 2: tasty
+	Egg at station 3: white
+	Egg at station 4: tasty
+	[done]
+Q2: deliver D2 + D3:
+	Checkpoint: Departed conveyor and found line
+	Following line for 0.3m...
+	Lost: lost to the right, 0.221545m remain
+	Checkpoint: Junction Before Ramp
+	Driving over junction
+	Lost line at junction - continueing
+	Turning 90deg
+	Checkpoint: Looking up ramp
+	Following line for 999999m...
+	Checkpoint: Top of ramp
+	Driving over junction
+	Turning 90deg
+	Checkpoint: Looking along plateau
+	Following line for 0.86m...
+	Checkpoint: At plateau center
+	Following line for 0.86m...
+	Checkpoint: At delivery nexus
+	Dropping eggs(2):
+		tasty egg
+		[done]
+	Dropping eggs(2):
+		tasty egg
+		[done]
+	Dropping eggs(2):
+		tasty egg
+		[done]
+	Checkpoint: Returned to delivery nexus
+	[done]
+Q3: return from d2 + d3:
+	Turning -180deg
+	Following line for 0.84m...
+	Checkpoint: At plateau center
+	Following line for 0.84m...
+	Checkpoint: At plateau start
+	Driving over junction
+	Turning -90deg
+	Following line for 1e+08m...
+	Checkpoint: At ramp bottom
+	Driving over junction
+	Turning -90deg
+	Following line for 0.84m...
+	Checkpoint: At conveyor cewnter
+	Following line for 0.64m...
+	Checkpoint: At start box edge
+	Following line for 0.2m...
+	Checkpoint: At start box center
+	[done]
+Q4: collect D1 + rest:
+	Egg at station 0: tasty
+	Egg at station 1: white
+	Egg at station 2: tasty
+	Egg at station 3 ignored
+	Egg at station 4 ignored
+	Reversing past junction to line up again
+	[done]
+Q5: deliver D1 + rest:
+	Checkpoint: Exploring the unknown
+	Checkpoint: Avoiding the ramp
+^CKilled by signal 2.
