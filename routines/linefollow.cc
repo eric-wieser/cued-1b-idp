@@ -3,12 +3,13 @@
 #include <deque>
 #include <iostream>
 #include <chrono>
-#include "util/utils.h"
 #include "util/timeout.h"
 #include "util/logging.h"
 #include "robot.h"
 
 #include "linefollow.h"
+
+#define ALL(v) v.begin(), v.end()
 
 using namespace std::chrono;
 

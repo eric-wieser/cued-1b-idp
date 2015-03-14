@@ -5,9 +5,10 @@ Software documentation
 	:maxdepth: 2
 
 	getting-started
-	hardware
-	colors
-	lines
 	routes
+	lines
+	colors
+	hardware
+	utils
 
 - :ref:`genindex`
