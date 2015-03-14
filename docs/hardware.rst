@@ -72,16 +72,13 @@ hardware.
 .. doxygenclass:: Device
 	:protected-members:
 
-.. doxygenclass:: Port
-	:members:
-
-.. doxygennamespace:: port
-
-.. enum:: port::Name
+.. cpp:type:: port::Name
 
 	An enum of port names, from ``P0`` to ``P7``, and ``PA0`` to ``PA7``
 
-	.. doxygenfunction:: operator<<(std::ostream &, const port::Name &)
+.. doxygenclass:: Port
+	:members:
+
 
 
 Exceptions

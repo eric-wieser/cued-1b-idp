@@ -1,5 +1,5 @@
-Index
-=====================
+Software documentation
+======================
 
 .. toctree::
 	:maxdepth: 2
@@ -9,3 +9,5 @@ Index
 	colors
 	lines
 	routes
+
+- :ref:`genindex`
