@@ -28,7 +28,7 @@ int main() {
 				<< " Q3 - return from D2 and D3 - delivery crossroads, facing D3" << std::endl
 				<< " Q4 - collect remainder     - start box, facing out" << std::endl
 				<< " Q5 - deliver remainder     - last egg location" << std::endl
-				<< " Q3 - return from D1        - facing D1" << std::endl;
+				<< " Q6 - return from D1        - facing D1" << std::endl;
 
 			std::cout << "Your choice: ";
 			int n = -1;

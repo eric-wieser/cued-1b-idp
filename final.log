@@ -7,7 +7,7 @@ Choose a start position:
  Q3 - return from D2 and D3 - delivery crossroads, facing D3
  Q4 - collect remainder     - start box, facing out
  Q5 - deliver remainder     - last egg location
- Q3 - return from D1        - facing D1
+ Q6 - return from D1        - facing D1
 Your choice: 1
 Q1: collect D2 + D3:
 	Egg at station 0: tasty
@@ -52,7 +52,7 @@ Choose a start position:
  Q3 - return from D2 and D3 - delivery crossroads, facing D3
  Q4 - collect remainder     - start box, facing out
  Q5 - deliver remainder     - last egg location
- Q3 - return from D1        - facing D1
+ Q6 - return from D1        - facing D1
 Your choice: 1
 Q1: collect D2 + D3:
 	Egg at station 0: tasty
