@@ -280,3 +280,5 @@ highlight_language = 'c++'
 
 
 graphviz_output_format = 'svg'
+
+breathe_domain_by_extension = {"h" : "cpp"}
