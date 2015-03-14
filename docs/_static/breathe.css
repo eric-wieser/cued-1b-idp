@@ -1,3 +1,9 @@
-.breatheparameterlist li tt + p {
+.breatheparameterlist li tt + p,
+.breatheparameterlist li code + p {
     display: inline;
 }
+
+.rst-content dl dd:empty { display: none }
+.rst-content dl { margin-bottom: 0 !important }
+.rst-content dl dd { margin-bottom: 24px !important }
+
