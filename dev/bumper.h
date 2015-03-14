@@ -9,12 +9,11 @@
 class Bumper : public Device {
 private:
 	Port _port;
-public:
 	enum {
-		PIN_LEFT =0,
+		PIN_LEFT = 0,
 		PIN_RIGHT = 1
 	};
-
+public:
 	struct Reading {
 		bool left;      ///< left switch is pressed
 		bool right;     ///< right switch is pressed

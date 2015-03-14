@@ -21,10 +21,10 @@ private:
 	int _volume;
 
 	void _updateLeds();
-public:
 	enum {
 		PIN_LIGHTGATE = 7
 	};
+public:
 	Courier(RLink& r, port::Name ledPort, port::Name lightGatePort);
 
 	/**
@@ -42,7 +42,6 @@ public:
 	/// The number of eggs on the rail
 	int volume() const;
 
+	/// if an egg is at the bottom of the courier
 	bool eggDetected() const;
-
-	struct NoEgg : public std::exception {};
 };

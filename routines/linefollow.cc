@@ -23,15 +23,6 @@ const char* LineLost::what() const throw() {
 };
 
 
-/**
-	@param distance  estimated travel distance, in m
-
-	@throws LineLost          Line lost for too long
-	@throws HardwareDamaged   Line state invalid for too long
-	                          Middle sensor broken? Wheels jammed?
-*/
-
-
 bool until_junction(Robot&, const LineSensors::Reading& ls) {
 	return ls.state == LineSensors::Reading::JUNCTION;
 }
@@ -49,9 +40,14 @@ bool forever(Robot&, const LineSensors::Reading& ls) {
 }
 
 
+/**
+	@param distance  estimated travel distance, in m
 
-
-void followUntil_once(Robot& r, float distance, linefollowTerminator* terminator) {
+	@throws LineLost          Line lost for too long
+	@throws HardwareDamaged   Line state invalid for too long
+	                          Middle sensor broken? Wheels jammed?
+*/
+static void followUntil_once(Robot& r, float distance, linefollowTerminator* terminator) {
 	std::deque<LineSensors::Reading::State> history;
 	std::deque<bool> terminateHistory;
 

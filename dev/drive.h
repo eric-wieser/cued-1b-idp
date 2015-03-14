@@ -5,16 +5,6 @@
 
 /**
     Interface to the two-wheeled drive system
-
-    Intended usage
-
-    \code{.cpp}
-    Drive d(rlink);
-
-    // forward, steer with center of curvature on left
-    d.move({forward: 0.9, .steer: 0.1});
-    \endcode
-
 */
 class Drive : public Device {
 public:
@@ -73,7 +63,7 @@ public:
     Timeout turn(float angle, float speed = 1);
     Timeout::duration_type timeForTurn(float angle, float speed = 1);
 
-    /// low-level motor access
+    /// low-level motor access. Speeds should be between 1 and -1
     void setWheelSpeeds(float left, float right);
 
     /// shorthand for no motion

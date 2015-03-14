@@ -9,11 +9,11 @@
 class Arm : public Device {
 private:
 	Port _port;
-public:
 	enum {
 		PIN_DOWN_UPB = 6,
 		PIN_CLOSED_OPENB = 7
 	};
+public:
 	Arm(RLink& r, port::Name name);
 
 	void up();
