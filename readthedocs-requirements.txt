@@ -1,1 +1,1 @@
-breathe
+-e git://github.com/michaeljones/breathe.git#egg=breathe-master
