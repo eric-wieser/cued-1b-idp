@@ -35,7 +35,7 @@ inline std::ostream& operator <<(std::ostream& stream, const port::Name& p) {
 	if(port::P0 <= p && p < port::PA0)
 		return stream << "P" << int(p);
 	else if(port::PA0 <= p && p < port::NUM_PORTS)
-		return stream << "PA" << int(p);
+		return stream << "PA" << int(p) - int(port::PA0);
 	else
 		return stream << "P?" << int(p);
 }
