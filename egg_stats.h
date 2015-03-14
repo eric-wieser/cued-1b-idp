@@ -15,7 +15,8 @@ struct MultivariateNormal {
 	Matrix<float, N, N> covariance;
 
 	/**
-		generalization of [(x - mu) / sigma]^2 to N variables
+		generalization of \f$ \frac{x - \mu}{\sigma}^2 \f$ to N variables
+
 		see: http://en.wikipedia.org/wiki/Mahalanobis_distance
 	*/
 	double mahalanobisDistanceSq(Matrix<float, N, 1> value) const {
