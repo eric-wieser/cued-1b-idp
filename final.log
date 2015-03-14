@@ -33,13 +33,13 @@ Q2: deliver D2 + D3:
 	Checkpoint: At plateau center
 	Following line for 0.86m...
 	Checkpoint: At delivery nexus
-	Dropping eggs(2):
+	Dropping eggs:
 		tasty egg
 		[done]
-	Dropping eggs(2):
+	Dropping eggs:
 		tasty egg
 		[done]
-	Dropping eggs(2):
+	Dropping eggs:
 		brown egg
 		egg not in dropper - wiggle		took 6 wiggle(s)
 ^CKilled by signal 2.
@@ -79,13 +79,13 @@ Q2: deliver D2 + D3:
 	Checkpoint: At plateau center
 	Following line for 0.86m...
 	Checkpoint: At delivery nexus
-	Dropping eggs(2):
+	Dropping eggs:
 		tasty egg
 		[done]
-	Dropping eggs(2):
+	Dropping eggs:
 		tasty egg
 		[done]
-	Dropping eggs(2):
+	Dropping eggs:
 		tasty egg
 		[done]
 	Checkpoint: Returned to delivery nexus

@@ -4,7 +4,7 @@ Logger* Logger::_active;
 
 Logger::Logger(std::string name, Logger* _parent ) : parent(_parent), _indent(std::string(depth(), '\t')) {
 	if(_parent != NULL)
-		*_parent << name << "(" << depth() << "):" << std::endl;
+		*_parent << name << ":" << std::endl;
 	else
 		std::cout << name << ":" << std::endl;
 
