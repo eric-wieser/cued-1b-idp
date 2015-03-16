@@ -5,7 +5,6 @@
 
   edge [color="#06306F", fillcolor="#FFFFFF"];
   subgraph Flowchart {
-      node [color="#06306F", fillcolor="#FFFFFF", fontcolor="#06306F", style=filled];
       "Start" [label=Start, shape=ellipse];
       "Depart Conveyor\nMove\nForward: 1\nSteer: 0.5" [label="Depart Conveyor\nMove\nForward: 1\nSteer: 0.5", shape=box];
       "Line Follow" [label="Line Follow", shape=box];
