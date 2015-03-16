@@ -7,6 +7,12 @@
 /** [Q1] Collect D2/3 Eggs
 Start: Starting position
 End: Last position on conveyor
+
+\htmlonly
+<div align='center'>
+<embed src="http://1b-idp.readthedocs.org/en/latest/_static/q1_collect_d2d3.svg" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+</div>
+\endhtmlonly 
 */
 void q1_collect_d2d3(Robot& r);
 
