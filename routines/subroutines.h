@@ -8,7 +8,9 @@
 Start: Starting position
 End: Last position on conveyor
 
-@image html http://1b-idp.readthedocs.org/en/latest/_static/q1_collect_d2d3.svg
+\verbatim embed:rst
+.. image:: flowcharts/q1_collect_d2d3.svg
+\endverbatim
 */
 void q1_collect_d2d3(Robot& r);
 
