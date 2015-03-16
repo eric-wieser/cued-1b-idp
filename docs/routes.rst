@@ -13,4 +13,13 @@ Navigation plan
    		{ rank=same; Q1; Q4 }
 	}
 
+
+.. graphviz:: test.dot
+
 .. doxygenfile:: routines/subroutines.h
+
+
+Subroutines
+-----------
+
+Some bits of code are reused across multiple routes

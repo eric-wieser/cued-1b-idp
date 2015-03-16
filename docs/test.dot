@@ -1,0 +1,55 @@
+ digraph RootGraph {
+  rankdir=LR;
+  size="24,1000";
+  ratio=compress;
+  splines=ortho;
+
+  edge [color="#06306F", fillcolor="#FFFFFF"];
+  subgraph Flowchart {
+      node [color="#06306F", fillcolor="#FFFFFF", fontcolor="#06306F", style=filled];
+      "Start" [label=Start, shape=ellipse];
+      "Depart Conveyor\nMove\nForward: 1\nSteer: 0.5" [label="Depart Conveyor\nMove\nForward: 1\nSteer: 0.5", shape=box];
+      "Line Follow" [label="Line Follow", shape=box];
+      "Turn CCW" [label="Turn CCW", shape=box];
+      "Go up ramp\nLine Follow" [label="Go up ramp\nLine Follow", shape=box];
+      "Turn CCW1" [label="Turn CCW", shape=box];
+      "Line Follow1" [label="Line Follow", shape=box];
+      "Move Forward" [label="Move Forward", shape=box];
+      "At Delivery Nexus" [label="At Delivery Nexus", shape=box];
+      "Any more eggs?" [label="Any more eggs?", shape=diamond];
+      "dropEggs" [label=dropEggs, sides="6", shape=polygon];
+      "Move\nForward: 0.35\nSteer: 0.65" [label="Move\nForward: 0.35\nSteer: 0.65", shape=box];
+      "dropEggs1" [label=dropEggs, sides="6", shape=polygon];
+      "Move\nForward: -0.35\nSteer: -0.65" [label="Move\nForward: -0.35\nSteer: -0.65", shape=box];
+      "Continue\nMovement" [label="Continue\nMovement", shape=box];
+      "Reverse" [label=Reverse, shape=box];
+      "Reverse1" [label=Reverse, shape=box];
+      "End" [label=End, shape=ellipse];
+      "Next Eggs\nBrown?" [label="Next Eggs\nBrown?", shape=diamond];
+  }
+  "Start"->"Depart Conveyor\nMove\nForward: 1\nSteer: 0.5";
+  "Depart Conveyor\nMove\nForward: 1\nSteer: 0.5"->"Line Follow" [label="Line\nAfter at\nleast 1s"];
+  "Line Follow"->"Turn CCW" [label="Junction`"];
+  "Turn CCW"->"Go up ramp\nLine Follow" [label="90 deg"];
+  "Go up ramp\nLine Follow"->"Turn CCW1" [label=Junction];
+  "Turn CCW1"->"Line Follow1" [label="90 deg"];
+  "Line Follow1"->"Move Forward" [label="2 Junctions"];
+  "Move Forward"->"At Delivery Nexus" [label="10cm"];
+  "Any more eggs?"->"dropEggs" [label=Yes];
+  "dropEggs"->"At Delivery Nexus";
+  "Move\nForward: 0.35\nSteer: 0.65"->"dropEggs1" [label="Line\nAt least\n45deg"];
+  "dropEggs1"->"Move\nForward: -0.35\nSteer: -0.65";
+  "Continue\nMovement"->"At Delivery Nexus" [label=Line];
+  "Continue\nMovement"->"Reverse" [label="90 deg\nTimeout"];
+  "Move\nForward: -0.35\nSteer: -0.65"->"Continue\nMovement" [label="45 deg"];
+  "Reverse"->"Move\nForward: -0.35\nSteer: -0.65" [label="10cm"];
+  "Any more eggs?"->"Reverse1" [label=No];
+  "Reverse1"->"End" [label="30cm"];
+  "At Delivery Nexus"->"Next Eggs\nBrown?";
+  "Next Eggs\nBrown?"->"Move\nForward: 0.35\nSteer: 0.65" [label=Yes];
+  "Next Eggs\nBrown?"->"Any more eggs?" [label="No\n"];
+
+  {rank=min; Start}
+  {rank=max; End}
+  {rank=same; "At Delivery Nexus"; "Depart Conveyor\nMove\nForward: 1\nSteer: 0.5"}
+}
