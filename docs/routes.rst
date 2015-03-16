@@ -23,3 +23,5 @@ Subroutines
 -----------
 
 Some bits of code are reused across multiple routes
+
+.. doxygenfile:: routines/common.h
