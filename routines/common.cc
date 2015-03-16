@@ -45,14 +45,6 @@ void goToConveyor(Robot& r, bool east)
 	Timeout(r.drive.timeForTurn(90 + 10, 0.5)).wait();
 }
 
-
-void checkpoint(Robot& r, std::string id) {
-	// r.drive.stop();
-	std::cout << "Checkpoint: " << id << std::endl;
-	// std::cin.get();
-}
-
-
 void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect)
 {
 	Logger& l = Logger::active();

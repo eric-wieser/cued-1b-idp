@@ -21,5 +21,4 @@ typedef bool (*EGG_CALLBACK)(EggSensor::Reading& reading);
 */
 void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect);
 
-void checkpoint(Robot& r, std::string id);
 void dropEggs(Robot& r, int n = 1);
