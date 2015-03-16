@@ -1,7 +1,6 @@
  digraph RootGraph {
   rankdir=LR;
-  size="24,1000";
-  ratio=compress;
+  size="800,400";
   splines=ortho;
 
   edge [color="#06306F", fillcolor="#FFFFFF"];
