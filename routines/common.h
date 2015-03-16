@@ -13,11 +13,15 @@ void goToConveyor(Robot& r, bool east = true);
 typedef bool (*EGG_CALLBACK)(EggSensor::Reading& reading);
 
 /** Drives along the conveyor collecting eggs
-\htmlonly
-<div align='center'>
-<embed src="http://1b-idp.readthedocs.org/en/latest/_static/conveyorCollect.svg" type="image/svg+xml"     pluginspage="http://www.adobe.com/svg/viewer/install/" />
-</div>
-\endhtmlonly 
+
+\verbatim embed:rst
+.. image:: flowcharts/conveyorCollect.svg
+
+.. graphviz:: flowcharts/conveyorCollect.dot
+
+\endverbatim
+
+
 */
 void conveyorCollect(Robot& r, EGG_CALLBACK shouldCollect);
 

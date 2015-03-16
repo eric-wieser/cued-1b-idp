@@ -1,0 +1,25 @@
+ digraph  RootGraph {
+  edge [color="#06306F", fillcolor="#FFFFFF"];
+  subgraph Flowchart {
+      node [color="#06306F", fillcolor="#FFFFFF", fontcolor="#06306F", style=filled];
+      "Start" [width="0.590551181102362", height="0.236220472440945", pos="49.6062992125984,505.984251968504", label=Start, shape=ellipse];
+      "Straight along conveyor" [width="0.984251968503937", height="0.590551181102362", pos="145.984251968504,505.984251968504", label="Straight along conveyor", shape=box];
+      "Check Egg Type" [width="0.984251968503937", height="0.590551181102362", pos="256.535433070866,505.984251968504", label="Check Egg Type", shape=box];
+      "Drive Straight" [width="0.984251968503937", height="0.590551181102362", pos="256.535433070866,420.944881889764", label="Drive Straight", shape=box];
+      "Arm Down" [width="0.984251968503937", height="0.590551181102362", pos="369.92125984252,420.944881889764", label="Arm Down", shape=box];
+      "Arm Close" [width="0.984251968503937", height="0.590551181102362", pos="483.307086614173,420.944881889764", label="Arm Close", shape=box];
+      "Arm Up" [width="0.984251968503937", height="0.590551181102362", pos="596.692913385827,420.944881889764", label="Arm Up", shape=box];
+      "Arm Open" [width="0.984251968503937", height="0.590551181102362", pos="710.078740157481,420.944881889764", label="Arm Open", shape=box];
+      "End" [width="0.590551181102362", height="0.236220472440945", pos="710.078740157481,505.984251968504", label=End, shape=ellipse];
+  }
+  "Start"->"Straight along conveyor";
+  "Straight along conveyor"->"Check Egg Type" [label=LSL];
+  "Check Egg Type"->"Drive Straight" [label=shouldCollect];
+  "Drive Straight"->"Arm Down" [label="10cm"];
+  "Arm Down"->"Arm Close";
+  "Arm Close"->"Arm Up";
+  "Arm Up"->"Arm Open";
+  "Arm Open"->"Straight along conveyor" [label=Else];
+  "Arm Open"->"End" [label="At position 5"];
+  "Check Egg Type"->"End" [label="Not shouldCollect\nAnd at position 5"];
+}
