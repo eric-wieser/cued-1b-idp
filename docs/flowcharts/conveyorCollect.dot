@@ -1,4 +1,5 @@
  digraph  RootGraph {
+  rank=LR;
   edge [color="#06306F", fillcolor="#FFFFFF"];
   subgraph Flowchart {
       node [color="#06306F", fillcolor="#FFFFFF", fontcolor="#06306F", style=filled];
@@ -22,4 +23,7 @@
   "Arm Open"->"Straight along conveyor" [label=Else];
   "Arm Open"->"End" [label="At position 5"];
   "Check Egg Type"->"End" [label="Not shouldCollect\nAnd at position 5"];
+
+  {rank=min; Start}
+  {rank=max; End}
 }
