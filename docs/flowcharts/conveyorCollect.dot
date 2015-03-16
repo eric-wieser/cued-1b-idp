@@ -1,5 +1,7 @@
  digraph  RootGraph {
-  rank=LR;
+  rankdir=LR;
+  splines=ortho;
+
   edge [color="#06306F", fillcolor="#FFFFFF"];
   subgraph Flowchart {
       node [color="#06306F", fillcolor="#FFFFFF", fontcolor="#06306F", style=filled];
