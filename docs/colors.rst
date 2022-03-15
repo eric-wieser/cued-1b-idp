@@ -14,7 +14,7 @@ The following steppable animation shows how this works for just two variables
 
 .. raw:: html
 
-	<iframe src="http://eric-wieser.github.io/idp-presentation" allowtransparency="true" style="border: 0; width: 100%; height: 50vh"></iframe>
+	<iframe src="http://eric-wieser.github.io/cued-idp-presentation" allowtransparency="true" style="border: 0; width: 100%; height: 50vh"></iframe>
 
 The conversion of the raw recorded data to a set of normal distribution
 parameters is done with a small python script, that leverages the `numpy`
